@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/audit_area"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/detail_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context=".activity.AddPlanOrSummaryActivity">
+
+               <include
+                   layout="@layout/actionbar"
+                   android:id="@+id/detail_actionbar"></include>
+                <!--工作类型-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:text="工作类型" />
+
+                    <TextView
+                        android:id="@+id/detail_work_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"></TextView>
+                </RelativeLayout>
+                <!--工作安排-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:text="工作安排" />
+
+                    <TextView
+                        android:id="@+id/detail_work_content_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"></TextView>
+                </RelativeLayout>
+                <!--具体事项-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:paddingBottom="10dp"
+                        android:layout_centerVertical="true"
+                        android:text="具体事项" />
+
+                    <TextView
+                        android:id="@+id/detail_specific_things"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"></TextView>
+                </RelativeLayout>
+                <!--计划开始时间-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:paddingBottom="10dp"
+                        android:layout_centerVertical="true"
+                        android:text="计划开始时间" />
+
+                    <TextView
+                        android:id="@+id/detail_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:background="@null"
+                        android:text="2019-06-27" />
+                </RelativeLayout>
+                <!--计划结束时间-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:paddingBottom="10dp"
+                        android:text="计划结束时间" />
+
+                    <TextView
+
+                        android:id="@+id/detail_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:text="2019-06-27"></TextView>
+                </RelativeLayout>
+                <!--实际完成百分比-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:text="完成百分比" />
+
+                    <TextView
+                        android:id="@+id/detail_plan_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"></TextView>
+                </RelativeLayout>
+                <!--工时-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:paddingBottom="10dp"
+                        android:layout_centerVertical="true"
+                        android:text="工时" />
+
+                    <TextView
+                        android:id="@+id/detail_work_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentRight="true"
+                        android:focusableInTouchMode="true" />
+                </RelativeLayout>
+                <!--输出物 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:id="@+id/detail_title_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:text="输出物" />
+
+                    <TextView
+                        android:id="@+id/detail_output"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/detail_title_text"
+                        android:gravity="end"></TextView>
+                </RelativeLayout>
+                <!--实际完成情况说明/计划完成进度 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:id="@+id/plan_or_summary_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:paddingBottom="10dp"
+                        android:layout_centerVertical="true"
+                        android:text="计划完成进度" />
+
+                    <TextView
+                        android:id="@+id/detail_show_how"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_toRightOf="@+id/plan_or_summary_txt"
+                        android:gravity="end" />
+                </RelativeLayout>
+                <!-- 状态-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:text="状态" />
+
+                    <TextView
+                        android:id="@+id/detail_work_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15dp"
+                        android:entries="@array/plan_status"
+                        android:gravity="end"></TextView>
+                </RelativeLayout>
+                <!--问题和需要配合的项-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:id="@+id/detail_issue_text"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:paddingBottom="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="问题和需要配合的项" />
+
+                    <TextView
+                        android:id="@+id/detail_need_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="1dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_toRightOf="@id/detail_issue_text"
+                        android:gravity="end"></TextView>
+                </RelativeLayout>
+                <!--审批状态-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="18sp"
+                        android:paddingBottom="10dp"
+                        android:layout_centerVertical="true"
+                        android:text="审批状态" />
+
+                    <TextView
+                        android:id="@+id/detail_check_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="end" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/audit_area"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="15dp">
+
+            <Button
+                android:id="@+id/allow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:onClick="AllowClick"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/detail_check_allow_btn"
+                android:text="通过" />
+
+
+            <Button
+                android:id="@+id/not_allow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:onClick="NotAllowClick"
+                android:background="@drawable/detail_check_not_allow_btn"
+                android:text="驳回" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/pass"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="已通过"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/colorAccent"
+            android:layout_height="50dp" />
+        <TextView
+            android:id="@+id/notpass"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="已驳回"
+            android:layout_alignParentBottom="true"
+            android:textColor="#FE6744"
+            android:layout_height="50dp" />
+    </RelativeLayout>
+</layout>
