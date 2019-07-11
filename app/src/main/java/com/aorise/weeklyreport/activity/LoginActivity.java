@@ -46,7 +46,7 @@ public class LoginActivity extends BaseActivity {
         String json = gson.toJson(requestParam);
         LogT.d(" json " + json);
         RequestBody requestBody = CommonUtils.getRequestBody(json);
-        ApiService.Utils.getInstance().login(requestBody)
+        ApiService.Utils.getInstance(this).login(requestBody)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<String>>(this) {
                     @Override

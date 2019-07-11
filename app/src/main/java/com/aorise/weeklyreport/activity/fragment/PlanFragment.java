@@ -4,11 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.adapter.BaseAdapter;
 import com.aorise.weeklyreport.adapter.HeaderItemRecyclerAdapter;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
@@ -60,9 +62,6 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
      * @return A new instance of fragment PlanFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -133,24 +132,23 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
     }
 
     public void updateAdapter(boolean isNormalMode) {
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList);
-        mHeaderAdapter = new HeaderItemRecyclerAdapter(getContext(), memberWeeklyModelListBeans);
-        mViewDataBinding.planRecycler.swapAdapter(isNormalMode ? mAdapter : mHeaderAdapter, true);
+
+       // mViewDataBinding.planRecycler.swapAdapter(isNormalMode ? mAdapter : mHeaderAdapter, false);
         if(isNormalMode){
+            mViewDataBinding.planRecycler.setAdapter(mAdapter);
             isManager = false;
             updateList(weeks);
         }else {
+            mViewDataBinding.planRecycler.setAdapter(mHeaderAdapter);
             isManager = true;
             updateManagerList(weeks);
         }
-
-
     }
 
     public void updateList(int weeks) {
         this.weeks = weeks;
         LogT.d(" weeks is " + weeks);
-        ApiService.Utils.getInstance().getWeeklyReport(userId, weeks, 2)
+        ApiService.Utils.getInstance(getContext()).getWeeklyReport(userId, weeks, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
                     @Override
@@ -182,7 +180,7 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
     public void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
-        ApiService.Utils.getInstance().getHeaderList(projectId, weeks, 2)
+        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
                     @Override

@@ -77,7 +77,7 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
     }
 
     private void initProjectList() {
-        ApiService.Utils.getInstance().getProjectList(userId, -1)
+        ApiService.Utils.getInstance(this).getProjectList(userId, -1)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectList>>>(this) {
                     @Override
@@ -134,7 +134,7 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
     }
 
     private void initPlanList() {
-        ApiService.Utils.getInstance().getProjectPlan(userId, projectId)
+        ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectPlan>>>(this) {
                     @Override
@@ -196,7 +196,7 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
         LogT.d(" upload info is " + mUploadInfo.toString());
         String jsonData = gson.toJson(mUploadInfo);
         RequestBody mResponseBody = CommonUtils.getRequestBody(jsonData);
-        ApiService.Utils.getInstance().fillInWeeklyReprot(mResponseBody)
+        ApiService.Utils.getInstance(this).fillInWeeklyReprot(mResponseBody)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<Integer>>(this) {
                     @Override

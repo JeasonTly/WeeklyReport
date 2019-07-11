@@ -133,13 +133,13 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     }
 
     public void updateAdapter(boolean isNormalMode) {
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList);
-        mHeaderAdapter = new HeaderItemRecyclerAdapter(getContext(), memberWeeklyModelListBeans);
-        mViewDataBinding.summaryRecycler.swapAdapter(isNormalMode ? mAdapter : mHeaderAdapter, true);
+      //  mViewDataBinding.summaryRecycler.swapAdapter(isNormalMode ? mAdapter : mHeaderAdapter, false);
         if(isNormalMode){
+            mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
             isManager = false;
             updateList(weeks);
         }else {
+            mViewDataBinding.summaryRecycler.setAdapter(mHeaderAdapter);
             isManager = true;
             updateManagerList(weeks);
         }
@@ -148,7 +148,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     public void updateList(int weeks) {
         this.weeks = weeks;
         LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks);
-        ApiService.Utils.getInstance().getWeeklyReport(userId, weeks, 1)
+        ApiService.Utils.getInstance(getContext()).getWeeklyReport(userId, weeks, 1)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
                     @Override
@@ -180,7 +180,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     public void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
-        ApiService.Utils.getInstance().getHeaderList(projectId, weeks, 1)
+        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks, 1)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
                     @Override

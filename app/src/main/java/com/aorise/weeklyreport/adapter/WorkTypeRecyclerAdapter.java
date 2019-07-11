@@ -39,9 +39,9 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<MulityTypeItem, BaseVie
     public BaseViewHolder onCreateVH(ViewGroup parent, int viewType) {
         LogT.d("onCreateVH");
         if (mList.get(viewType).getData_type() == TypeTAG.TYPE_TAG.ordinal()) {
-            mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_tag_description, null, false);
+            mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_tag_description, parent, false);
         } else if (mList.get(viewType).getData_type() == TypeTAG.TYPE_CONTENT.ordinal()) {
-            mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_content_list_description, null, false);
+            mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_content_list_description, parent, false);
         }
         return new BaseViewHolder(mViewDataBinding);
     }
@@ -50,17 +50,15 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<MulityTypeItem, BaseVie
     public void onBindVH(BaseViewHolder baseViewHolder, final int position) {
         LogT.d(" data is " + mList.get(position));
         if (mList.get(position).getData_type() == TypeTAG.TYPE_TAG.ordinal()) {
-
-            TextView mTagInfo = baseViewHolder.itemView.findViewById(R.id.item_tag_name);
-            LogT.d(" mTag info is empty ?" +(mTagInfo == null));
-            mTagInfo.setText(mList.get(position).getItem_name());
+            TextView mTagInfo = baseViewHolder.itemView.findViewById(R.id.item_tag_name_txt);
+            LogT.d(" mTag info is empty ? " +(mTagInfo == null) + " item view is empty? "+(baseViewHolder.itemView == null));
+//            mTagInfo.setText(mList.get(position).getItem_name());
             baseViewHolder.itemView.setOnClickListener(null);
             int iconRes = R.drawable.xiangmu;
             switch (mList.get(position).getItem_name()) {
                 case "项目工作":
                     iconRes = R.drawable.xiangmu;
                     break;
-
                 case "部门工作":
                     iconRes = R.drawable.bumen;
                     break;
@@ -68,8 +66,8 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<MulityTypeItem, BaseVie
                     iconRes = R.drawable.qita;
                     break;
             }
-            ImageView imageView = baseViewHolder.itemView.findViewById(R.id.item_tag_img);
-            imageView.setImageResource(iconRes);
+//            ImageView imageView = baseViewHolder.itemView.findViewById(R.id.item_tag_img);
+//            imageView.setImageResource(iconRes);
 
         } else if (mList.get(position).getData_type() == TypeTAG.TYPE_CONTENT.ordinal()) {
             final WeeklyReportBean weeklyReportBean = (WeeklyReportBean) mList.get(position).getData();

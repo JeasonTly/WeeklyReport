@@ -123,7 +123,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
     }
 
     private void initProjectList() {
-        ApiService.Utils.getInstance().getProjectList(-1, userId)
+        ApiService.Utils.getInstance(getContext()).getProjectList(-1, userId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectList>>>(this.getContext()) {
                     @Override
@@ -176,7 +176,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
     private void getMemberList(int projectId) {
         this.projectId = projectId;
         LogT.d("project id is "+projectId);
-        ApiService.Utils.getInstance().getMemberList("1", "50", projectId, TimeUtil.getInstance().getDayofWeek())
+        ApiService.Utils.getInstance(getContext()).getMemberList("1", "50", projectId, TimeUtil.getInstance().getDayofWeek())
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<MemberListBean>>>(getContext()) {
                     @Override

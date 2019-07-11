@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aorise.weeklyreport.BR;
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
 import com.aorise.weeklyreport.base.LogT;
@@ -28,14 +29,14 @@ public class HeaderItemRecyclerAdapter extends BaseAdapter<HeaderItemBean.PlanDe
 
     @Override
     public BaseViewHolder onCreateVH(ViewGroup parent, int viewType) {
-        ItemListHeaderBinding mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_list_header, parent, false);
+        LogT.d("onCreateVH");
+        ViewDataBinding mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_list_header, parent, false);
         return new BaseViewHolder(mViewDataBinding);
     }
 
     @Override
     public void onBindVH(BaseViewHolder viewHolder, final int position) {
-        ItemListHeaderBinding mViewDataBinding = (ItemListHeaderBinding) viewHolder.getBinding();
-        mViewDataBinding.setHeader(mList.get(position));
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +55,8 @@ public class HeaderItemRecyclerAdapter extends BaseAdapter<HeaderItemBean.PlanDe
                 }
             }
         });
+        viewHolder.getBinding().setVariable(BR.header, mList.get(position));
+        viewHolder.getBinding().executePendingBindings();
     }
 
 }

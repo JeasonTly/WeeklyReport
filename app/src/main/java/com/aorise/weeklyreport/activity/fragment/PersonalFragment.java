@@ -73,7 +73,7 @@ public class PersonalFragment extends Fragment {
 
 
     private void initPersonalInfo(){
-        ApiService.Utils.getInstance().getPersonalInfo(userId)
+        ApiService.Utils.getInstance(getContext()).getPersonalInfo(userId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<PersonalBean>>(getContext()) {
                     @Override

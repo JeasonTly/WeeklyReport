@@ -142,23 +142,9 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
             @Override
             public void onClick(View v) {
                 isNormalMode = !isNormalMode;
-                if (addPlan) {
-                    if (mPlanFragment != null) {
-                        mPlanFragment.updateAdapter(isNormalMode);
-                    } else {
-                        mPlanFragment = new PlanFragment();
-                        mFragmentList.add(mPlanFragment);
-                        mPlanFragment.updateAdapter(isNormalMode);
-                    }
-                } else {
-                    if (mConclusionFragment != null) {
-                        mConclusionFragment.updateAdapter(isNormalMode);
-                    } else {
-                        mConclusionFragment = new ConclusionFragment();
-                        mFragmentList.add(mConclusionFragment);
-                        mConclusionFragment.updateAdapter(isNormalMode);
-                    }
-                }
+                mPlanFragment.updateAdapter(isNormalMode);
+                mConclusionFragment.updateAdapter(isNormalMode);
+                mViewDataBinding.fhActionbar.actionMenu.setVisibility(isNormalMode ? View.VISIBLE : View.GONE);
             }
         });
         mViewDataBinding.fhActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +158,8 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         initTabHost();
         initViewPager();
 
-        mViewDataBinding.fhActionbar.actionMenu.setVisibility(View.VISIBLE);
+
+        mViewDataBinding.fhActionbar.actionMenu.setVisibility(isNormalMode ? View.VISIBLE : View.GONE);
         mViewDataBinding.fhActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -49,7 +49,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         int approvestatus = pass ? 1 : 2;
         approvalText = pass ? "通过" : "不通过";
         LogT.d(" param id = " + mDetailBean.getId() + " stauts is " + mDetailBean.getState() + " approvalText " + approvalText);
-        ApiService.Utils.getInstance().approvalWeeklyReport(mDetailBean.getId(), mDetailBean.getState(), approvestatus, approvalText)
+        ApiService.Utils.getInstance(this).approvalWeeklyReport(mDetailBean.getId(), mDetailBean.getState(), approvestatus, approvalText)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result>(this) {
                     @Override
@@ -78,7 +78,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
     private void initDetailInfo() {
         LogT.d("id is " + id);
-        ApiService.Utils.getInstance().getWeeklyReportDetail(id)
+        ApiService.Utils.getInstance(this).getWeeklyReportDetail(id)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<WeeklyReportDetailBean>>(this) {
                     @Override

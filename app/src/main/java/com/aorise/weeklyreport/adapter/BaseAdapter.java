@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.aorise.weeklyreport.base.LogT;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     @Override
     public int getItemCount() {
+        LogT.d("now my listSize is "+mList.size());
         return mList.size();
     }
 

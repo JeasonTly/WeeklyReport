@@ -7,8 +7,8 @@ package com.aorise.weeklyreport.network;
 public class NetworkURLConfig {
     //public static final String BASE_URL = " ";
     //public static final String BASE_URL = "http://192.168.1.201:8089/";//沈智维
-    public static final String BASE_URL = "http://192.168.1.144:8089/";//YYP
-    //public static final String BASE_URL = "http://account.aorisetest.com/";//YYP
+    //public static final String BASE_URL = "http://192.168.1.144:8089/";//YYP
+    public static final String BASE_URL = "http://account.aorisetest.com/";//YYP
 
 
     public static final String LOGIN_URL = "api/v1/login";
