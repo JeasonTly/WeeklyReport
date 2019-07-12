@@ -100,6 +100,7 @@ public class PersonalFragment extends Fragment {
         // Inflate the layout for this fragment
         mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_personal,container,false);
         mViewDataBinding.personalActionbar.actionBarTitle.setText("个人信息");
+        mViewDataBinding.personalActionbar.actionbarBack.setVisibility(View.GONE);
         return mViewDataBinding.getRoot();
     }
 

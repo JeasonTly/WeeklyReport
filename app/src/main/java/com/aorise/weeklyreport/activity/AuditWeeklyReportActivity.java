@@ -59,8 +59,8 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     }
 
     private void initFragment() {
-        mFragmentList.add(ConclusionFragment.newInstance(projectId, userId, weeks));
-        mFragmentList.add(PlanFragment.newInstance(projectId, userId, weeks));
+        mFragmentList.add(ConclusionFragment.newInstance(projectId, userId, weeks,true));
+        mFragmentList.add(PlanFragment.newInstance(projectId, userId, weeks,true));
     }
 
     private void initTabHost() {

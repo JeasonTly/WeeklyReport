@@ -1,9 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.activity.AddPlanOrSummaryActivity;
 import com.aorise.weeklyreport.activity.AuditWeeklyReportActivity;
-import com.aorise.weeklyreport.adapter.CustomProjectSpinnerAdapter;
+import com.aorise.weeklyreport.activity.MemberManagerActivity;
 import com.aorise.weeklyreport.adapter.MemberListAdapter;
 import com.aorise.weeklyreport.adapter.ProjectListAdapter;
 import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.MemberListBean;
-import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.FragmentMemberBinding;
 import com.aorise.weeklyreport.network.ApiService;
@@ -29,7 +25,6 @@ import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.CustomSubscriberNoDialog;
 import com.aorise.weeklyreport.network.Result;
 import com.hjq.toast.ToastUtils;
-import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +54,9 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         isProjectList = true;
     }
 
@@ -77,7 +70,9 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
         mAdapter.setClickListener(this);
         mViewDataBinding.fragmentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewDataBinding.fragmentRecycler.setAdapter(mAdapter);
-
+        mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.GONE);
+        mViewDataBinding.fmActionbar.actionMenu.setVisibility(View.GONE);
+        mViewDataBinding.fmActionbar.actionMenu.setImageResource(R.drawable.bianji);
         mMemberAdapter = new MemberListAdapter(getContext(), mMemberList);
         mMemberAdapter.setClickListener(new RecyclerListClickListener() {
             @Override
@@ -85,10 +80,10 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
                 LogT.d("点击查看此人的项目详情咯");
                 Intent mIntent = new Intent();
                 mIntent.setClass(getContext(), AuditWeeklyReportActivity.class);
-                mIntent.putExtra("projectId",projectId);
-                mIntent.putExtra("userId",mMemberList.get(position).getUserId());
-                mIntent.putExtra("userName",mMemberList.get(position).getUserName());
-                mIntent.putExtra("weeks",TimeUtil.getInstance().getDayofWeek());
+                mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("userId", mMemberList.get(position).getUserId());
+                mIntent.putExtra("userName", mMemberList.get(position).getUserName());
+                mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
                 startActivity(mIntent);
             }
 
@@ -97,7 +92,8 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
 
             }
         });
-        mViewDataBinding.fmActionbar.actionBarTitle.setText("请选择");
+        //mViewDataBinding.fmActionbar.actionBarTitle.setText("请选择");
+        mViewDataBinding.fmActionbar.actionBarTitle.setText("项目管理");
         mViewDataBinding.fragmentMemberRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewDataBinding.fragmentMemberRecycler.setAdapter(mMemberAdapter);
 
@@ -108,9 +104,21 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
                     mViewDataBinding.fragmentRecycler.setVisibility(View.VISIBLE);
                     mViewDataBinding.fragmentMemberRecycler.setVisibility(View.GONE);
                     mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.GONE);
+                    mViewDataBinding.fmActionbar.actionMenu.setVisibility(View.GONE);
                     isProjectList = true;
                 }
 
+            }
+        });
+
+        mViewDataBinding.fmActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent();
+                mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("userId", userId);
+                mIntent.setClass(getActivity(), MemberManagerActivity.class);
+                startActivity(mIntent);
             }
         });
         return mViewDataBinding.getRoot();
@@ -175,7 +183,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
 
     private void getMemberList(int projectId) {
         this.projectId = projectId;
-        LogT.d("project id is "+projectId);
+        LogT.d("project id is " + projectId);
         ApiService.Utils.getInstance(getContext()).getMemberList("1", "50", projectId, TimeUtil.getInstance().getDayofWeek())
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<MemberListBean>>>(getContext()) {
@@ -198,11 +206,16 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
 
                             mMemberList = o.getData();
                             LogT.d("mMemberList list " + mMemberList);
+                            isProjectList = false;
+
                             mViewDataBinding.fragmentMemberRecycler.setVisibility(View.VISIBLE);
                             mViewDataBinding.fragmentRecycler.setVisibility(View.GONE);
-                            isProjectList = false;
                             mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.VISIBLE);
+                            mViewDataBinding.fmActionbar.actionMenu.setVisibility(View.VISIBLE);
+
                             mMemberAdapter.refreshData(mMemberList);
+
+
                         }
                     }
                 });

@@ -73,6 +73,9 @@ public interface ApiService {
     @GET(NetworkURLConfig.WEEKLY_REPORT_QUERY)
     Observable<Result<List<WeeklyReportBean>>> getWeeklyReport(@Query("userId") int userId, @Query("byWeek") int weekCount, @Query("type") int type);
 
+    @GET(NetworkURLConfig.WEEKLY_REPORT_QUERY)
+    Observable<Result<List<WeeklyReportBean>>> getWeeklyReport(@Query("projectId") int projectId,@Query("userId") int userId, @Query("byWeek") int weekCount, @Query("type") int type);
+
     /**
      * 根据用户和项目负责人Id获取项目列表
      *
@@ -135,6 +138,15 @@ public interface ApiService {
     @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
     Observable<Result<HeaderItemBean>> getHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
+    @FormUrlEncoded
+    @POST(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
+    Observable<Result<Integer>> postHeaderReport(@Field("projectId")int projectId ,
+                                                 @Field("byWeek")int byWeek ,
+                                                 @Field("type")int type ,
+                                                 @Field("startDate")int startDate ,
+                                                 @Field("endDate")int endDate ,
+                                                 @Field("overallSituation")String overallSituation ,
+                                                 @Field("percentComplete")int percentComplete);
     class Utils {
 
         public static ApiService getInstance(Context context) {
@@ -198,6 +210,7 @@ public interface ApiService {
                     final StringBuffer cookieBuffer = new StringBuffer();
                     //最近在学习RxJava,这里用了RxJava的相关API大家可以忽略,用自己逻辑实现即可.大家可以用别的方法保存cookie数据
                     //解析Cookie
+
                     for (String header : originalResponse.headers("Set-Cookie")) {
                         LogT.d(" header " + header);
                         cookieBuffer.append(header);

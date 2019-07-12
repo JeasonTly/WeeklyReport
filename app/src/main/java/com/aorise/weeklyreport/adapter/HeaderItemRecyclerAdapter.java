@@ -13,7 +13,6 @@ import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
-import com.aorise.weeklyreport.databinding.ItemListHeaderBinding;
 
 import java.util.List;
 
@@ -58,5 +57,6 @@ public class HeaderItemRecyclerAdapter extends BaseAdapter<HeaderItemBean.PlanDe
         viewHolder.getBinding().setVariable(BR.header, mList.get(position));
         viewHolder.getBinding().executePendingBindings();
     }
+
 
 }

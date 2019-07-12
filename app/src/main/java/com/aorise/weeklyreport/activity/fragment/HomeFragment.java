@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     private List<String> weeks = new ArrayList<>();
     private MenuPopup menuPopup;
 
-    private boolean isNormalMode = false;
+    private boolean isNormalMode = true;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -138,15 +138,6 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         currentWeeks = "第" + TimeUtil.getInstance().getDayofWeek() + "周";
         mViewDataBinding.fhActionbar.actionbarBack.setVisibility(View.GONE);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
-        mViewDataBinding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isNormalMode = !isNormalMode;
-                mPlanFragment.updateAdapter(isNormalMode);
-                mConclusionFragment.updateAdapter(isNormalMode);
-                mViewDataBinding.fhActionbar.actionMenu.setVisibility(isNormalMode ? View.VISIBLE : View.GONE);
-            }
-        });
         mViewDataBinding.fhActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,19 +190,19 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         currentWeeks = weeks.get(position);
         if (addPlan) {
             if (mPlanFragment != null) {
-                mPlanFragment.updateList(position + 1);
+                mPlanFragment.update(position + 1);
             } else {
                 mPlanFragment = new PlanFragment();
                 mFragmentList.add(mPlanFragment);
-                mPlanFragment.updateList(position + 1);
+                mPlanFragment.update(position + 1);
             }
         } else {
             if (mConclusionFragment != null) {
-                mConclusionFragment.updateList(position + 1);
+                mConclusionFragment.update(position + 1);
             } else {
                 mConclusionFragment = new ConclusionFragment();
                 mFragmentList.add(mConclusionFragment);
-                mConclusionFragment.updateList(position + 1);
+                mConclusionFragment.update(position + 1);
             }
         }
     }

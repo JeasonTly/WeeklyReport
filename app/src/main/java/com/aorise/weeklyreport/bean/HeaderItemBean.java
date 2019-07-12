@@ -9,21 +9,92 @@ import java.util.List;
  * Created by Tuliyuan.
  * Date: 2019/7/8.
  */
-public class HeaderItemBean extends BaseObservable {
+public class HeaderItemBean implements Serializable {
     @Override
     public String toString() {
         return "HeaderItemBean{" +
-                "percentComplete=" + percentComplete +
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", byWeek=" + byWeek +
+                ", type=" + type +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", overallSituation='" + overallSituation + '\'' +
+                ", percentComplete=" + percentComplete +
                 ", planDetailsList=" + planDetailsList +
                 '}';
     }
 
-    /**
-     * percentComplete : 0
-     * planDetailsList : [{"phase":"sdgsd","stage":0,"specificPhase":"4234","percentComplete":0,"person":"沅","isComplete":2},{"phase":"123123","stage":0,"percentComplete":0,"person":"沅","isComplete":2},{"phase":"测试需求","stage":0,"percentComplete":0,"person":"沅","isComplete":2}]
-     */
+    private int id;
+    private Integer projectId;
+    private Integer byWeek;
+    private Integer type;
+    private String startDate;
+    private String endDate;
+    private String overallSituation;
 
-    private int percentComplete;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public Integer getByWeek() {
+        return byWeek;
+    }
+
+    public void setByWeek(Integer byWeek) {
+        this.byWeek = byWeek;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getOverallSituation() {
+        return overallSituation;
+    }
+
+    public void setOverallSituation(String overallSituation) {
+        this.overallSituation = overallSituation;
+    }
+
+    public void setPercentComplete(Integer percentComplete) {
+        this.percentComplete = percentComplete;
+    }
+
+    private Integer percentComplete;
+
     private List<PlanDetailsListBean> planDetailsList;
 
     public int getPercentComplete() {
@@ -46,7 +117,8 @@ public class HeaderItemBean extends BaseObservable {
         @Override
         public String toString() {
             return "PlanDetailsListBean{" +
-                    "phase='" + phase + '\'' +
+                    "memberId=" + memberId +
+                    ", phase='" + phase + '\'' +
                     ", stage=" + stage +
                     ", specificPhase='" + specificPhase + '\'' +
                     ", percentComplete=" + percentComplete +
@@ -63,13 +135,21 @@ public class HeaderItemBean extends BaseObservable {
          * person : 沅
          * isComplete : 2
          */
-
+        private int memberId;
         private String phase;
         private int stage;
         private String specificPhase;
         private int percentComplete;
         private String person;
         private int isComplete;
+
+        public int getMemberId() {
+            return memberId;
+        }
+
+        public void setMemberId(int memberId) {
+            this.memberId = memberId;
+        }
 
         public String getPhase() {
             return phase;

@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.adapter.HeaderItemRecyclerAdapter;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
-import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 import com.aorise.weeklyreport.databinding.FragmentConclusionBinding;
@@ -39,22 +37,20 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
 
     private FragmentConclusionBinding mViewDataBinding;
     // TODO: Rename and change types of parameters
 //    private OnFragmentInteractionListener mListener;
-
-    private boolean isManager = true;
-    private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
-    private HeaderItemRecyclerAdapter mHeaderAdapter;
-
     private int userId = 2;
-    private int projectId = 18;
+    private int projectId = 1;
     private int weeks = 28;
+    private boolean isManagerMode = false;
     //    private OnFragmentInteractionListener mListener;
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
     private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
     private WorkTypeRecyclerAdapter mAdapter;
+
 
     public ConclusionFragment() {
         // Required empty public constructor
@@ -67,12 +63,13 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
      * @return A new instance of fragment ConclusionFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ConclusionFragment newInstance(int projectId, int userId, int weeks) {
+    public static ConclusionFragment newInstance(int projectId, int userId, int weeks,boolean isManagerMode) {
         ConclusionFragment fragment = new ConclusionFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, projectId);
         args.putInt(ARG_PARAM2, userId);
         args.putInt(ARG_PARAM3, weeks);
+        args.putBoolean(ARG_PARAM4, isManagerMode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,7 +81,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
             userId = getArguments().getInt(ARG_PARAM1);
             projectId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
-            isManager = false;
+            isManagerMode = getArguments().getBoolean(ARG_PARAM4);
         }
     }
 
@@ -98,32 +95,22 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
         mViewDataBinding.summaryPlt.setCanLoadMore(false);
         mViewDataBinding.summaryRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList);
-        mHeaderAdapter = new HeaderItemRecyclerAdapter(getContext(), memberWeeklyModelListBeans);
-        if (isManager) {
-            mViewDataBinding.summaryRecycler.setAdapter(mHeaderAdapter);
-        } else {
-            mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
-        }
+
+        mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
+
         return mViewDataBinding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isManager) {
-            updateManagerList(weeks);
-        } else {
-            updateList(weeks);
-        }
+        updateList(weeks);
+
     }
 
     @Override
     public void refresh() {
-        if (isManager) {
-            updateManagerList(weeks);
-        } else {
-            updateList(weeks);
-        }
+        updateList(weeks);
         mViewDataBinding.summaryPlt.finishRefresh();
     }
 
@@ -132,87 +119,71 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
 
     }
 
-    public void updateAdapter(boolean isNormalMode) {
-      //  mViewDataBinding.summaryRecycler.swapAdapter(isNormalMode ? mAdapter : mHeaderAdapter, false);
-        if(isNormalMode){
-            mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
-            isManager = false;
-            updateList(weeks);
-        }else {
-            mViewDataBinding.summaryRecycler.setAdapter(mHeaderAdapter);
-            isManager = true;
-            updateManagerList(weeks);
-        }
+
+    public void update(int weeks) {
+        updateList(weeks);
     }
 
     public void updateList(int weeks) {
         this.weeks = weeks;
         LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks);
-        ApiService.Utils.getInstance(getContext()).getWeeklyReport(userId, weeks, 1)
-                .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        LogT.d("错误" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Result<List<WeeklyReportBean>> o) {
-                        super.onNext(o);
-                        if (o.isRet()) {
-                            mPlanWeeklyReport.clear();
-                            mPlanWeeklyReport.addAll(o.getData());
-                            LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-                            mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-                            LogT.d("size is " + mMulityTypeList.size());
-                            mAdapter.refreshData(mMulityTypeList);
+        if (isManagerMode) {
+            ApiService.Utils.getInstance(getContext()).getWeeklyReport(projectId, userId, weeks, 1)
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
                         }
-                    }
-                });
-    }
 
-    public void updateManagerList(int weeks) {
-        this.weeks = weeks;
-        LogT.d("project id is " + projectId + " weeks is " + weeks);
-        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks, 1)
-                .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            LogT.d("错误" + e.toString());
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        LogT.d("错误" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Result<HeaderItemBean> o) {
-                        super.onNext(o);
-                        LogT.d(" O " + o.toString());
-                        if (o.isRet()) {
-                            LogT.d(" o " + o.getData().getPlanDetailsList().size());
-                            if (memberWeeklyModelListBeans != null && memberWeeklyModelListBeans.size() != 0) {
-                                memberWeeklyModelListBeans = o.getData().getPlanDetailsList();
-                            } else {
-                                memberWeeklyModelListBeans.clear();
-                                memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
+                        @Override
+                        public void onNext(Result<List<WeeklyReportBean>> o) {
+                            super.onNext(o);
+                            if (o.isRet()) {
+                                mPlanWeeklyReport.clear();
+                                mPlanWeeklyReport.addAll(o.getData());
+                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
+                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
+                                LogT.d("size is " + mMulityTypeList.size());
+                                mAdapter.refreshData(mMulityTypeList);
                             }
-                            HeaderItemBean.PlanDetailsListBean memberWeeklyModelListBean = new HeaderItemBean.PlanDetailsListBean();
-                            memberWeeklyModelListBean.setPhase("整体情况");
-                            memberWeeklyModelListBeans.add(memberWeeklyModelListBean);
-                            LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + ".....周的周报计划数目为" + memberWeeklyModelListBeans.size());
-                            mHeaderAdapter.updateData(memberWeeklyModelListBeans);
                         }
-                    }
-                });
+                    });
+        } else {
+            ApiService.Utils.getInstance(getContext()).getWeeklyReport(userId, weeks, 1)
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            LogT.d("错误" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(Result<List<WeeklyReportBean>> o) {
+                            super.onNext(o);
+                            if (o.isRet()) {
+                                mPlanWeeklyReport.clear();
+                                mPlanWeeklyReport.addAll(o.getData());
+                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
+                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
+                                LogT.d("size is " + mMulityTypeList.size());
+                                mAdapter.refreshData(mMulityTypeList);
+                            }
+                        }
+                    });
+        }
     }
+
 }
