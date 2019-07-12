@@ -1,14 +1,17 @@
 package com.aorise.weeklyreport.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aorise.weeklyreport.BR;
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MulityTypeItem;
@@ -51,12 +54,17 @@ public class MulityStageRecyclerAdapter extends BaseAdapter<MulityTypeItem, Base
             TextView textView = (TextView) baseViewHolder.itemView.findViewById(R.id.item_stage_title);
             textView.setText(mList.get(position).getItem_name());
         } else if (mList.get(position).getData_type() == TypeTAG.TYPE_CONTENT.ordinal()) {
-            HeaderItemBean.PlanDetailsListBean mBean = (HeaderItemBean.PlanDetailsListBean) mList.get(position).getData();
+           final HeaderItemBean.PlanDetailsListBean mBean = (HeaderItemBean.PlanDetailsListBean) mList.get(position).getData();
             baseViewHolder.getBinding().setVariable(BR.stagecontent, mBean);
             baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(mContext, HeaderWeeklyReportDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("detail", mBean);
+                    mIntent.putExtra("item_detail", bundle);
+                    mContext.startActivity(mIntent);
                 }
             });
             baseViewHolder.getBinding().executePendingBindings();
