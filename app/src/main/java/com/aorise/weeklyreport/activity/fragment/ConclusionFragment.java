@@ -1,5 +1,6 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.activity.WeeklyReportDetailActivity;
+import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;

@@ -110,7 +110,7 @@ public interface ApiService {
     Observable<Result<PersonalBean>> getPersonalInfo(@Path("id") int userId);
 
     @GET(NetworkURLConfig.WEEKLY_REPORT_DETAIL)
-    Observable<Result<WeeklyReportDetailBean>> getWeeklyReportDetail(@Path("id") int id);
+    Observable<Result<WeeklyReportDetailBean>> getWeeklyReportDetail(@Query("id") int id);
 
     /**
      * 审批周报

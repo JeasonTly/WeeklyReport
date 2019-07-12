@@ -38,8 +38,8 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
     private boolean isAddPlan = false;
     private ActivityAddPlanOrSummaryBinding mViewDataBinding;
     private int weeks;
-    private int projectId = 1 ;
-    private int userId;
+    private int projectId = 1;
+    private int userId = 2;
     private int type = 1;//类型：1总结，2计划
     private int work_type = 1;//工作类型 '1-项目工作，2-部门工作，3-临时工作'
     private int planId = 1;//计划ID
@@ -100,6 +100,7 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
                             LogT.d("mProjectList is " + mProjectList.toString());
                             mProjectAdapter = new CustomProjectSpinnerAdapter(AddPlanOrSummaryActivity.this, R.layout.item_spinner_list, mProjectList);
                             mViewDataBinding.workContentList.setAdapter(mProjectAdapter);
+                            initPlanList();
                         }
                     }
                 });
@@ -130,10 +131,10 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
 
     private void initSpinnerList() {
         initProjectList();
-        initPlanList();
     }
 
     private void initPlanList() {
+        LogT.d(" project id is " + projectId + " user id is " + userId);
         ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectPlan>>>(this) {

@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.databinding.ActivityWeeklyReportDetailBinding;
 import com.aorise.weeklyreport.network.ApiService;
@@ -17,6 +18,7 @@ import com.hjq.toast.ToastUtils;
 public class WeeklyReportDetailActivity extends AppCompatActivity {
     private ActivityWeeklyReportDetailBinding mViewDataBinding;
     private int id = -1;
+    private int userId = 2;
     private WeeklyReportDetailBean mDetailBean;
     private String approvalText = "";
 

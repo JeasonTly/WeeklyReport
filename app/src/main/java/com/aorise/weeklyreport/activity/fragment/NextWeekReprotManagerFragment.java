@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.adapter.HeaderItemRecyclerAdapter;
+import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
+import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
+import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
@@ -29,6 +31,8 @@ import java.util.List;
  * Use the {@link NextWeekReprotManagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
 public class NextWeekReprotManagerFragment extends Fragment implements BaseRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +49,8 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
     private int weeks = 28;
 
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
-    private HeaderItemRecyclerAdapter mHeaderAdapter;
+    private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
+    private MulityStageRecyclerAdapter mAdapter;
     private HeaderItemBean mHeaderItemBean;
 
     public NextWeekReprotManagerFragment() {
@@ -59,7 +64,6 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
      * @return A new instance of fragment NextWeekReprotManagerFragment.
      */
     // TODO: Rename and change types and number of parameters
-
     public static NextWeekReprotManagerFragment newInstance(int useId, int projectId) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
@@ -77,6 +81,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
             projectId = getArguments().getInt(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,8 +90,8 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding.nextReportPlt.setCanLoadMore(false);
         mViewDataBinding.nextReportPlt.setRefreshListener(this);
         mViewDataBinding.nextReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mHeaderAdapter = new HeaderItemRecyclerAdapter(getActivity(),memberWeeklyModelListBeans);
-        mViewDataBinding.nextReportRecycler.setAdapter(mHeaderAdapter);
+        mAdapter = new MulityStageRecyclerAdapter(getActivity(), mMulityTypeList);
+        mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
         return mViewDataBinding.getRoot();
     }
 
@@ -120,11 +125,11 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
                                 memberWeeklyModelListBeans.clear();
                                 memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
                             }
-                            HeaderItemBean.PlanDetailsListBean memberWeeklyModelListBean = new HeaderItemBean.PlanDetailsListBean();
-                            memberWeeklyModelListBean.setPhase("整体情况");
-                            memberWeeklyModelListBeans.add(memberWeeklyModelListBean);
                             LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + ".....周的周报计划数目为" + memberWeeklyModelListBeans.size());
-                            mHeaderAdapter.updateData(memberWeeklyModelListBeans);
+
+                            mMulityTypeList = CommonUtils.getInstance().resortStage(memberWeeklyModelListBeans);
+
+                            mAdapter.refreshData(mMulityTypeList);
                         }
                     }
                 });

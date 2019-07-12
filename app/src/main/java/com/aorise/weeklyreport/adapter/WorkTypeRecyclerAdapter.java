@@ -38,9 +38,9 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<MulityTypeItem, BaseVie
     @Override
     public BaseViewHolder onCreateVH(ViewGroup parent, int viewType) {
         LogT.d("onCreateVH");
-        if (mList.get(viewType).getData_type() == TypeTAG.TYPE_TAG.ordinal()) {
+        if (viewType == TypeTAG.TYPE_TAG.ordinal()) {
             mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_tag_description, parent, false);
-        } else if (mList.get(viewType).getData_type() == TypeTAG.TYPE_CONTENT.ordinal()) {
+        } else if (viewType == TypeTAG.TYPE_CONTENT.ordinal()) {
             mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.item_content_list_description, parent, false);
         }
         return new BaseViewHolder(mViewDataBinding);
