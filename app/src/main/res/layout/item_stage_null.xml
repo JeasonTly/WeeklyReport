@@ -9,7 +9,7 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:background="@drawable/base_line_cf"
+        android:background="@drawable/base_line_wfe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
