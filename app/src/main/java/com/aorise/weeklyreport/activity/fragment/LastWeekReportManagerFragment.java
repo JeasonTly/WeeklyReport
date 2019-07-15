@@ -1,5 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,6 +38,7 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     // TODO: Rename and change types of parameters
 
@@ -60,11 +63,12 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
      * @return A new instance of fragment LastWeekReportManagerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LastWeekReportManagerFragment newInstance(int useId, int projectId) {
+    public static LastWeekReportManagerFragment newInstance(int useId, int projectId ,int weeks) {
         LastWeekReportManagerFragment fragment = new LastWeekReportManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, useId);
         args.putInt(ARG_PARAM2, projectId);
+        args.putInt(ARG_PARAM3, weeks);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,6 +79,7 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         if (getArguments() != null) {
             userId = getArguments().getInt(ARG_PARAM1);
             projectId = getArguments().getInt(ARG_PARAM2);
+            weeks = getArguments().getInt(ARG_PARAM3);
         }
     }
 
@@ -86,6 +91,10 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_header, container, false);
         mViewDataBinding.lastReportPlt.setCanLoadMore(false);
         mViewDataBinding.lastReportPlt.setRefreshListener(this);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId",2);
+
         mViewDataBinding.lastReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MulityStageRecyclerAdapter(getActivity(),mMulityTypeList);
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);

@@ -1,5 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -93,6 +95,9 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
         mViewDataBinding.planRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList,isManagerMode);
         mViewDataBinding.planRecycler.setAdapter(mAdapter);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId",2);
 
         return mViewDataBinding.getRoot();
     }

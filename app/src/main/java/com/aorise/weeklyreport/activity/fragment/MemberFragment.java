@@ -1,6 +1,8 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -68,6 +70,10 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
 
         mAdapter = new ProjectListAdapter(getContext(), mProjectList);
         mAdapter.setClickListener(this);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId",2);
+
         mViewDataBinding.fragmentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewDataBinding.fragmentRecycler.setAdapter(mAdapter);
         mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.GONE);

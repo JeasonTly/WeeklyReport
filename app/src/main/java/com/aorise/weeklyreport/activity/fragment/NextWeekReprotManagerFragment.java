@@ -1,5 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,10 +40,9 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private FragmentMemeberCheckBinding mViewDataBinding;
     private int userId = 2;
@@ -64,11 +65,12 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
      * @return A new instance of fragment NextWeekReprotManagerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId) {
+    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId,int weeks) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, useId);
         args.putInt(ARG_PARAM2, projectId);
+        args.putInt(ARG_PARAM3, weeks);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,6 +81,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         if (getArguments() != null) {
             userId = getArguments().getInt(ARG_PARAM1);
             projectId = getArguments().getInt(ARG_PARAM2);
+            weeks = getArguments().getInt(ARG_PARAM3);
         }
     }
 
@@ -89,10 +92,20 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_memeber_check, container, false);
         mViewDataBinding.nextReportPlt.setCanLoadMore(false);
         mViewDataBinding.nextReportPlt.setRefreshListener(this);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId",2);
+
         mViewDataBinding.nextReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MulityStageRecyclerAdapter(getActivity(), mMulityTypeList);
         mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
         return mViewDataBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateManagerList(weeks);
     }
 
     public void updateManagerList(int weeks) {

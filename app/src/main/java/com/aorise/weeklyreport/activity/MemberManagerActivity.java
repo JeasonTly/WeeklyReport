@@ -78,8 +78,8 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     }
 
     private void initFragment() {
-        mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId);
-        mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId);
+        mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek());
+        mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek());
         mFragmentList.add(mLastReportFragment);
         mFragmentList.add(mNextReportFragment);
 

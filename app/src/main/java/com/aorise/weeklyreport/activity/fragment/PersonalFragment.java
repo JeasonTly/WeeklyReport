@@ -1,5 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -101,6 +103,10 @@ public class PersonalFragment extends Fragment {
         // Inflate the layout for this fragment
         mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_personal,container,false);
         mViewDataBinding.personalActionbar.actionBarTitle.setText("个人信息");
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId",2);
+
         mViewDataBinding.personalActionbar.actionbarBack.setVisibility(View.GONE);
         mViewDataBinding.personalExit.setOnClickListener(new View.OnClickListener() {
             @Override
