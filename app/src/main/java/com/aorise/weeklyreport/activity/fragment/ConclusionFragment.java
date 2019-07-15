@@ -48,7 +48,8 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     private int userId = 2;
     private int projectId = 1;
     private int weeks = 28;
-    private boolean isManagerMode = false;
+    private boolean isManagerMode = false;//这个判断来源是否为项目负责人查看周报
+
     //    private OnFragmentInteractionListener mListener;
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
     private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
@@ -57,6 +58,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
 
     public ConclusionFragment() {
         // Required empty public constructor
+        weeks = TimeUtil.getInstance().getDayofWeek();
     }
 
     /**
@@ -92,12 +94,11 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_conclusion, container, false);
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_conclusion, container, false);
         mViewDataBinding.summaryPlt.setRefreshListener(this);
         mViewDataBinding.summaryPlt.setCanLoadMore(false);
         mViewDataBinding.summaryRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList);
+        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList,isManagerMode);
 
         mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
 

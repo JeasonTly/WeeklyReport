@@ -51,10 +51,13 @@ public class MulityStageRecyclerAdapter extends BaseAdapter<MulityTypeItem, Base
     @Override
     public void onBindVH(BaseViewHolder baseViewHolder, final int position) {
         if (mList.get(position).getData_type() == TypeTAG.TYPE_TAG.ordinal()) {
+            final HeaderItemBean.PlanDetailsListBean mBean = (HeaderItemBean.PlanDetailsListBean) mList.get(position).getData();
             TextView textView = (TextView) baseViewHolder.itemView.findViewById(R.id.item_stage_title);
+            TextView textPercent = (TextView) baseViewHolder.itemView.findViewById(R.id.item_stage_percent);
             textView.setText(mList.get(position).getItem_name());
+            textPercent.setText(mBean.getPercentComplete() + "%");
         } else if (mList.get(position).getData_type() == TypeTAG.TYPE_CONTENT.ordinal()) {
-           final HeaderItemBean.PlanDetailsListBean mBean = (HeaderItemBean.PlanDetailsListBean) mList.get(position).getData();
+            final HeaderItemBean.PlanDetailsListBean mBean = (HeaderItemBean.PlanDetailsListBean) mList.get(position).getData();
             baseViewHolder.getBinding().setVariable(BR.stagecontent, mBean);
             baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

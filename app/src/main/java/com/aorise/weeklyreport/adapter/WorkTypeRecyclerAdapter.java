@@ -24,10 +24,12 @@ import java.util.List;
  */
 public class WorkTypeRecyclerAdapter extends BaseAdapter<MulityTypeItem, BaseViewHolder> {
     private ViewDataBinding mViewDataBinding;
+    private boolean isManagerMode = false;//是否从审批界面进入？
 
-    public WorkTypeRecyclerAdapter(Context context, List<MulityTypeItem> typeItems) {
+    public WorkTypeRecyclerAdapter(Context context, List<MulityTypeItem> typeItems,boolean isManagerMode) {
         super(context);
         this.mList = typeItems;
+        this.isManagerMode = isManagerMode;
     }
 
     public enum TypeTAG {
@@ -79,6 +81,7 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<MulityTypeItem, BaseVie
                     Intent mIntent = new Intent();
                     mIntent.setClass(mContext, WeeklyReportDetailActivity.class);
                     mIntent.putExtra("reportId", weeklyReportBean.getId());
+                    mIntent.putExtra("isManagerMode", isManagerMode);
                     mContext.startActivity(mIntent);
                 }
             });

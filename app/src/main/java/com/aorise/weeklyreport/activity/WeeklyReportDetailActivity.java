@@ -6,14 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
+import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.TimeUtil;
+import com.aorise.weeklyreport.bean.AuditReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.databinding.ActivityWeeklyReportDetailBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriberNoDialog;
 import com.aorise.weeklyreport.network.Result;
+import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
+
+import okhttp3.RequestBody;
 
 public class WeeklyReportDetailActivity extends AppCompatActivity {
     private ActivityWeeklyReportDetailBinding mViewDataBinding;
@@ -21,13 +26,18 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     private int userId = 2;
     private WeeklyReportDetailBean mDetailBean;
     private String approvalText = "";
+    private boolean isManagerMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_weekly_report_detail);
-
+        WRApplication.getInstance().addActivity(this);
         id = getIntent().getIntExtra("reportId", -1);
+        isManagerMode = getIntent().getBooleanExtra("isManagerMode", false);
+        LogT.d(" isManager Mode " + isManagerMode);
+        mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+        //mViewDataBinding.pass.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
         initDetailInfo();
         mViewDataBinding.detailActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +61,15 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         int approvestatus = pass ? 1 : 2;
         approvalText = pass ? "通过" : "不通过";
         LogT.d(" param id = " + mDetailBean.getId() + " stauts is " + mDetailBean.getState() + " approvalText " + approvalText);
-        ApiService.Utils.getInstance(this).approvalWeeklyReport(mDetailBean.getId(), mDetailBean.getState(), approvestatus, approvalText)
+        Gson gson = new Gson();
+        AuditReportBean mModel = new AuditReportBean();
+        mModel.setWeeklyId(mDetailBean.getId());//周报ID
+        mModel.setPlanStatus(mDetailBean.getState());//项目周报上的完成状态
+        mModel.setRemark(approvalText);//备注
+        mModel.setStatue(approvestatus);//审批状态
+        String json = gson.toJson(mModel);
+        RequestBody model = CommonUtils.getRequestBody(json);
+        ApiService.Utils.getInstance(this).approvalWeeklyReport(model)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result>(this) {
                     @Override
@@ -62,6 +80,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
+                        ToastUtils.show("审批失败");
                     }
 
                     @Override
@@ -140,20 +159,18 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
             case 1:
                 checkStatus = "已通过";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
-                mViewDataBinding.pass.setVisibility(View.VISIBLE);
-                mViewDataBinding.notpass.setVisibility(View.GONE);
+                mViewDataBinding.pass.setText("已通过");
                 break;
             case 2:
                 checkStatus = "已驳回";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
-                mViewDataBinding.pass.setVisibility(View.GONE);
-                mViewDataBinding.notpass.setVisibility(View.VISIBLE);
+                mViewDataBinding.pass.setText("已驳回");
                 break;
             case 3:
                 checkStatus = "未审批";
-                mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
                 mViewDataBinding.pass.setVisibility(View.GONE);
-                mViewDataBinding.notpass.setVisibility(View.GONE);
+                mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+               // mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
                 break;
         }
 

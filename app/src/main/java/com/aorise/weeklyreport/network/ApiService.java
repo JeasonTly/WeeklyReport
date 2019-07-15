@@ -11,6 +11,7 @@ import com.aorise.weeklyreport.bean.MemberListBean;
 import com.aorise.weeklyreport.bean.PersonalBean;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectPlan;
+import com.aorise.weeklyreport.bean.UserInfoBean;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 
@@ -44,9 +45,10 @@ import rx.schedulers.Schedulers;
  */
 public interface ApiService {
 
-    @Headers("Content-Type: application/json;charset=UTF-8")
+    //@Headers("Content-Type: application/json;charset=UTF-8")
+    @FormUrlEncoded
     @POST(NetworkURLConfig.LOGIN_URL)
-    Observable<Result<String>> login(@Body RequestBody responseBody);
+    Observable<Result<UserInfoBean>> login(@Field("userName")String userName, @Field("passWord")String passWord);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.POST_WEEKLY_REPORT)
@@ -115,19 +117,18 @@ public interface ApiService {
     /**
      * 审批周报
      *
-     * @param weekyId
-     * @param status
-     * @param approvalStatus
-     * @param remark
      * @return
      */
-    @FormUrlEncoded
-    @POST(NetworkURLConfig.APPROVAL_WEEKLY_REPORT)
-    Observable<Result> approvalWeeklyReport(@Field("weeklyId") int weekyId,
-                                            @Field("planStatus") int status,
-                                            @Field("approvalStatus") int approvalStatus,
-                                            @Field("remark") String remark);
+//    @FormUrlEncoded
+//    @POST(NetworkURLConfig.APPROVAL_WEEKLY_REPORT)
+//    Observable<Result> approvalWeeklyReport(@Field("weeklyId") int weekyId,
+//                                            @Field("planStatus") int status,
+//                                            @Field("approvalStatus") int approvalStatus,
+//                                            @Field("remark") String remark);
 
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @POST(NetworkURLConfig.APPROVAL_WEEKLY_REPORT)
+    Observable<Result> approvalWeeklyReport(@Body RequestBody model);
     /**
      * 获取项目负责人的周报列表
      *

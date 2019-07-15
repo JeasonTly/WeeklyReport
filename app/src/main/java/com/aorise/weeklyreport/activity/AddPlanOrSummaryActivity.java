@@ -1,18 +1,22 @@
 package com.aorise.weeklyreport.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.adapter.CustomProjectSpinnerAdapter;
 import com.aorise.weeklyreport.adapter.CustomSpinnerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectPlan;
 import com.aorise.weeklyreport.bean.WeeklyReportUploadBean;
@@ -26,6 +30,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
 
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,12 +53,20 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
     private List<ProjectList> mProjectList = new ArrayList<>();
     private List<ProjectPlan> mProjectPlan = new ArrayList<>();
     private CustomProjectSpinnerAdapter mProjectAdapter;
+    private SimpleDateFormat sdf;
+    private InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_plan_or_summary);
+        WRApplication.getInstance().addActivity(this);
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        mViewDataBinding.startTime.setText(sdf.format(new Date()));
+        mViewDataBinding.endTime.setText(sdf.format(new Date()));
+
+        inputMethodManager  = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
         initGetIntent();
         initClickListener();
     }
@@ -166,6 +179,8 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
 
         String start_time = mViewDataBinding.startTime.getText().toString();
         String end_time = mViewDataBinding.endTime.getText().toString();
+        Date startDate = sdf.parse(start_time, new ParsePosition(0));
+        Date endDate = sdf.parse(end_time, new ParsePosition(0));
         int work_time = 1;
         try {
             work_time = Integer.valueOf(mViewDataBinding.workTime.getText().toString());
@@ -175,7 +190,6 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
         String output = mViewDataBinding.output.getText().toString();
         String explain = mViewDataBinding.showHow.getText().toString();
         String issue = mViewDataBinding.needHelp.getText().toString();
-
         Gson gson = new Gson();
         WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
         mUploadInfo.setApprovalState(3);//1,通过，2驳回，3未审批
@@ -230,7 +244,9 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
         //startDate.set(2013,1,1);
         Calendar endDate = Calendar.getInstance();
         //endDate.set(2020,1,1);
-
+        if(inputMethodManager.isActive()){
+            inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        }
         //正确设置方式 原因：注意事项有说明
         startDate.set(2000, 0, 1);
         endDate.set(2099, 11, 30);
@@ -239,9 +255,22 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
 //                tvTime.setText(getTime(date));
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
                 String format = sdf.format(date);
                 view.setText(format);
+
+                String start_time = mViewDataBinding.startTime.getText().toString();
+                String end_time = mViewDataBinding.endTime.getText().toString();
+                Date startDate = sdf.parse(start_time, new ParsePosition(0));
+                Date endDate = sdf.parse(end_time, new ParsePosition(0));
+                if (endDate.before(startDate)) {
+                    LogT.d("开始时间在结束时间之后");
+                    view.setText(sdf.format(new Date()));
+                    ToastUtils.show((isAddPlan ? "计划" : "总结") + "结束时间不得小于开始时间!");
+                    return;
+                }
+                mViewDataBinding.workTime.setText(String.valueOf(TimeUtil.getInstance().caclulateDifferenceBySimpleDateFormat(startDate, endDate)));
+
             }
         });
         timePickerBuilder

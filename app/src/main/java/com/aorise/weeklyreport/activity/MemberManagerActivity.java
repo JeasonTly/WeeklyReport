@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.activity.fragment.LastWeekReportManagerFragment;
 import com.aorise.weeklyreport.activity.fragment.NextWeekReprotManagerFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
@@ -46,6 +47,7 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_member_manager);
+        WRApplication.getInstance().addActivity(this);
         mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         weeks = TimeUtil.getInstance().getHistoryWeeks();

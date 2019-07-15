@@ -91,7 +91,7 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
         mViewDataBinding.planPlt.setRefreshListener(this);
         mViewDataBinding.planPlt.setCanLoadMore(false);
         mViewDataBinding.planRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList);
+        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList,isManagerMode);
         mViewDataBinding.planRecycler.setAdapter(mAdapter);
 
         return mViewDataBinding.getRoot();
@@ -128,7 +128,7 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
         this.weeks = weeks;
         LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks);
         if (isManagerMode) {
-            ApiService.Utils.getInstance(getContext()).getWeeklyReport(projectId, userId, weeks, 1)
+            ApiService.Utils.getInstance(getContext()).getWeeklyReport(projectId, userId, weeks, 2)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
                         @Override
@@ -156,7 +156,7 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
                         }
                     });
         } else {
-            ApiService.Utils.getInstance(getContext()).getWeeklyReport(userId, weeks, 1)
+            ApiService.Utils.getInstance(getContext()).getWeeklyReport(userId, weeks, 2)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
                         @Override

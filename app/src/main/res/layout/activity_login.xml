@@ -25,6 +25,7 @@
 
         <EditText
             android:hint="请输入账户名"
+            android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
@@ -48,6 +49,7 @@
             android:layout_gravity="center_vertical"/>
         <EditText
             android:hint="请输入密码"
+            android:id="@+id/pwd"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_width="match_parent"

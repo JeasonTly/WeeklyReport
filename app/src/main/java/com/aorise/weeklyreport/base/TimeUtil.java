@@ -38,4 +38,13 @@ public class TimeUtil {
         }
         return weeklist;
     }
+
+    public int caclulateDifferenceBySimpleDateFormat(Date date, Date nextDate) {
+        int diff = -1;
+        long from1 = date.getTime();
+        long to1 = nextDate.getTime();
+        diff = (int) ((to1 - from1) / (1000 * 60 * 60 * 24));
+        LogT.d("差距了" + diff + "天");
+        return diff;
+    }
 }

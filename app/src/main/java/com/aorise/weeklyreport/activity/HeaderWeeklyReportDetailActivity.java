@@ -7,6 +7,7 @@ import android.support.v7.view.menu.MenuView;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.databinding.ActivityHeaderWeeklyReportDetailBinding;
@@ -18,6 +19,7 @@ public class HeaderWeeklyReportDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBiding = DataBindingUtil.setContentView(this, R.layout.activity_header_weekly_report_detail);
+        WRApplication.getInstance().addActivity(this);
         mViewDataBiding.headerDetailActionbar.actionBarTitle.setText("项目阶段详情");
         mViewDataBiding.headerDetailActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override

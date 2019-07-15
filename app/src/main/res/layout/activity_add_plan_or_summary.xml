@@ -1,323 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".activity.AddPlanOrSummaryActivity">
 
-        <include
-            layout="@layout/actionbar"
-            android:id="@+id/addplan_actionbar"></include>
-        <!--工作类型-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="工作类型" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/work_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:entries="@array/plan_list"></Spinner>
-        </RelativeLayout>
-        <!--工作安排-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
+                <include
+                    android:id="@+id/addplan_actionbar"
+                    layout="@layout/actionbar"></include>
+                <!--工作类型-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="工作安排" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="工作类型" />
 
-            <Spinner
-                android:id="@+id/work_content_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:entries="@array/plan_list"></Spinner>
-        </RelativeLayout>
-        <!--具体事项-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
+                    <Spinner
+                        android:id="@+id/work_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_list"></Spinner>
+                </RelativeLayout>
+                <!--工作安排-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="具体事项" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="工作安排" />
 
-            <Spinner
-                android:id="@+id/specific_things"
-                android:layout_width="wrap_content"
-                android:focusable="true"
-                android:entries="@array/plan_list"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"></Spinner>
-        </RelativeLayout>
-        <!--计划开始时间-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
+                    <Spinner
+                        android:id="@+id/work_content_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_list"></Spinner>
+                </RelativeLayout>
+                <!--具体事项-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="计划开始时间" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="具体事项" />
+
+                    <Spinner
+                        android:id="@+id/specific_things"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_list"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"></Spinner>
+                </RelativeLayout>
+                <!--计划开始时间-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="计划开始时间" />
+
+                    <Button
+                        android:id="@+id/start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:text="2019-06-27" />
+                </RelativeLayout>
+                <!--计划结束时间-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="计划结束时间" />
+
+                    <Button
+                        android:id="@+id/end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:text="2019-06-27"></Button>
+                </RelativeLayout>
+                <!--实际完成百分比-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="完成百分比" />
+
+                    <Spinner
+                        android:id="@+id/plan_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_percent"></Spinner>
+                </RelativeLayout>
+                <!--工时-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="工时" />
+
+                    <EditText
+                        android:id="@+id/work_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="end"
+                        android:hint="X(天)"
+                        android:inputType="number"></EditText>
+                </RelativeLayout>
+                <!--输出物 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="输出物" />
+
+                    <EditText
+                        android:id="@+id/output"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_list"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="end"></EditText>
+                </RelativeLayout>
+                <!--实际完成情况说明/计划完成进度 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:id="@+id/plan_or_summary_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="计划完成进度" />
+
+                    <EditText
+                        android:id="@+id/show_how"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="end" />
+                </RelativeLayout>
+                <!-- 状态-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="状态" />
+
+                    <Spinner
+                        android:id="@+id/work_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_status"></Spinner>
+                </RelativeLayout>
+                <!--问题和需要配合的项-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="问题和需要配合的项" />
+
+                    <EditText
+                        android:id="@+id/need_help"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="1dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="end"></EditText>
+                </RelativeLayout>
+                <!--验收人-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/base_line"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="验收人" />
+
+                    <EditText
+                        android:id="@+id/acceptor"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="end"></EditText>
+
+                </RelativeLayout>
+            </LinearLayout>
 
             <Button
-                android:id="@+id/start_time"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:text="2019-06-27"/>
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/login_btn_background_green"
+                android:onClick="CommitClick"
+                android:layout_marginBottom="15dp"
+                android:text="提交" />
         </RelativeLayout>
-        <!--计划结束时间-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="计划结束时间" />
-
-            <Button
-                android:id="@+id/end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:text="2019-06-27"></Button>
-        </RelativeLayout>
-        <!--实际完成百分比-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="完成百分比" />
-
-            <Spinner
-                android:id="@+id/plan_percent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:entries="@array/plan_percent"></Spinner>
-        </RelativeLayout>
-        <!--工时-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="工时" />
-
-            <EditText
-                android:id="@+id/work_time"
-                android:focusable="true"
-                android:inputType="number"
-                android:gravity="end"
-                android:focusableInTouchMode="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:hint="X(天)"></EditText>
-        </RelativeLayout>
-        <!--输出物 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="输出物" />
-
-            <EditText
-                android:id="@+id/output"
-                android:layout_width="300dp"
-                android:focusable="true"
-                android:gravity="end"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:entries="@array/plan_list"></EditText>
-        </RelativeLayout>
-        <!--实际完成情况说明/计划完成进度 -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:id="@+id/plan_or_summary_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="计划完成进度" />
-
-            <EditText
-                android:id="@+id/show_how"
-                android:layout_width="200dp"
-                android:focusable="true"
-                android:gravity="end"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
-        <!-- 状态-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="状态" />
-
-            <Spinner
-                android:id="@+id/work_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:entries="@array/plan_status"></Spinner>
-        </RelativeLayout>
-        <!--问题和需要配合的项-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="问题和需要配合的项" />
-
-            <EditText
-                android:id="@+id/need_help"
-                android:layout_width="200dp"
-                android:focusable="true"
-                android:gravity="end"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="1dp"></EditText>
-        </RelativeLayout>
-        <!--验收人-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/base_line">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="验收人" />
-
-            <EditText
-                android:id="@+id/acceptor"
-                android:layout_width="150dp"
-                android:focusable="true"
-                android:gravity="end"
-                android:focusableInTouchMode="true"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"></EditText>
-        </RelativeLayout>
-
-        <Button
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:text="提交"
-            android:onClick="CommitClick"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
-    </ScrollView>
 </layout>

@@ -2,18 +2,20 @@ package com.aorise.weeklyreport;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
 
-import com.aorise.weeklyreport.activity.BaseActivity;
 import com.aorise.weeklyreport.activity.fragment.HomeFragment;
 import com.aorise.weeklyreport.activity.fragment.MemberFragment;
 import com.aorise.weeklyreport.activity.fragment.PersonalFragment;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.databinding.ActivityMainBinding;
+import com.hjq.toast.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +30,15 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     private List<Fragment> fragmentList = new ArrayList<>();
 
+    private long[] mHints = new long[2];
+    // 时间间隔
+    private static final long EXIT_INTERVAL = 2000L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        WRApplication.getInstance().addActivity(this);
         mHomeFragment = new HomeFragment();
         mMemberFragment = new MemberFragment();
         mPersonalFragment = new PersonalFragment();
@@ -61,6 +67,25 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            // 将mHints数组内的所有元素左移一个位置
+            System.arraycopy(mHints, 1, mHints, 0, mHints.length - 1);
+            // 获得当前系统已经启动的时间
+            mHints[mHints.length - 1] = SystemClock.uptimeMillis();
+            if ((SystemClock.uptimeMillis() - mHints[0]) > EXIT_INTERVAL) {
+                ToastUtils.show("再按一次退出应用!");
+            } else {
+                finish();
+                WRApplication.getInstance().exit();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

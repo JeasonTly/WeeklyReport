@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.activity.fragment.ConclusionFragment;
 import com.aorise.weeklyreport.activity.fragment.PlanFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
@@ -35,7 +36,7 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_audit_weekly_report);
-
+        WRApplication.getInstance().addActivity(this);
         initGetIntent();
         initFragment();
         initTabHost();

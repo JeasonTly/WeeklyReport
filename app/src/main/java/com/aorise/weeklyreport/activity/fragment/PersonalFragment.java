@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.bean.PersonalBean;
 import com.aorise.weeklyreport.databinding.FragmentPersonalBinding;
 import com.aorise.weeklyreport.network.ApiService;
@@ -101,6 +102,12 @@ public class PersonalFragment extends Fragment {
         mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_personal,container,false);
         mViewDataBinding.personalActionbar.actionBarTitle.setText("个人信息");
         mViewDataBinding.personalActionbar.actionbarBack.setVisibility(View.GONE);
+        mViewDataBinding.personalExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WRApplication.getInstance().exit();
+            }
+        });
         return mViewDataBinding.getRoot();
     }
 

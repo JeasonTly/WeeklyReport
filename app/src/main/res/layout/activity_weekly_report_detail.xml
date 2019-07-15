@@ -345,7 +345,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="15dp"
-
+                    android:visibility="gone"
                     android:background="@drawable/base_line">
 
                     <TextView
@@ -400,7 +400,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:onClick="NotAllowClick"
@@ -412,20 +411,9 @@
             android:layout_width="match_parent"
             android:textSize="18sp"
             android:gravity="center"
-            android:visibility="gone"
             android:text="已通过"
             android:layout_alignParentBottom="true"
             android:textColor="@color/colorAccent"
-            android:layout_height="50dp" />
-        <TextView
-            android:id="@+id/notpass"
-            android:layout_width="match_parent"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:text="已驳回"
-            android:layout_alignParentBottom="true"
-            android:textColor="#FE6744"
             android:layout_height="50dp" />
     </RelativeLayout>
 </layout>
