@@ -33,6 +33,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -49,6 +50,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetworkURLConfig.LOGIN_URL)
     Observable<Result<UserInfoBean>> login(@Field("userName")String userName, @Field("passWord")String passWord);
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @POST(NetworkURLConfig.LOGIN_URL_N)
+    Observable<Result<String>> login(@Body RequestBody requestBody);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.POST_WEEKLY_REPORT)
@@ -144,10 +149,15 @@ public interface ApiService {
     Observable<Result<Integer>> postHeaderReport(@Field("projectId")int projectId ,
                                                  @Field("byWeek")int byWeek ,
                                                  @Field("type")int type ,
-                                                 @Field("startDate")int startDate ,
-                                                 @Field("endDate")int endDate ,
                                                  @Field("overallSituation")String overallSituation ,
                                                  @Field("percentComplete")int percentComplete);
+
+    @PUT(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
+    Observable<Result<Integer>> putHeaderReport(@Query("projectId") int projectId ,
+                                                 @Query("byWeek")int byWeek ,
+                                                 @Query("type")int type ,
+                                                 @Query("overallSituation")String overallSituation ,
+                                                 @Query("percentComplete")int percentComplete);
     class Utils {
 
         public static ApiService getInstance(Context context) {

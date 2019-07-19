@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.MemberManagerActivity"></activity>
+        <activity android:name=".activity.OverAllSituationActivity"></activity>
+        <activity android:name=".activity.MemberManagerActivity" />
         <activity android:name=".activity.HeaderWeeklyReportDetailActivity" />
         <activity android:name=".activity.WeeklyReportDetailActivity" />
         <activity android:name=".activity.AuditWeeklyReportActivity" />

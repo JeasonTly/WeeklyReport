@@ -53,6 +53,7 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
         weeks = TimeUtil.getInstance().getHistoryWeeks();
         menuPopup = new MenuPopup(this, weeks.size() - 1, this);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
+        menuPopup.setOffsetY(36);
         mViewDataBinding.managerActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

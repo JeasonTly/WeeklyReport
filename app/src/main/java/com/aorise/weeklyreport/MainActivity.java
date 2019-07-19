@@ -1,5 +1,6 @@
 package com.aorise.weeklyreport;
 
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.activity.fragment.HomeFragment;
@@ -33,28 +35,32 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private long[] mHints = new long[2];
     // 时间间隔
     private static final long EXIT_INTERVAL = 2000L;
+    private boolean isManager = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         WRApplication.getInstance().addActivity(this);
-        mHomeFragment = new HomeFragment();
-        mMemberFragment = new MemberFragment();
-        mPersonalFragment = new PersonalFragment();
-        addToList(mHomeFragment);
-        addToList(mMemberFragment);
-        addToList(mPersonalFragment);
+//        mHomeFragment = new HomeFragment();
+//        mMemberFragment = new MemberFragment();
+//        mPersonalFragment = new PersonalFragment();
+//        addToList(mHomeFragment);
+//        addToList(mMemberFragment);
+//        addToList(mPersonalFragment);
+        SharedPreferences sp = getSharedPreferences("UserInfo",MODE_PRIVATE);
+        isManager = sp.getInt("userRole",0) ==1;
+
+        mViewDataBinding.groupMember.setVisibility(isManager ? View.VISIBLE:View.GONE);
+
         mViewDataBinding.pageIndex.setOnCheckedChangeListener(this);
         mViewDataBinding.groupHome.setChecked(true);
 
     }
 
-    private void addToList(Fragment fragment) {
-        if (fragment != null) {
-            fragmentList.add(fragment);
-        }
-        LogT.i("fragmentList数量" + fragmentList.size());
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -105,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     /*添加fragment*/
     private void showFragment(Fragment fragment) {
-        LogT.d("显示" + fragment);
+        LogT.d("显示" + fragment + " fragment is Add " + fragment.isAdded());
         /*判断该fragment是否已经被添加过  如果没有被添加  则添加*/
         if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().add(R.id.main_vp, fragment).commit();
@@ -114,15 +120,16 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
         LogT.i("fragmentList数量：" + fragmentList.size());
         for (Fragment frag : fragmentList) {
-
+            LogT.d(" fragment is " + frag);
             if (frag != fragment) {
                 /*先隐藏其他fragment*/
-                LogT.i("隐藏" + fragment);
+                LogT.i("隐藏" + frag);
+               // getSupportFragmentManager().beginTransaction().remove(f)
                 getSupportFragmentManager().beginTransaction().hide(frag).commit();
             }
         }
         currentFragment = fragment;
-//        LogT.d("Now fragment is " + fragment + " home hide ? " + mHomeFragment.isHidden());
+        LogT.d("Now fragment is " + fragment);
         getSupportFragmentManager().beginTransaction().show(fragment).commit();
 
     }

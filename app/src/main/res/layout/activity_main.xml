@@ -42,6 +42,9 @@
             android:layout_alignParentBottom="true"
             android:background="#ffffff"
             android:id="@+id/page_index"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout_height="60dp"
             android:orientation="horizontal">
 

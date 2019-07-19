@@ -1,6 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
+import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
@@ -21,6 +24,7 @@ import com.aorise.weeklyreport.databinding.FragmentHeaderBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.hjq.toast.ToastUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
@@ -98,6 +102,25 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding.lastReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MulityStageRecyclerAdapter(getActivity(),mMulityTypeList);
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
+
+        mViewDataBinding.summaryTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mHeaderItemBean == null) {
+                    ToastUtils.show("当前无项目具体信息!");
+                    return;
+                }
+                Intent mIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("detail",mHeaderItemBean);
+                mIntent.putExtra("item_detail",bundle);
+                mIntent.putExtra("projectId",projectId);
+                mIntent.putExtra("weeks",weeks);
+                mIntent.putExtra("type",1);
+                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
+                startActivity(mIntent);
+            }
+        });
         return mViewDataBinding.getRoot();
     }
 

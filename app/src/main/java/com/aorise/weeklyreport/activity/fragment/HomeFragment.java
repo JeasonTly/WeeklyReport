@@ -140,6 +140,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         currentWeeks = "第" + TimeUtil.getInstance().getDayofWeek() + "周";
         mViewDataBinding.fhActionbar.actionbarBack.setVisibility(View.GONE);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
+        menuPopup.setOffsetY(36);
         mViewDataBinding.fhActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

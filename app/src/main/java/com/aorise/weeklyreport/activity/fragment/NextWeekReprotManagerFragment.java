@@ -1,6 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
+import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
@@ -21,6 +24,7 @@ import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.hjq.toast.ToastUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
@@ -65,7 +69,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
      * @return A new instance of fragment NextWeekReprotManagerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId,int weeks) {
+    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, useId);
@@ -94,11 +98,30 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding.nextReportPlt.setRefreshListener(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId",2);
+        userId = sharedPreferences.getInt("userId", 2);
 
         mViewDataBinding.nextReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MulityStageRecyclerAdapter(getActivity(), mMulityTypeList);
         mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
+
+        mViewDataBinding.planTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mHeaderItemBean == null) {
+                    ToastUtils.show("当前无项目具体信息!");
+                    return;
+                }
+                Intent mIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("detail", mHeaderItemBean);
+                mIntent.putExtra("item_detail", bundle);
+                mIntent.putExtra("projectId",projectId);
+                mIntent.putExtra("weeks",weeks);
+                mIntent.putExtra("type",2);
+                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
+                startActivity(mIntent);
+            }
+        });
         return mViewDataBinding.getRoot();
     }
 

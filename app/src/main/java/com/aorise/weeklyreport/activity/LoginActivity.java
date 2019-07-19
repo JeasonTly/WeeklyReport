@@ -68,15 +68,36 @@ public class LoginActivity extends BaseActivity {
             ToastUtils.show("密码为空，请输入！");
             return;
         }
-//        Gson gson = new Gson();
-//        Map<String, Object> requestParam = new HashMap<>();
-//        requestParam.put("username", "shenzhiwei");
-//        requestParam.put("password", "szw123..");
-//        String json = gson.toJson(requestParam);
-//        LogT.d(" json " + json);
+        Gson gson = new Gson();
+        Map<String, Object> requestParam = new HashMap<>();
+        requestParam.put("username", "tuliyuan");
+        requestParam.put("password", "password");
+        String json = gson.toJson(requestParam);
+        LogT.d(" json " + json);
+        RequestBody requestBody = CommonUtils.getRequestBody(json);
         String userName = mViewDataBinding.userName.getText().toString();
         String pwd = mViewDataBinding.pwd.getText().toString();
-        //RequestBody requestBody = CommonUtils.getRequestBody(json);
+
+        editor = sp.edit();
+        //editor.putInt("userId",o.getData().getId());
+        editor.putInt("userId",2);
+        editor.putString("fullName","aab");
+        editor.putString("uuid","CCD");
+       // if(o.getData().getRoleName().equals("普通成员")){
+        //    editor.putInt("userRole",0);
+      //  }else{
+            editor.putInt("userRole",1);
+      //  }
+        editor.apply();
+        SharedPreferences.Editor accountEditor = spAccount.edit();
+        accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
+        accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
+        accountEditor.commit();
+
+        Intent mIntent = new Intent();
+        mIntent.setClass(LoginActivity.this, MainActivity.class);
+        startActivity(mIntent);
+
         ApiService.Utils.getInstance(this).login(userName,pwd)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<UserInfoBean>>(this) {
@@ -95,25 +116,25 @@ public class LoginActivity extends BaseActivity {
                         super.onNext(o);
                         LogT.d(" 11111111 o is " + o);
                         if(o.isRet()){
-                            editor = sp.edit();
-                            //editor.putInt("userId",o.getData().getId());
-                            editor.putInt("userId",2);
-                            editor.putString("fullName",o.getData().getFullName());
-                            editor.putString("uuid",o.getData().getUuid());
-                            if(o.getData().getRoleName().equals("普通成员")){
-                                editor.putInt("userRole",0);
-                            }else{
-                                editor.putInt("userRole",1);
-                            }
-                            editor.apply();
-                            SharedPreferences.Editor accountEditor = spAccount.edit();
-                            accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
-                            accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
-                            accountEditor.commit();
-
-                            Intent mIntent = new Intent();
-                            mIntent.setClass(LoginActivity.this, MainActivity.class);
-                            startActivity(mIntent);
+//                            editor = sp.edit();
+//                            //editor.putInt("userId",o.getData().getId());
+//                            editor.putInt("userId",2);
+//                            editor.putString("fullName",o.getData().getFullName());
+//                            editor.putString("uuid",o.getData().getUuid());
+//                            if(o.getData().getRoleName().equals("普通成员")){
+//                                editor.putInt("userRole",0);
+//                            }else{
+//                                editor.putInt("userRole",1);
+//                            }
+//                            editor.apply();
+//                            SharedPreferences.Editor accountEditor = spAccount.edit();
+//                            accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
+//                            accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
+//                            accountEditor.commit();
+//
+//                            Intent mIntent = new Intent();
+//                            mIntent.setClass(LoginActivity.this, MainActivity.class);
+//                            startActivity(mIntent);
                         }
                     }
                 });

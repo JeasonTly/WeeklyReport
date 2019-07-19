@@ -42,7 +42,7 @@ public class MenuPopup extends BasePopupWindow {
         this.menuPopupSelectedListener =  menuPopupSelectedListener;
 
         LogT.d("aaarestart.....?");
-        mAdapter = new MyArrayAdatper(getContext(), android.R.layout.simple_expandable_list_item_1, mList);
+        mAdapter = new MyArrayAdatper(getContext(), R.layout.listview_item, mList);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
