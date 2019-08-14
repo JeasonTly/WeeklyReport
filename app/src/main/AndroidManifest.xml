@@ -10,9 +10,8 @@
     <application
         android:name=".WRApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
@@ -22,7 +21,7 @@
         <activity android:name=".activity.HeaderWeeklyReportDetailActivity" />
         <activity android:name=".activity.WeeklyReportDetailActivity" />
         <activity android:name=".activity.AuditWeeklyReportActivity" />
-        <activity android:name=".activity.AddPlanOrSummaryActivity" />
+        <activity android:name=".activity.EditReportActivity" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -139,7 +139,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
     private void initProjectList() {
         ApiService.Utils.getInstance(getContext()).getProjectList(-1, userId)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectList>>>(this.getContext()) {
+                .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(this.getContext()) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();

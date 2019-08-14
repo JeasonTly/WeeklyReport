@@ -1,8 +1,6 @@
 package com.aorise.weeklyreport.activity.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.activity.AddPlanOrSummaryActivity;
+import com.aorise.weeklyreport.activity.EditReportActivity;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.MenuPopup;
@@ -163,7 +161,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
                 mIntent.putExtra("isAddPlan", addPlan);
                 mIntent.putExtra("title", currentWeeks);
                 mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
-                mIntent.setClass(getActivity(), AddPlanOrSummaryActivity.class);
+                mIntent.setClass(getActivity(), EditReportActivity.class);
                 startActivity(mIntent);
             }
         });

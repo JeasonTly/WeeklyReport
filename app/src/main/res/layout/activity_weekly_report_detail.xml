@@ -16,7 +16,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                tools:context=".activity.AddPlanOrSummaryActivity">
+                tools:context=".activity.EditReportActivity">
 
                <include
                    layout="@layout/actionbar"
@@ -281,6 +281,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/detail_status_area"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="15dp"
@@ -303,9 +304,7 @@
                         android:layout_centerVertical="true"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:visibility="gone"
                         android:layout_marginLeft="15dp"
-                        android:entries="@array/plan_status"
                         android:gravity="end"></TextView>
                     <Spinner
                         android:id="@+id/detail_work_status_spinner"

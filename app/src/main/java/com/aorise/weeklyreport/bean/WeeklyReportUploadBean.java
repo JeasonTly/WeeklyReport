@@ -2,6 +2,8 @@ package com.aorise.weeklyreport.bean;
 
 import android.databinding.BaseObservable;
 
+import java.util.List;
+
 /**
  * Created by Tuliyuan.
  * Date: 2019/7/5.
@@ -19,6 +21,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
                 ", issue='" + issue + '\'' +
                 ", output='" + output + '\'' +
                 ", percentComplete=" + percentComplete +
+                ", percentStage=" + percentStage +
                 ", planId=" + planId +
                 ", projectId=" + projectId +
                 ", startDate='" + startDate + '\'' +
@@ -27,10 +30,12 @@ public class WeeklyReportUploadBean extends BaseObservable {
                 ", userId=" + userId +
                 ", workTime=" + workTime +
                 ", workType=" + workType +
+                ", approvalModelList=" + approvalModelList +
                 '}';
     }
 
     /**
+     * approvalModelList : [{"planStatus":0,"remark":"string","statue":0,"weeklyId":0}]
      * approvalState : 0
      * byWeek : 0
      * endDate : string
@@ -39,6 +44,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
      * issue : string
      * output : string
      * percentComplete : 0
+     * percentStage : 0
      * planId : 0
      * projectId : 0
      * startDate : string
@@ -57,6 +63,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
     private String issue;
     private String output;
     private int percentComplete;
+    private int percentStage;
     private int planId;
     private int projectId;
     private String startDate;
@@ -65,6 +72,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
     private int userId;
     private int workTime;
     private int workType;
+    private List<ApprovalModelListBean> approvalModelList;
 
     public int getApprovalState() {
         return approvalState;
@@ -130,6 +138,14 @@ public class WeeklyReportUploadBean extends BaseObservable {
         this.percentComplete = percentComplete;
     }
 
+    public int getPercentStage() {
+        return percentStage;
+    }
+
+    public void setPercentStage(int percentStage) {
+        this.percentStage = percentStage;
+    }
+
     public int getPlanId() {
         return planId;
     }
@@ -192,5 +208,69 @@ public class WeeklyReportUploadBean extends BaseObservable {
 
     public void setWorkType(int workType) {
         this.workType = workType;
+    }
+
+    public List<ApprovalModelListBean> getApprovalModelList() {
+        return approvalModelList;
+    }
+
+    public void setApprovalModelList(List<ApprovalModelListBean> approvalModelList) {
+        this.approvalModelList = approvalModelList;
+    }
+
+    public static class ApprovalModelListBean {
+        @Override
+        public String toString() {
+            return "ApprovalModelListBean{" +
+                    "planStatus=" + planStatus +
+                    ", remark='" + remark + '\'' +
+                    ", statue=" + statue +
+                    ", weeklyId=" + weeklyId +
+                    '}';
+        }
+
+        /**
+         * planStatus : 0
+         * remark : string
+         * statue : 0
+         * weeklyId : 0
+         */
+
+        private int planStatus;
+        private String remark;
+        private int statue;
+        private int weeklyId;
+
+        public int getPlanStatus() {
+            return planStatus;
+        }
+
+        public void setPlanStatus(int planStatus) {
+            this.planStatus = planStatus;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public int getStatue() {
+            return statue;
+        }
+
+        public void setStatue(int statue) {
+            this.statue = statue;
+        }
+
+        public int getWeeklyId() {
+            return weeklyId;
+        }
+
+        public void setWeeklyId(int weeklyId) {
+            this.weeklyId = weeklyId;
+        }
     }
 }

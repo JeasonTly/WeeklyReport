@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.BR;
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.ItemListProjectBinding;
 

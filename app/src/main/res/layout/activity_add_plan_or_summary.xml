@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".activity.AddPlanOrSummaryActivity">
+        tools:context=".activity.EditReportActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,13 +35,35 @@
                         android:layout_centerVertical="true"
                         android:text="工作类型" />
 
-                    <Spinner
-                        android:id="@+id/work_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <!--<Spinner-->
+                        <!--android:id="@+id/work_type"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:entries="@array/plan_list"></Spinner>-->
+                    <LinearLayout
+                        android:id="@+id/work_type_area"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:entries="@array/plan_list"></Spinner>
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textSize="18sp"
+                            android:gravity="start"
+                            android:id="@+id/workType"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/dropdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
                 </RelativeLayout>
                 <!--工作安排-->
                 <RelativeLayout
@@ -58,13 +80,28 @@
                         android:layout_centerVertical="true"
                         android:text="工作安排" />
 
-                    <Spinner
-                        android:id="@+id/work_content_list"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/work_project_area"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:entries="@array/plan_list"></Spinner>
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textSize="18sp"
+                            android:gravity="start"
+                            android:id="@+id/work_project_name"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/dropdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
                 </RelativeLayout>
                 <!--具体事项-->
                 <RelativeLayout
@@ -81,14 +118,28 @@
                         android:layout_centerVertical="true"
                         android:text="具体事项" />
 
-                    <Spinner
-                        android:id="@+id/specific_things"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/work_plan_area"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"></Spinner>
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textSize="18sp"
+                            android:gravity="start"
+                            android:id="@+id/work_plan_name"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/dropdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
                 </RelativeLayout>
                 <!--计划开始时间-->
                 <RelativeLayout
@@ -152,14 +203,28 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="完成百分比" />
-
-                    <Spinner
-                        android:id="@+id/plan_percent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/work_percent_area"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:entries="@array/plan_percent"></Spinner>
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textSize="18sp"
+                            android:gravity="start"
+                            android:id="@+id/work_percent_text"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/dropdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
                 </RelativeLayout>
                 <!--工时-->
                 <RelativeLayout

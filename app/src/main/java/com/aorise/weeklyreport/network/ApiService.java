@@ -9,6 +9,7 @@ import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MemberListBean;
 import com.aorise.weeklyreport.bean.PersonalBean;
+import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectPlan;
 import com.aorise.weeklyreport.bean.UserInfoBean;
@@ -59,6 +60,9 @@ public interface ApiService {
     @POST(NetworkURLConfig.POST_WEEKLY_REPORT)
     Observable<Result<Integer>> fillInWeeklyReprot(@Body RequestBody responseBody);
 
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @PUT(NetworkURLConfig.PUT_WEEKLY_REPORT)
+    Observable<Result<Integer>> updateWeeklyReprot(@Body RequestBody responseBody);
     /**
      * 获取当前项目下对应用户的计划安排
      *
@@ -93,6 +97,13 @@ public interface ApiService {
     @GET(NetworkURLConfig.LIST_PROJECT_BY_USERID)
     Observable<Result<List<ProjectList>>> getProjectList(@Query("userId") int userId, @Query("leaderId") int leaderId);
 
+    /**
+     * 根据项目ID获取项目信息
+     * @param projectId
+     * @return
+     */
+    @GET(NetworkURLConfig.PROJECT_BASE_INFO)
+    Observable<Result<ProjectBaseInfo>> getProjectInfoById(@Path("id")int projectId);
     /**
      * 获取项目组成员列表
      *

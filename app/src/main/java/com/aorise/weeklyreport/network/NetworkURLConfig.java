@@ -16,7 +16,9 @@ public class NetworkURLConfig {
    // public static final String LIST_MEMBER = "api/projectMember/pageIndex/{pageIndex}/pageNum/{pageNum}";//查询项目程序按列表
     public static final String LIST_MEMBER = "api/projectMember/projectId/{projectId}";//查询项目程序按列表
     public static final String LIST_PROJECT_BY_USERID = "api/project";//查询项目列表
+    public static final String PROJECT_BASE_INFO = "api/project/{id}";
     public static final String POST_WEEKLY_REPORT = "api/memberWeekly";//添加周报
+    public static final String PUT_WEEKLY_REPORT = "api/memberWeekly";//添加周报
     public static final String APPROVAL_WEEKLY_REPORT = "api/approval";//审核周报
     public static final String PROJECT_PLAN = "api/projectPlan/owner/{owner}";//当前项目下的计划列表
     public static final String WEEKLY_REPORT_QUERY = "api/memberWeekly";//根据项目、人员id、周数查询周报

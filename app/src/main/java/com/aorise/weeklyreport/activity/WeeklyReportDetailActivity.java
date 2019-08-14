@@ -2,6 +2,7 @@ package com.aorise.weeklyreport.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,33 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         isManagerMode = getIntent().getBooleanExtra("isManagerMode", false);
         LogT.d(" isManager Mode " + isManagerMode);
         mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
-        mViewDataBinding.detailWorkStatus.setVisibility(isManagerMode ? View.GONE : View.VISIBLE);
+        mViewDataBinding.detailActionbar.actionMenu.setImageResource(R.drawable.bianji);
+        mViewDataBinding.detailActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent();
+                mIntent.setClass(WeeklyReportDetailActivity.this, EditReportActivity.class);
+                mIntent.putExtra("isEdit",true);
+                mIntent.putExtra("reportId",id);
+                mIntent.putExtra("title", "周报编辑");
+                mIntent.putExtra("weeks", mDetailBean.getByWeek());
+                mIntent.putExtra("isAddPlan",mDetailBean.getType()==2);
+                mIntent.putExtra("workType", mDetailBean.getWorkType());
+                mIntent.putExtra("projectId",mDetailBean.getProjectId());
+                mIntent.putExtra("projectName",mDetailBean.getProjectName());
+                mIntent.putExtra("planId",mDetailBean.getPlanId());
+                mIntent.putExtra("planName",mDetailBean.getPlanName());
+                mIntent.putExtra("startDate",mDetailBean.getStartDate());
+                mIntent.putExtra("endDate",mDetailBean.getEndDate());
+                mIntent.putExtra("percent",mDetailBean.getPercentComplete());
+                mIntent.putExtra("workTime",mDetailBean.getWorkTime());
+                mIntent.putExtra("output",mDetailBean.getOutput());
+                mIntent.putExtra("explain",mDetailBean.getExplain());
+                mIntent.putExtra("issue",mDetailBean.getIssue());
+                startActivity(mIntent);
+            }
+        });
+        //mViewDataBinding.detailWorkStatus.setVisibility(isManagerMode ? View.GONE : View.VISIBLE);
         mViewDataBinding.detailWorkStatusSpinner.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
         mViewDataBinding.detailWorkStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -56,7 +83,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
             }
         });
         //mViewDataBinding.pass.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
-        initDetailInfo();
+
         mViewDataBinding.detailActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +92,12 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         });
         mViewDataBinding.detailActionbar.actionBarTitle.setText("周报详情");
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initDetailInfo();
     }
 
     public void AllowClick(View view) {
@@ -200,7 +233,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
             case 1:
                 checkStatus = "已通过";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
-                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
                 mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
                 mViewDataBinding.pass.setText("已通过");
                 break;
@@ -208,16 +241,19 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 checkStatus = "已驳回";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
                 mViewDataBinding.pass.setText("已驳回");
-                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
                 mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
                 break;
             case 3:
                 checkStatus = "未审批";
                 mViewDataBinding.pass.setVisibility(View.GONE);
                 mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
-                mViewDataBinding.detailWorkStatus.setVisibility(View.GONE);
-                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.VISIBLE);
-                // mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
+                if(isManagerMode) {
+                    mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.VISIBLE);
+                }else{
+                    mViewDataBinding.detailStatusArea.setVisibility(View.GONE);
+                    mViewDataBinding.detailActionbar.actionMenu.setVisibility(View.VISIBLE);
+                }
                 break;
         }
 

@@ -1,15 +1,17 @@
 package com.aorise.weeklyreport.activity.fragment;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.databinding.FragmentNewHomeBinding;
 
 /**
@@ -65,9 +67,30 @@ public class NewHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_new_home,container,false);
-
+        mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_home, container, false);
+        initSpan();
+        mViewDataBinding.newHomeActionbar.actionBarTitle.setText("首页");
+        mViewDataBinding.newHomeActionbar.actionbarBack.setVisibility(View.GONE);
         return mViewDataBinding.getRoot();
     }
-
+    private void initSpan(){
+        SpannableString projectText = new SpannableString("项目概况 project");
+        RelativeSizeSpan largeSpan = new RelativeSizeSpan(2.0f);
+        RelativeSizeSpan smallSpan = new RelativeSizeSpan(0.4f);
+        projectText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        projectText.setSpan(smallSpan, 0, projectText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mViewDataBinding.projectInfo.setText(projectText);
+        SpannableString fillReportText = new SpannableString("周报填写 Fill");
+        fillReportText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        fillReportText.setSpan(smallSpan, 0, fillReportText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mViewDataBinding.fillReport.setText(fillReportText);
+        SpannableString reviewText = new SpannableString("周报审核 review");
+        reviewText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        reviewText.setSpan(smallSpan, 0, reviewText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mViewDataBinding.review.setText(reviewText);
+        SpannableString weeklyReportText = new SpannableString("项目周报 weekly");
+        weeklyReportText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        weeklyReportText.setSpan(smallSpan, 0, weeklyReportText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mViewDataBinding.weeklyReport.setText(weeklyReportText);
+    }
 }

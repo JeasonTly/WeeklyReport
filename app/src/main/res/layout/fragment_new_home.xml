@@ -5,23 +5,171 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F5F5F5"
     tools:context=".activity.fragment.NewHomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <include layout="@layout/actionbar"
+        android:id="@+id/new_home_actionbar"></include>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
-            <com.youth.banner.Banner
-                android:id="@+id/news_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </com.youth.banner.Banner>
+        android:layout_height="280dp">
+
+        <com.youth.banner.Banner
+            android:id="@+id/news_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.youth.banner.Banner>
     </LinearLayout>
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <!-- -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:background="@drawable/new_home_item_bg"
+            android:id="@+id/project_info_area"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/project_icon"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:textColor="#3dd078"
+                        android:text="项目概况project"
+                        android:textSize="32sp"
+                        android:id="@+id/project_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="48dp"/>
+                    <TextView
+                        android:text="点击了解项目概况"
+                        android:textSize="12sp"
+                        android:textColor="#919191"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="48dp"/>
+                </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:background="@drawable/new_home_item_bg"
+            android:layout_weight="1"
+            android:id="@+id/report_fill_area"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/fill_icon"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:textColor="#3dd078"
+                    android:text="周报填写Fill"
+                    android:textSize="32sp"
+                    android:id="@+id/fill_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+                <TextView
+                    android:text="快捷填写周报"
+                    android:textSize="12sp"
+                    android:textColor="#919191"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:background="@drawable/new_home_item_bg"
+            android:orientation="horizontal"
+            android:id="@+id/report_review_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/review_icon"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:textColor="#3dd078"
+                    android:text="周报审核review"
+                    android:textSize="32sp"
+                    android:id="@+id/review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+                <TextView
+                    android:text="审核并通过周报"
+                    android:textSize="12sp"
+                    android:textColor="#919191"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:background="@drawable/new_home_item_bg"
+            android:orientation="horizontal"
+            android:id="@+id/project_report_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/weekly_icon"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:textColor="#3dd078"
+                    android:text="项目周报weekly"
+                    android:textSize="32sp"
+                    android:id="@+id/weekly_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+                <TextView
+                    android:text="各项目组周报"
+                    android:textSize="12sp"
+                    android:textColor="#919191"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
 </layout>

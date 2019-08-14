@@ -77,7 +77,7 @@ public class MenuPopup extends BasePopupWindow {
     public void showPopupWindow(View v) {
         setOffsetX(v.getWidth() / 2);
       //  mListView.setSelection(mListView.getBottom());
-        mListView.smoothScrollToPosition(mList.size()-1);
+     //   mListView.smoothScrollToPosition(mList.size()-1);
         super.showPopupWindow(v);
     }
 
@@ -92,8 +92,8 @@ public class MenuPopup extends BasePopupWindow {
 
         public MyArrayAdatper(Context context, int resource, List<String> objects) {
             super(context, resource, objects);
-            isSelected = new boolean[mList.size()];
-            for (int i = 0; i < mList.size(); i++) {
+            isSelected = new boolean[objects.size()];
+            for (int i = 0; i < objects.size(); i++) {
                 isSelected[i] = false;
             }
             isSelected[defaultSelected] = true;

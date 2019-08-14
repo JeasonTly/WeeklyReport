@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.activity.fragment.HomeFragment;
 import com.aorise.weeklyreport.activity.fragment.MemberFragment;
+import com.aorise.weeklyreport.activity.fragment.NewHomeFragment;
 import com.aorise.weeklyreport.activity.fragment.PersonalFragment;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.databinding.ActivityMainBinding;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private ActivityMainBinding mViewDataBinding;
 
     private HomeFragment mHomeFragment;
+    private NewHomeFragment mNewHomeFragment;
     private MemberFragment mMemberFragment;
     private PersonalFragment mPersonalFragment;
     private Fragment currentFragment;
@@ -42,12 +44,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         WRApplication.getInstance().addActivity(this);
-//        mHomeFragment = new HomeFragment();
-//        mMemberFragment = new MemberFragment();
-//        mPersonalFragment = new PersonalFragment();
-//        addToList(mHomeFragment);
-//        addToList(mMemberFragment);
-//        addToList(mPersonalFragment);
+
         SharedPreferences sp = getSharedPreferences("UserInfo",MODE_PRIVATE);
 //        isManager = sp.getInt("userRole",0) ==1;
 
@@ -139,11 +136,15 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.group_home:
-                if (mHomeFragment == null) {
-                    LogT.i("homeFragment 为空  创建");
-                    mHomeFragment = new HomeFragment();
+//                if (mHomeFragment == null) {
+//                    LogT.i("homeFragment 为空  创建");
+//                    mHomeFragment = new HomeFragment();
+//                }
+//                showFragment(mHomeFragment);
+                if(mNewHomeFragment == null){
+                    mNewHomeFragment = new NewHomeFragment();
                 }
-                showFragment(mHomeFragment);
+                showFragment(mNewHomeFragment);
                 break;
             case R.id.group_member:
                 if (mMemberFragment == null) {
