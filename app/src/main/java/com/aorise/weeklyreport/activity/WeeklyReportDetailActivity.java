@@ -1,9 +1,14 @@
 package com.aorise.weeklyreport.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
@@ -23,10 +28,10 @@ import okhttp3.RequestBody;
 public class WeeklyReportDetailActivity extends AppCompatActivity {
     private ActivityWeeklyReportDetailBinding mViewDataBinding;
     private int id = -1;
-    private int userId = 2;
     private WeeklyReportDetailBean mDetailBean;
     private String approvalText = "";
     private boolean isManagerMode = false;
+    private int workStatus = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,19 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         isManagerMode = getIntent().getBooleanExtra("isManagerMode", false);
         LogT.d(" isManager Mode " + isManagerMode);
         mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+        mViewDataBinding.detailWorkStatus.setVisibility(isManagerMode ? View.GONE : View.VISIBLE);
+        mViewDataBinding.detailWorkStatusSpinner.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+        mViewDataBinding.detailWorkStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                workStatus = position + 1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         //mViewDataBinding.pass.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
         initDetailInfo();
         mViewDataBinding.detailActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
@@ -50,24 +68,47 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     }
 
     public void AllowClick(View view) {
-        CommitApproveResult(true);
+        // CommitApproveResult(true);
+        showApproveDialog(true);
     }
 
     public void NotAllowClick(View view) {
-        CommitApproveResult(false);
+        showApproveDialog(false);
+    }
+
+    private void showApproveDialog(final boolean pass) {
+        View inputView = LayoutInflater.from(this).inflate(R.layout.dialog_input_contentview, null);
+        final EditText approvalMark = (EditText) inputView.findViewById(R.id.approval_mark);
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(this)
+                .setTitle("周报审批")
+                .setView(inputView)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        approvalText = approvalMark.getText().toString();
+                        CommitApproveResult(pass);
+                    }
+                });
+        mDialog.create().show();
     }
 
     private void CommitApproveResult(boolean pass) {
         int approvestatus = pass ? 1 : 2;
-        approvalText = pass ? "通过" : "不通过";
-        LogT.d(" param id = " + mDetailBean.getId() + " stauts is " + mDetailBean.getState() + " approvalText " + approvalText);
+        //approvalText = pass ? "通过" : "不通过";
+        LogT.d(" param id = " + mDetailBean.getId() + " stauts is " + workStatus + " approvalText " + approvalText);
         Gson gson = new Gson();
         AuditReportBean mModel = new AuditReportBean();
         mModel.setWeeklyId(mDetailBean.getId());//周报ID
-        mModel.setPlanStatus(mDetailBean.getState());//项目周报上的完成状态
+        mModel.setPlanStatus(workStatus);//项目周报上的完成状态
         mModel.setRemark(approvalText);//备注
         mModel.setStatue(approvestatus);//审批状态
         String json = gson.toJson(mModel);
+        LogT.d("json is "+json);
         RequestBody model = CommonUtils.getRequestBody(json);
         ApiService.Utils.getInstance(this).approvalWeeklyReport(model)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -159,18 +200,24 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
             case 1:
                 checkStatus = "已通过";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
+                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
                 mViewDataBinding.pass.setText("已通过");
                 break;
             case 2:
                 checkStatus = "已驳回";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
                 mViewDataBinding.pass.setText("已驳回");
+                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
                 break;
             case 3:
                 checkStatus = "未审批";
                 mViewDataBinding.pass.setVisibility(View.GONE);
                 mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
-               // mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailWorkStatus.setVisibility(View.GONE);
+                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.VISIBLE);
+                // mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
                 break;
         }
 

@@ -2,7 +2,10 @@ package com.aorise.weeklyreport;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 
+import com.aorise.weeklyreport.activity.LoginActivity;
 import com.hjq.toast.ToastUtils;
 
 import java.util.LinkedList;
@@ -39,5 +42,18 @@ public class WRApplication extends Application {
             activity.finish();
         }
         activityList.clear();
+    }
+
+    public void LoginExit(Context context) {
+//        for(Activity activity:activityList) {
+//            if(activity instanceof LoginActivity){
+//                continue;
+//            }
+//            activityList.remove(activity);
+//            activity.finish();
+//        }
+        Intent mIntent = new Intent();
+        mIntent.setClass(context,LoginActivity.class);
+        context.startActivity(mIntent);
     }
 }

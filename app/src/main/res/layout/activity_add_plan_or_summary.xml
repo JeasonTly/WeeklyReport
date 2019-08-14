@@ -87,7 +87,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:entries="@array/plan_list"
                         android:focusable="true"
                         android:focusableInTouchMode="true"></Spinner>
                 </RelativeLayout>
@@ -175,18 +174,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="工时" />
+                        android:text="工时 (单位:天)" />
 
                     <EditText
                         android:id="@+id/work_time"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:gravity="end"
-                        android:hint="X(天)"
                         android:inputType="number"></EditText>
                 </RelativeLayout>
                 <!--输出物 -->
@@ -206,7 +204,7 @@
 
                     <EditText
                         android:id="@+id/output"
-                        android:layout_width="300dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -247,6 +245,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
+                    android:visibility="gone"
                     android:layout_marginRight="15dp"
                     android:background="@drawable/base_line">
 

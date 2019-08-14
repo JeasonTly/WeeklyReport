@@ -72,7 +72,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
         mAdapter.setClickListener(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId",2);
+        userId = sharedPreferences.getInt("userId",-1);
 
         mViewDataBinding.fragmentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewDataBinding.fragmentRecycler.setAdapter(mAdapter);
@@ -157,8 +157,11 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
                         if (o.isRet()) {
                             mProjectList = o.getData();
                             LogT.d("mProjectList is " + mProjectList.toString());
-
-                            mAdapter.refreshData(mProjectList);
+                            if(mProjectList !=null && mProjectList.size()==1){
+                                getMemberList(mProjectList.get(0).getId());
+                            }else {
+                                mAdapter.refreshData(mProjectList);
+                            }
                         }
                     }
                 });
@@ -190,7 +193,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
     private void getMemberList(int projectId) {
         this.projectId = projectId;
         LogT.d("project id is " + projectId);
-        ApiService.Utils.getInstance(getContext()).getMemberList("1", "50", projectId, TimeUtil.getInstance().getDayofWeek())
+        ApiService.Utils.getInstance(getContext()).getMemberList(projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<MemberListBean>>>(getContext()) {
                     @Override
@@ -213,7 +216,6 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
                             mMemberList = o.getData();
                             LogT.d("mMemberList list " + mMemberList);
                             isProjectList = false;
-
                             mViewDataBinding.fragmentMemberRecycler.setVisibility(View.VISIBLE);
                             mViewDataBinding.fragmentRecycler.setVisibility(View.GONE);
                             mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.VISIBLE);

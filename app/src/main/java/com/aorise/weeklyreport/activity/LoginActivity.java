@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -41,10 +43,29 @@ public class LoginActivity extends BaseActivity {
         spAccount = getSharedPreferences("UserAccount", Context.MODE_PRIVATE);
         String userName = spAccount.getString("userName","");
         String pwd = spAccount.getString("pwd","");
+        boolean shouldAutonLogin = sp.getBoolean("autoLogin",false);
         mViewDataBinding.userName.setText(userName);
         mViewDataBinding.pwd.setText(pwd);
-
+        if(shouldAutonLogin && !TextUtils.isEmpty(mViewDataBinding.userName.getText().toString()) && !TextUtils.isEmpty(mViewDataBinding.pwd.getText().toString())){
+            LoginClick(mViewDataBinding.btnLogin);
+        }
         WRApplication.getInstance().addActivity(this);
+        mViewDataBinding.userName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mViewDataBinding.pwd.setText("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mViewDataBinding.pwd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -68,35 +89,15 @@ public class LoginActivity extends BaseActivity {
             ToastUtils.show("密码为空，请输入！");
             return;
         }
-        Gson gson = new Gson();
-        Map<String, Object> requestParam = new HashMap<>();
-        requestParam.put("username", "tuliyuan");
-        requestParam.put("password", "password");
-        String json = gson.toJson(requestParam);
-        LogT.d(" json " + json);
-        RequestBody requestBody = CommonUtils.getRequestBody(json);
+//        Gson gson = new Gson();
+//        Map<String, Object> requestParam = new HashMap<>();
+//        requestParam.put("username", "tuliyuan");
+//        requestParam.put("password", "password");
+//        String json = gson.toJson(requestParam);
+//        LogT.d(" json " + json);
+//        RequestBody requestBody = CommonUtils.getRequestBody(json);
         String userName = mViewDataBinding.userName.getText().toString();
         String pwd = mViewDataBinding.pwd.getText().toString();
-
-        editor = sp.edit();
-        //editor.putInt("userId",o.getData().getId());
-        editor.putInt("userId",2);
-        editor.putString("fullName","aab");
-        editor.putString("uuid","CCD");
-       // if(o.getData().getRoleName().equals("普通成员")){
-        //    editor.putInt("userRole",0);
-      //  }else{
-            editor.putInt("userRole",1);
-      //  }
-        editor.apply();
-        SharedPreferences.Editor accountEditor = spAccount.edit();
-        accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
-        accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
-        accountEditor.commit();
-
-        Intent mIntent = new Intent();
-        mIntent.setClass(LoginActivity.this, MainActivity.class);
-        startActivity(mIntent);
 
         ApiService.Utils.getInstance(this).login(userName,pwd)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -109,32 +110,36 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
+                        ToastUtils.show("连接失败，请检查网络!");
                     }
 
                     @Override
                     public void onNext(Result<UserInfoBean> o) {
                         super.onNext(o);
-                        LogT.d(" 11111111 o is " + o);
+                        LogT.d(" 11111111 o is " + o.toString());
                         if(o.isRet()){
-//                            editor = sp.edit();
-//                            //editor.putInt("userId",o.getData().getId());
-//                            editor.putInt("userId",2);
-//                            editor.putString("fullName",o.getData().getFullName());
-//                            editor.putString("uuid",o.getData().getUuid());
-//                            if(o.getData().getRoleName().equals("普通成员")){
-//                                editor.putInt("userRole",0);
-//                            }else{
-//                                editor.putInt("userRole",1);
-//                            }
-//                            editor.apply();
-//                            SharedPreferences.Editor accountEditor = spAccount.edit();
-//                            accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
-//                            accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
-//                            accountEditor.commit();
-//
-//                            Intent mIntent = new Intent();
-//                            mIntent.setClass(LoginActivity.this, MainActivity.class);
-//                            startActivity(mIntent);
+                            editor = sp.edit();
+                            editor.putInt("userId",o.getData().getId());
+                            //editor.putInt("userId",2);
+                            editor.putString("fullName",o.getData().getFullName());
+                            editor.putString("uuid",o.getData().getUuid());
+                            if(!TextUtils.isEmpty(o.getData().getRoleName())){
+                                if(o.getData().getRoleName().equals("普通成员")){
+                                    editor.putInt("userRole",0);
+                                }else{
+                                    editor.putInt("userRole",1);
+                                }
+                            }
+                            editor.putBoolean("autoLogin",true);
+                            editor.apply();
+                            SharedPreferences.Editor accountEditor = spAccount.edit();
+                            accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
+                            accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
+                            accountEditor.commit();
+
+                            Intent mIntent = new Intent();
+                            mIntent.setClass(LoginActivity.this, MainActivity.class);
+                            startActivity(mIntent);
                         }
                     }
                 });

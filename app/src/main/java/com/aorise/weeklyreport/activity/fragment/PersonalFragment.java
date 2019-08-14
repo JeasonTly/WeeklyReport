@@ -20,7 +20,7 @@ import com.aorise.weeklyreport.network.Result;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- *  interface
+ * interface
  * to handle interaction events.
  * Use the {@link PersonalFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -75,7 +75,7 @@ public class PersonalFragment extends Fragment {
     }
 
 
-    private void initPersonalInfo(){
+    private void initPersonalInfo() {
         ApiService.Utils.getInstance(getContext()).getPersonalInfo(userId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriberNoDialog<Result<PersonalBean>>(getContext()) {
@@ -101,17 +101,33 @@ public class PersonalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_personal,container,false);
+        mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal, container, false);
         mViewDataBinding.personalActionbar.actionBarTitle.setText("个人信息");
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId",2);
-
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId", 2);
+        int isManager = sharedPreferences.getInt("userRole", -1);
+        String isManagerText = "";
+        switch (isManager){
+            case -1:
+                isManagerText = "无";
+                break;
+            case 0:
+                isManagerText = "普通成员";
+                break;
+            case 1:
+                isManagerText = "项目负责人";
+                break;
+        }
+        mViewDataBinding.personalJobs.setText(isManagerText);
         mViewDataBinding.personalActionbar.actionbarBack.setVisibility(View.GONE);
         mViewDataBinding.personalExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WRApplication.getInstance().exit();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("autoLogin",false);
+                editor.commit();
+                WRApplication.getInstance().LoginExit(getActivity());
             }
         });
         return mViewDataBinding.getRoot();

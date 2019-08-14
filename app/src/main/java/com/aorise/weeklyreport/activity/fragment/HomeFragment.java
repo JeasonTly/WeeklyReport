@@ -145,6 +145,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
             @Override
             public void onClick(View v) {
                 menuPopup.showPopupWindow(mViewDataBinding.fhActionbar.actionBarTitle);
+
             }
         });
 

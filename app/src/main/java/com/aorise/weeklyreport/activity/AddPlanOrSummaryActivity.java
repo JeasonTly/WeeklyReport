@@ -2,6 +2,7 @@ package com.aorise.weeklyreport.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +56,7 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
     private CustomProjectSpinnerAdapter mProjectAdapter;
     private SimpleDateFormat sdf;
     private InputMethodManager inputMethodManager;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,8 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
         mViewDataBinding.endTime.setText(sdf.format(new Date()));
 
         inputMethodManager  = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-
+        sp = getSharedPreferences("UserInfo",MODE_PRIVATE);
+        userId = sp.getInt("userId", 2);
         initGetIntent();
         initClickListener();
     }
@@ -202,7 +205,7 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
         mUploadInfo.setPlanId(planId);//计划ID
         mUploadInfo.setProjectId(projectId);//项目ID
         mUploadInfo.setStartDate(start_time);//开始日期
-        mUploadInfo.setState(status);//完成状态
+       // mUploadInfo.setState(status);//完成状态
         mUploadInfo.setType(type);//工作类型 计划还是总结
         mUploadInfo.setUserId(userId);//用户ID
         mUploadInfo.setWorkTime(work_time);//工作时间
@@ -283,9 +286,9 @@ public class AddPlanOrSummaryActivity extends AppCompatActivity {
                 .setTitleText("选择日期")//标题文字
                 .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
                 .isCyclic(true)//是否循环滚动
-                .setTitleBgColor(0xFF2d348f)//标题背景颜色 Night mode
-                .setBgColor(0xFF474faf)//滚轮背景颜色 Night mode
-                .setTitleColor(0xFF7af1c8)
+                .setTitleBgColor(0xFF3dd078)//标题背景颜色 Night mode
+                .setBgColor(0xFFFFFFFF)//滚轮背景颜色 Night mode
+                .setTitleColor(0xFFffffff)
                 .setDividerColor(0xFF7af1c8)//
                 .setTextColorCenter(0xFF7af1c8)
                 .setTextColorOut(0xFF919ac6)

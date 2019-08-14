@@ -6,11 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
-import com.aorise.weeklyreport.bean.ProjectPlan;
 
 import java.util.ArrayList;
 import java.util.List;

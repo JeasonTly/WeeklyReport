@@ -303,9 +303,18 @@
                         android:layout_centerVertical="true"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
+                        android:visibility="gone"
                         android:layout_marginLeft="15dp"
                         android:entries="@array/plan_status"
                         android:gravity="end"></TextView>
+                    <Spinner
+                        android:id="@+id/detail_work_status_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/plan_status"></Spinner>
                 </RelativeLayout>
                 <!--问题和需要配合的项-->
                 <RelativeLayout

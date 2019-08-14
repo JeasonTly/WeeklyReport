@@ -63,6 +63,7 @@
                 android:id="@+id/group_member"
                 style="@style/Main_RadioButton"
                 android:text="管理"
+
                 android:drawableTop="@drawable/tab_manager"
                 android:layout_width="0dp"
                 android:gravity="center"

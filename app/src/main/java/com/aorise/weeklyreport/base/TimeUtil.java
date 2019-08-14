@@ -26,7 +26,7 @@ public class TimeUtil {
         cal.setMinimalDaysInFirstWeek(7); // 设置每周最少为7天
         cal.setTime(new Date());
         int weeks = cal.get(Calendar.WEEK_OF_YEAR) + 1;
-        LogT.d("现在是第" + weeks + "周");
+     //   LogT.d("现在是第" + weeks + "周");
         return weeks;
     }
 

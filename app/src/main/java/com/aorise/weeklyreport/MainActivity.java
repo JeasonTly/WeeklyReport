@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 //        addToList(mMemberFragment);
 //        addToList(mPersonalFragment);
         SharedPreferences sp = getSharedPreferences("UserInfo",MODE_PRIVATE);
-        isManager = sp.getInt("userRole",0) ==1;
+//        isManager = sp.getInt("userRole",0) ==1;
 
-        mViewDataBinding.groupMember.setVisibility(isManager ? View.VISIBLE:View.GONE);
+       // mViewDataBinding.groupMember.setVisibility(isManager ? View.VISIBLE:View.GONE);
 
         mViewDataBinding.pageIndex.setOnCheckedChangeListener(this);
         mViewDataBinding.groupHome.setChecked(true);

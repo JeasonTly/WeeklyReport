@@ -67,7 +67,7 @@ public interface ApiService {
      * @return
      */
     @GET(NetworkURLConfig.PROJECT_PLAN)
-    Observable<Result<List<ProjectPlan>>> getProjectPlan(@Query("owner") int userid, @Query("projectId") int projectId);
+    Observable<Result<List<ProjectPlan>>> getProjectPlan(@Path("owner") int userid, @Query("projectId") int projectId);
 
     /**
      * 根据项目和用户ID还有第N周获取对应的周报
@@ -96,16 +96,11 @@ public interface ApiService {
     /**
      * 获取项目组成员列表
      *
-     * @param pageIndex
-     * @param pageNum
      * @param projectId
      * @return
      */
     @GET(NetworkURLConfig.LIST_MEMBER)
-    Observable<Result<List<MemberListBean>>> getMemberList(@Path("pageIndex") String pageIndex,
-                                                           @Path("pageNum") String pageNum,
-                                                           @Query("projectId") int projectId,
-                                                           @Query("byWeek") int byWeek);
+    Observable<Result<List<MemberListBean>>> getMemberList(@Path("projectId") int projectId);
 
     /**
      * 获取个人信息

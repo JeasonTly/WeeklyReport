@@ -44,6 +44,7 @@ public class MenuPopup extends BasePopupWindow {
         LogT.d("aaarestart.....?");
         mAdapter = new MyArrayAdatper(getContext(), R.layout.listview_item, mList);
         mListView.setAdapter(mAdapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,6 +76,8 @@ public class MenuPopup extends BasePopupWindow {
     @Override
     public void showPopupWindow(View v) {
         setOffsetX(v.getWidth() / 2);
+      //  mListView.setSelection(mListView.getBottom());
+        mListView.smoothScrollToPosition(mList.size()-1);
         super.showPopupWindow(v);
     }
 

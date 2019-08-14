@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.bean.ProjectPlan;
 
 import java.util.ArrayList;
@@ -21,7 +20,8 @@ public class CustomSpinnerAdapter extends ArrayAdapter {
     private List<ProjectPlan> dataList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private int layoutRes;
-    public CustomSpinnerAdapter(Context context, int resource, List<com.aorise.weeklyreport.bean.ProjectPlan> objects) {
+
+    public CustomSpinnerAdapter(Context context, int resource, List<ProjectPlan> objects) {
         super(context, resource, objects);
         dataList = objects;
         layoutRes = resource;
@@ -38,7 +38,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = layoutInflater.inflate(layoutRes, null);
-        TextView textView = (TextView)view;
+        TextView textView = (TextView) view;
         textView.setText(getItem(position));
         return view;
     }
