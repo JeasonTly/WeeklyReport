@@ -158,7 +158,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
                             mProjectList = o.getData();
                             LogT.d("mProjectList is " + mProjectList.toString());
                             if(mProjectList !=null && mProjectList.size()==1){
-                                getMemberList(mProjectList.get(0).getId());
+                               // getMemberList(mProjectList.get(0).getId());
                             }else {
                                 mAdapter.refreshData(mProjectList);
                             }
@@ -176,7 +176,7 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
     @Override
     public void onClick(int position) {
         if (isProjectList) {
-            getMemberList(mProjectList.get(position).getId());
+           // getMemberList(mProjectList.get(position).getId());
         }
     }
 
@@ -190,42 +190,42 @@ public class MemberFragment extends Fragment implements RecyclerListClickListene
 
     }
 
-    private void getMemberList(int projectId) {
-        this.projectId = projectId;
-        LogT.d("project id is " + projectId);
-        ApiService.Utils.getInstance(getContext()).getMemberList(projectId)
-                .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<MemberListBean>>>(getContext()) {
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        LogT.d("error " + e.toString());
-                        ToastUtils.show("当前项目组下无项目成员");
-                    }
-
-                    @Override
-                    public void onNext(Result<List<MemberListBean>> o) {
-                        super.onNext(o);
-                        if (o.isRet()) {
-
-                            mMemberList = o.getData();
-                            LogT.d("mMemberList list " + mMemberList);
-                            isProjectList = false;
-                            mViewDataBinding.fragmentMemberRecycler.setVisibility(View.VISIBLE);
-                            mViewDataBinding.fragmentRecycler.setVisibility(View.GONE);
-                            mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.VISIBLE);
-                            mViewDataBinding.fmActionbar.actionMenu.setVisibility(View.VISIBLE);
-
-                            mMemberAdapter.refreshData(mMemberList);
-
-
-                        }
-                    }
-                });
-    }
+//    private void getMemberList(int projectId) {
+//        this.projectId = projectId;
+//        LogT.d("project id is " + projectId);
+//        ApiService.Utils.getInstance(getContext()).getMemberList(projectId)
+//                .compose(ApiService.Utils.schedulersTransformer())
+//                .subscribe(new CustomSubscriber<Result<List<MemberListBean>>>(getContext()) {
+//                    @Override
+//                    public void onCompleted() {
+//                        super.onCompleted();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        super.onError(e);
+//                        LogT.d("error " + e.toString());
+//                        ToastUtils.show("当前项目组下无项目成员");
+//                    }
+//
+//                    @Override
+//                    public void onNext(Result<List<MemberListBean>> o) {
+//                        super.onNext(o);
+//                        if (o.isRet()) {
+//
+//                            mMemberList = o.getData();
+//                            LogT.d("mMemberList list " + mMemberList);
+//                            isProjectList = false;
+//                            mViewDataBinding.fragmentMemberRecycler.setVisibility(View.VISIBLE);
+//                            mViewDataBinding.fragmentRecycler.setVisibility(View.GONE);
+//                            mViewDataBinding.fmActionbar.actionbarBack.setVisibility(View.VISIBLE);
+//                            mViewDataBinding.fmActionbar.actionMenu.setVisibility(View.VISIBLE);
+//
+//                            mMemberAdapter.refreshData(mMemberList);
+//
+//
+//                        }
+//                    }
+//                });
+//    }
 }

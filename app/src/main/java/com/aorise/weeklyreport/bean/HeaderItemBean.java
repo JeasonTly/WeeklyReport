@@ -26,12 +26,14 @@ public class HeaderItemBean implements Serializable {
     }
 
     private int id;
-    private Integer projectId;
-    private Integer byWeek;
-    private Integer type;
+    private int projectId;
+    private int byWeek;
+    private int type;
     private String startDate;
     private String endDate;
     private String overallSituation;
+    private double percentComplete;
+    private List<PlanDetailsListBean> planDetailsList;
 
     public int getId() {
         return id;
@@ -41,27 +43,27 @@ public class HeaderItemBean implements Serializable {
         this.id = id;
     }
 
-    public Integer getProjectId() {
+    public int getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Integer projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
-    public Integer getByWeek() {
+    public int getByWeek() {
         return byWeek;
     }
 
-    public void setByWeek(Integer byWeek) {
+    public void setByWeek(int byWeek) {
         this.byWeek = byWeek;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -89,21 +91,17 @@ public class HeaderItemBean implements Serializable {
         this.overallSituation = overallSituation;
     }
 
-    public void setPercentComplete(Integer percentComplete) {
-        this.percentComplete = percentComplete;
-    }
-
-    private Integer percentComplete;
-
-    private List<PlanDetailsListBean> planDetailsList;
-
-    public int getPercentComplete() {
+    public double getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(int percentComplete) {
+    public void setPercentComplete(double percentComplete) {
         this.percentComplete = percentComplete;
     }
+
+
+
+
 
     public List<PlanDetailsListBean> getPlanDetailsList() {
         return planDetailsList;
@@ -137,7 +135,7 @@ public class HeaderItemBean implements Serializable {
          */
         private int memberId;
         private String phase;
-        private int stage;
+        private String stage;
         private String specificPhase;
         private int percentComplete;
         private String person;
@@ -159,11 +157,11 @@ public class HeaderItemBean implements Serializable {
             this.phase = phase;
         }
 
-        public int getStage() {
+        public String getStage() {
             return stage;
         }
 
-        public void setStage(int stage) {
+        public void setStage(String stage) {
             this.stage = stage;
         }
 

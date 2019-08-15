@@ -1,10 +1,12 @@
 package com.aorise.weeklyreport.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Tuliyuan.
  * Date: 2019/7/3.
  */
-public class ProjectList {
+public class ProjectList implements Serializable {
 
     @Override
     public String toString() {

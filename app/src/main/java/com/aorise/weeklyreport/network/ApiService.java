@@ -58,11 +58,11 @@ public interface ApiService {
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.POST_WEEKLY_REPORT)
-    Observable<Result<Integer>> fillInWeeklyReprot(@Body RequestBody responseBody);
+    Observable<Result> fillInWeeklyReprot(@Body RequestBody responseBody);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.PUT_WEEKLY_REPORT)
-    Observable<Result<Integer>> updateWeeklyReprot(@Body RequestBody responseBody);
+    Observable<Result> updateWeeklyReprot(@Body RequestBody responseBody);
     /**
      * 获取当前项目下对应用户的计划安排
      *
@@ -111,7 +111,10 @@ public interface ApiService {
      * @return
      */
     @GET(NetworkURLConfig.LIST_MEMBER)
-    Observable<Result<List<MemberListBean>>> getMemberList(@Path("projectId") int projectId);
+    Observable<Result<List<MemberListBean>>> getMemberList(@Path("pageIndex") int pageIndex,
+                                                           @Path("pageNum") int pageNum,
+                                                           @Query("projectId") int projectId,
+                                                           @Query("byWeek") int byWeek);
 
     /**
      * 获取个人信息
@@ -150,20 +153,14 @@ public interface ApiService {
     @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
     Observable<Result<HeaderItemBean>> getHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
-    @FormUrlEncoded
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
-    Observable<Result<Integer>> postHeaderReport(@Field("projectId")int projectId ,
-                                                 @Field("byWeek")int byWeek ,
-                                                 @Field("type")int type ,
-                                                 @Field("overallSituation")String overallSituation ,
-                                                 @Field("percentComplete")int percentComplete);
+    Observable<Result<Integer>> postHeaderReport(@Body RequestBody model);
 
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
-    Observable<Result<Integer>> putHeaderReport(@Query("projectId") int projectId ,
-                                                 @Query("byWeek")int byWeek ,
-                                                 @Query("type")int type ,
-                                                 @Query("overallSituation")String overallSituation ,
-                                                 @Query("percentComplete")int percentComplete);
+    Observable<Result<Integer>> putHeaderReport(@Body RequestBody model);
     class Utils {
 
         public static ApiService getInstance(Context context) {

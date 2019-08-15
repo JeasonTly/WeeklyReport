@@ -30,12 +30,11 @@ public class WeeklyReportUploadBean extends BaseObservable {
                 ", userId=" + userId +
                 ", workTime=" + workTime +
                 ", workType=" + workType +
-                ", approvalModelList=" + approvalModelList +
+                ", weeklyDateModels=" + weeklyDateModels +
                 '}';
     }
 
     /**
-     * approvalModelList : [{"planStatus":0,"remark":"string","statue":0,"weeklyId":0}]
      * approvalState : 0
      * byWeek : 0
      * endDate : string
@@ -51,6 +50,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
      * state : 0
      * type : 0
      * userId : 0
+     * weeklyDateModels : [{"workDate":"string"}]
      * workTime : 0
      * workType : 0
      */
@@ -72,7 +72,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
     private int userId;
     private int workTime;
     private int workType;
-    private List<ApprovalModelListBean> approvalModelList;
+    private List<WeeklyDateModelsBean> weeklyDateModels;
 
     public int getApprovalState() {
         return approvalState;
@@ -210,67 +210,34 @@ public class WeeklyReportUploadBean extends BaseObservable {
         this.workType = workType;
     }
 
-    public List<ApprovalModelListBean> getApprovalModelList() {
-        return approvalModelList;
+    public List<WeeklyDateModelsBean> getWeeklyDateModels() {
+        return weeklyDateModels;
     }
 
-    public void setApprovalModelList(List<ApprovalModelListBean> approvalModelList) {
-        this.approvalModelList = approvalModelList;
+    public void setWeeklyDateModels(List<WeeklyDateModelsBean> weeklyDateModels) {
+        this.weeklyDateModels = weeklyDateModels;
     }
 
-    public static class ApprovalModelListBean {
+    public static class WeeklyDateModelsBean {
         @Override
         public String toString() {
-            return "ApprovalModelListBean{" +
-                    "planStatus=" + planStatus +
-                    ", remark='" + remark + '\'' +
-                    ", statue=" + statue +
-                    ", weeklyId=" + weeklyId +
+            return "WeeklyDateModelsBean{" +
+                    "workDate='" + workDate + '\'' +
                     '}';
         }
 
         /**
-         * planStatus : 0
-         * remark : string
-         * statue : 0
-         * weeklyId : 0
+         * workDate : string
          */
 
-        private int planStatus;
-        private String remark;
-        private int statue;
-        private int weeklyId;
+        private String workDate;
 
-        public int getPlanStatus() {
-            return planStatus;
+        public String getWorkDate() {
+            return workDate;
         }
 
-        public void setPlanStatus(int planStatus) {
-            this.planStatus = planStatus;
-        }
-
-        public String getRemark() {
-            return remark;
-        }
-
-        public void setRemark(String remark) {
-            this.remark = remark;
-        }
-
-        public int getStatue() {
-            return statue;
-        }
-
-        public void setStatue(int statue) {
-            this.statue = statue;
-        }
-
-        public int getWeeklyId() {
-            return weeklyId;
-        }
-
-        public void setWeeklyId(int weeklyId) {
-            this.weeklyId = weeklyId;
+        public void setWorkDate(String workDate) {
+            this.workDate = workDate;
         }
     }
 }

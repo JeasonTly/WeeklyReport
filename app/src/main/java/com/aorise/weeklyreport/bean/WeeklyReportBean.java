@@ -26,28 +26,30 @@ public class WeeklyReportBean extends BaseObservable {
                 ", state=" + state +
                 ", approvalState=" + approvalState +
                 ", userId=" + userId +
+                ", projectName='" + projectName + '\'' +
                 ", planName='" + planName + '\'' +
                 '}';
     }
 
     /**
-     * id : 3
-     * byWeek : 27
-     * projectId : 3
-     * type : 2
+     * id : 93
+     * byWeek : 33
+     * projectId : 2
+     * type : 1
      * workType : 1
-     * planId : 3
-     * startDate : 2019-07-01 09:42:16
-     * endDate : 2019-07-07 09:42:20
-     * percentComplete : 70
-     * workTime : 5
-     * output : dskfj klsd
-     * explain : sdfsadf
-     * issue : dsfsawerqw
-     * state : 2
-     * approvalState : 1
+     * planId : 94
+     * startDate : 2019-08-14 18:35:54
+     * endDate : 2019-08-17 18:35:58
+     * percentComplete : 30
+     * workTime : 3
+     * output : 输出物见githubs.cn
+     * explain : 修改成功
+     * issue : 暂时没有
+     * state : 0
+     * approvalState : 3
      * userId : 2
-     * planName : 说到底23
+     * projectName : 无双剑姬
+     * planName : Android编码阶段
      */
 
     private int id;
@@ -66,6 +68,7 @@ public class WeeklyReportBean extends BaseObservable {
     private int state;
     private int approvalState;
     private int userId;
+    private String projectName;
     private String planName;
 
     public int getId() {
@@ -194,6 +197,14 @@ public class WeeklyReportBean extends BaseObservable {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getPlanName() {

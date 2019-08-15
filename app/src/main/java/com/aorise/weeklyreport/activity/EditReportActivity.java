@@ -49,7 +49,7 @@ public class EditReportActivity extends AppCompatActivity {
     private int type = 1;//类型：1总结，2计划
     private int work_type = 1;//工作类型 '1-项目工作，2-部门工作，3-临时工作'
     private int planId = 1;//计划ID
-    private int percent = 1;//百分比
+    private int percent = 10;//百分比
     private int status = 1;//完成状态
     private int reportId = -1;
     private boolean isEdit = false;
@@ -255,7 +255,7 @@ public class EditReportActivity extends AppCompatActivity {
             mPercentTextList.add(i * 10 + "%");
         }
         if (!isEdit) {
-            mViewDataBinding.workPercentText.setText(mPercentTextList.get(0));
+            mViewDataBinding.workPercentText.setText(mPercentTextList.get(1));
         } else {
             mViewDataBinding.workPercentText.setText(isEdit_Percent);
         }
@@ -279,7 +279,7 @@ public class EditReportActivity extends AppCompatActivity {
                 .setLabels("", "", "")
                 //标题文字
                 .setTitleText("选择百分比")
-                .setSelectOptions(0)
+                .setSelectOptions(1)
                 .build();
         percentOptionsView.setPicker(mPercentTextList);
         mViewDataBinding.workPercentArea.setOnClickListener(new View.OnClickListener() {
@@ -369,7 +369,7 @@ public class EditReportActivity extends AppCompatActivity {
     private void initProjectList() {
         ApiService.Utils.getInstance(this).getProjectList(userId, -1)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectList>>>(this) {
+                .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -400,7 +400,7 @@ public class EditReportActivity extends AppCompatActivity {
         LogT.d(" project id is " + projectId + " user id is " + userId);
         ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriberNoDialog<Result<List<ProjectPlan>>>(this) {
+                .subscribe(new CustomSubscriber<Result<List<ProjectPlan>>>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -432,6 +432,7 @@ public class EditReportActivity extends AppCompatActivity {
 
         String start_time = mViewDataBinding.startTime.getText().toString();
         String end_time = mViewDataBinding.endTime.getText().toString();
+        List<WeeklyReportUploadBean.WeeklyDateModelsBean> workTimeList = TimeUtil.getInstance().getWorkDateList(start_time,end_time);
         int work_time = 1;
         try {
             work_time = Integer.valueOf(mViewDataBinding.workTime.getText().toString());
@@ -457,20 +458,20 @@ public class EditReportActivity extends AppCompatActivity {
         // mUploadInfo.setState(status);//完成状态
         mUploadInfo.setType(type);//工作类型 计划还是总结
         mUploadInfo.setUserId(userId);//用户ID
-        mUploadInfo.setWorkTime(work_time);//工作时间
+        mUploadInfo.setWorkTime(workTimeList.size());//工作时间
         mUploadInfo.setWorkType(work_type);//工作类型
         LogT.d(isEdit ?"修改周报":"创建周报" );
         if(isEdit){
             mUploadInfo.setId(reportId);
         }
+        mUploadInfo.setWeeklyDateModels(workTimeList);
         LogT.d(" upload info is " + mUploadInfo.toString());
         String jsonData = gson.toJson(mUploadInfo);
-
         RequestBody mResponseBody = CommonUtils.getRequestBody(jsonData);
         if (!isEdit) {
             ApiService.Utils.getInstance(this).fillInWeeklyReprot(mResponseBody)
                     .compose(ApiService.Utils.schedulersTransformer())
-                    .subscribe(new CustomSubscriber<Result<Integer>>(this) {
+                    .subscribe(new CustomSubscriber<Result>(this) {
                         @Override
                         public void onCompleted() {
                             super.onCompleted();
@@ -482,7 +483,7 @@ public class EditReportActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onNext(Result<Integer> o) {
+                        public void onNext(Result o) {
                             super.onNext(o);
                             LogT.d(" fillInWeeklyReprot data is " + o);
                             if (o.isRet()) {
@@ -554,7 +555,7 @@ public class EditReportActivity extends AppCompatActivity {
                     ToastUtils.show((isAddPlan ? "计划" : "总结") + "结束时间不得小于开始时间!");
                     return;
                 }
-                mViewDataBinding.workTime.setText(String.valueOf(TimeUtil.getInstance().caclulateDifferenceBySimpleDateFormat(startDate, endDate)));
+                mViewDataBinding.workTime.setText(String.valueOf(TimeUtil.getInstance().caclulateDiffByDate(startDate, endDate)));
 
             }
         });

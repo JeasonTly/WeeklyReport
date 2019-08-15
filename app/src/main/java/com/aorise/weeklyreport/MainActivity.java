@@ -13,10 +13,10 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.activity.fragment.HomeFragment;
-import com.aorise.weeklyreport.activity.fragment.MemberFragment;
 import com.aorise.weeklyreport.activity.fragment.NewHomeFragment;
 import com.aorise.weeklyreport.activity.fragment.PersonalFragment;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.databinding.ActivityMainBinding;
 import com.hjq.toast.ToastUtils;
 
@@ -26,11 +26,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
     private ActivityMainBinding mViewDataBinding;
 
-    private HomeFragment mHomeFragment;
     private NewHomeFragment mNewHomeFragment;
-    private MemberFragment mMemberFragment;
     private PersonalFragment mPersonalFragment;
-    private Fragment currentFragment;
 
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -52,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
         mViewDataBinding.pageIndex.setOnCheckedChangeListener(this);
         mViewDataBinding.groupHome.setChecked(true);
+       // LogT.d("Time xxxxxxx"+ TimeUtil.getInstance().getWorkDateList("2019-08-09 18:06:33","2019-08-19 23:56:33"));
 
     }
 
@@ -125,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 getSupportFragmentManager().beginTransaction().hide(frag).commit();
             }
         }
-        currentFragment = fragment;
         LogT.d("Now fragment is " + fragment);
         getSupportFragmentManager().beginTransaction().show(fragment).commit();
 
@@ -136,22 +133,11 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.group_home:
-//                if (mHomeFragment == null) {
-//                    LogT.i("homeFragment 为空  创建");
-//                    mHomeFragment = new HomeFragment();
-//                }
-//                showFragment(mHomeFragment);
+
                 if(mNewHomeFragment == null){
                     mNewHomeFragment = new NewHomeFragment();
                 }
                 showFragment(mNewHomeFragment);
-                break;
-            case R.id.group_member:
-                if (mMemberFragment == null) {
-                    LogT.i("contactsFragment 为空  创建");
-                    mMemberFragment = new MemberFragment();
-                }
-                showFragment(mMemberFragment);
                 break;
             case R.id.group_pesonal:
                 if (mPersonalFragment == null) {

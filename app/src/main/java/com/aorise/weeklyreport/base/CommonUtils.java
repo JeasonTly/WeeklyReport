@@ -2,9 +2,7 @@ package com.aorise.weeklyreport.base;
 
 import android.text.TextUtils;
 
-import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
-import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 
@@ -97,69 +95,70 @@ public class CommonUtils {
     }
 
     public static RequestBody getRequestBody(String string) {
+        LogT.d("json is "+string);
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), string);
     }
 
-    public List<MulityTypeItem> resortStage(List<HeaderItemBean.PlanDetailsListBean> listBeans) {
-        List<MulityTypeItem> mulityTypeItems = new ArrayList<>();
-        for (int i = 0; i < listBeans.size(); i++) {
-            HeaderItemBean.PlanDetailsListBean mPlanStage = listBeans.get(i);
-            if (i == 0) {
-                MulityTypeItem mulityTypeItem = new MulityTypeItem();
-                mulityTypeItem.setData(mPlanStage);
-                mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
-                mulityTypeItem.setItem_name(mPlanStage.getPhase());
-                mulityTypeItems.add(mulityTypeItem);
-
-                if (TextUtils.isEmpty(mPlanStage.getSpecificPhase())) {
-                    MulityTypeItem mulityTypeItem_one = new MulityTypeItem();
-                    mulityTypeItem_one.setData(mPlanStage);
-                    mulityTypeItem_one.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYEP_NULL.ordinal());
-                    mulityTypeItem_one.setItem_name("无数据");
-                    mulityTypeItems.add(mulityTypeItem_one);
-                    continue;
-                }
-            } else {
-                if (TextUtils.isEmpty(mPlanStage.getSpecificPhase())) {
-                    MulityTypeItem mulityTypeItem = new MulityTypeItem();
-                    mulityTypeItem.setData(mPlanStage);
-                    mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
-                    mulityTypeItem.setItem_name(mPlanStage.getPhase());
-                    mulityTypeItems.add(mulityTypeItem);
-
-
-                    MulityTypeItem mulityTypeItem_one = new MulityTypeItem();
-                    mulityTypeItem_one.setData(mPlanStage);
-                    mulityTypeItem_one.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYEP_NULL.ordinal());
-                    mulityTypeItem_one.setItem_name("无数据");
-                    mulityTypeItems.add(mulityTypeItem_one);
-                    continue;
-                } else {
-                    HeaderItemBean.PlanDetailsListBean lastPlanStage = listBeans.get(i - 1);
-                    if (!lastPlanStage.getPhase().equals(listBeans.get(i).getPhase())) {
-                        MulityTypeItem mulityTypeItem = new MulityTypeItem();
-                        mulityTypeItem.setData(mPlanStage);
-                        mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
-                        mulityTypeItem.setItem_name(mPlanStage.getPhase());
-                        mulityTypeItems.add(mulityTypeItem);
-                    }
-                }
-
-            }
-            LogT.d(" 具体的工作阶段名称: " + mPlanStage.toString());
-
-            MulityTypeItem mulityTypeItem = new MulityTypeItem();
-            mulityTypeItem.setData(mPlanStage);
-            mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_CONTENT.ordinal());
-            mulityTypeItem.setItem_name(mPlanStage.getSpecificPhase());
-            mulityTypeItems.add(mulityTypeItem);
-
-
-        }
-        for (MulityTypeItem mulityTypeItem : mulityTypeItems) {
-            LogT.d(" mulityType content is " + mulityTypeItem);
-        }
-        LogT.d(" size is " + mulityTypeItems.size());
-        return mulityTypeItems;
-    }
+//    public List<MulityTypeItem> resortStage(List<HeaderItemBean.PlanDetailsListBean> listBeans) {
+//        List<MulityTypeItem> mulityTypeItems = new ArrayList<>();
+//        for (int i = 0; i < listBeans.size(); i++) {
+//            HeaderItemBean.PlanDetailsListBean mPlanStage = listBeans.get(i);
+//            if (i == 0) {
+//                MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//                mulityTypeItem.setData(mPlanStage);
+//                mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                mulityTypeItem.setItem_name(mPlanStage.getPhase());
+//                mulityTypeItems.add(mulityTypeItem);
+//
+//                if (TextUtils.isEmpty(mPlanStage.getSpecificPhase())) {
+//                    MulityTypeItem mulityTypeItem_one = new MulityTypeItem();
+//                    mulityTypeItem_one.setData(mPlanStage);
+//                    mulityTypeItem_one.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYEP_NULL.ordinal());
+//                    mulityTypeItem_one.setItem_name("无数据");
+//                    mulityTypeItems.add(mulityTypeItem_one);
+//                    continue;
+//                }
+//            } else {
+//                if (TextUtils.isEmpty(mPlanStage.getSpecificPhase())) {
+//                    MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//                    mulityTypeItem.setData(mPlanStage);
+//                    mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                    mulityTypeItem.setItem_name(mPlanStage.getPhase());
+//                    mulityTypeItems.add(mulityTypeItem);
+//
+//
+//                    MulityTypeItem mulityTypeItem_one = new MulityTypeItem();
+//                    mulityTypeItem_one.setData(mPlanStage);
+//                    mulityTypeItem_one.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYEP_NULL.ordinal());
+//                    mulityTypeItem_one.setItem_name("无数据");
+//                    mulityTypeItems.add(mulityTypeItem_one);
+//                    continue;
+//                } else {
+//                    HeaderItemBean.PlanDetailsListBean lastPlanStage = listBeans.get(i - 1);
+//                    if (!lastPlanStage.getPhase().equals(listBeans.get(i).getPhase())) {
+//                        MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//                        mulityTypeItem.setData(mPlanStage);
+//                        mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                        mulityTypeItem.setItem_name(mPlanStage.getPhase());
+//                        mulityTypeItems.add(mulityTypeItem);
+//                    }
+//                }
+//
+//            }
+//            LogT.d(" 具体的工作阶段名称: " + mPlanStage.toString());
+//
+//            MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//            mulityTypeItem.setData(mPlanStage);
+//            mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_CONTENT.ordinal());
+//            mulityTypeItem.setItem_name(mPlanStage.getSpecificPhase());
+//            mulityTypeItems.add(mulityTypeItem);
+//
+//
+//        }
+//        for (MulityTypeItem mulityTypeItem : mulityTypeItems) {
+//            LogT.d(" mulityType content is " + mulityTypeItem);
+//        }
+//        LogT.d(" size is " + mulityTypeItems.size());
+//        return mulityTypeItems;
+//    }
 }

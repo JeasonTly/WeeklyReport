@@ -19,6 +19,7 @@ import com.aorise.weeklyreport.bean.AuditReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.databinding.ActivityWeeklyReportDetailBinding;
 import com.aorise.weeklyreport.network.ApiService;
+import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.CustomSubscriberNoDialog;
 import com.aorise.weeklyreport.network.Result;
 import com.google.gson.Gson;
@@ -145,7 +146,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         RequestBody model = CommonUtils.getRequestBody(json);
         ApiService.Utils.getInstance(this).approvalWeeklyReport(model)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriberNoDialog<Result>(this) {
+                .subscribe(new CustomSubscriber<Result>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -175,7 +176,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         LogT.d("id is " + id);
         ApiService.Utils.getInstance(this).getWeeklyReportDetail(id)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriberNoDialog<Result<WeeklyReportDetailBean>>(this) {
+                .subscribe(new CustomSubscriber<Result<WeeklyReportDetailBean>>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();

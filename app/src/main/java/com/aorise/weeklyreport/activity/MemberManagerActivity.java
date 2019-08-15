@@ -37,19 +37,24 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     private MenuPopup menuPopup;
     private List<String> weeks = new ArrayList<>();
     private String currentWeeks = "";
+    private int currentWeekNumber = -1;
 
     private boolean addPlan = false;
+    private int type = -1;
 
     private int userId = 1;
-    private int projectId = 1;
+    private int projectId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_member_manager);
         WRApplication.getInstance().addActivity(this);
-        mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
+        currentWeekNumber = TimeUtil.getInstance().getDayofWeek();
+
+        mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + currentWeekNumber + "周");
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
+        mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.VISIBLE);
         weeks = TimeUtil.getInstance().getHistoryWeeks();
         menuPopup = new MenuPopup(this, weeks.size() - 1, this);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
@@ -64,6 +69,24 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
             @Override
             public void onClick(View v) {
                 MemberManagerActivity.this.finish();
+            }
+        });
+        mViewDataBinding.managerActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (mHeaderItemBean == null) {
+//                    ToastUtils.show("当前无项目具体信息!");
+//                    return;
+//                }
+                Intent mIntent = new Intent();
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("detail", mHeaderItemBean);
+//                mIntent.putExtra("item_detail", bundle);
+                mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("weeks", currentWeekNumber);
+                mIntent.putExtra("type", type);
+                mIntent.setClass(MemberManagerActivity.this, OverAllSituationActivity.class);
+                startActivity(mIntent);
             }
         });
         getDefaultIntent();
@@ -93,8 +116,10 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
                 if (tab.getText().equals(TITLE_ONE)) {
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
                     addPlan = true;
+                    type = 1;
                 } else if (tab.getText().equals(TITLE_TWO)) {
                     addPlan = false;
+                    type = 2;
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
                 }
 
@@ -127,6 +152,7 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     @Override
     public void onPageSelected(int i) {
         addPlan = i == 1;
+        type = i + 1;
         mViewDataBinding.managerTabHost.setScrollPosition(i, 0, false);
     }
 
@@ -139,23 +165,23 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     public void selectPosistion(int position) {
         LogT.d("当前选择了。。。。" + position);
         mViewDataBinding.managerActionbar.actionBarTitle.setText(weeks.get(position));
-
+        currentWeekNumber = position + 1;
         currentWeeks = weeks.get(position);
         if (addPlan) {
             if (mLastReportFragment != null) {
-                mLastReportFragment.updateManagerList(position + 1);
+                mLastReportFragment.updateManagerList(currentWeekNumber);
             } else {
                 mLastReportFragment = new LastWeekReportManagerFragment();
                 mFragmentList.add(mLastReportFragment);
-                mLastReportFragment.updateManagerList(position + 1);
+                mLastReportFragment.updateManagerList(currentWeekNumber);
             }
         } else {
             if (mNextReportFragment != null) {
-                mNextReportFragment.updateManagerList(position + 1);
+                mNextReportFragment.updateManagerList(currentWeekNumber);
             } else {
                 mNextReportFragment = new NextWeekReprotManagerFragment();
                 mFragmentList.add(mNextReportFragment);
-                mNextReportFragment.updateManagerList(position + 1);
+                mNextReportFragment.updateManagerList(currentWeekNumber);
             }
         }
     }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
@@ -50,7 +51,6 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
     private FragmentPlanBinding mViewDataBinding;
     //    private OnFragmentInteractionListener mListener;
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
-    private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
     private WorkTypeRecyclerAdapter mAdapter;
     private boolean isManagerMode = false;
 
@@ -93,7 +93,8 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
         mViewDataBinding.planPlt.setRefreshListener(this);
         mViewDataBinding.planPlt.setCanLoadMore(false);
         mViewDataBinding.planRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList,isManagerMode);
+        mViewDataBinding.planRecycler.addItemDecoration(new SpacesItemDecoration(8));
+        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mPlanWeeklyReport,isManagerMode);
         mViewDataBinding.planRecycler.setAdapter(mAdapter);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
@@ -153,10 +154,8 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
                             if (o.isRet()) {
                                 mPlanWeeklyReport.clear();
                                 mPlanWeeklyReport.addAll(o.getData());
-                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-                                LogT.d("size is " + mMulityTypeList.size());
-                                mAdapter.refreshData(mMulityTypeList);
+                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报计划数目为" + mPlanWeeklyReport.size());
+                                mAdapter.refreshData(o.getData());
                             }
                         }
                     });
@@ -181,10 +180,8 @@ public class PlanFragment extends Fragment implements BaseRefreshListener {
                             if (o.isRet()) {
                                 mPlanWeeklyReport.clear();
                                 mPlanWeeklyReport.addAll(o.getData());
-                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-                                LogT.d("size is " + mMulityTypeList.size());
-                                mAdapter.refreshData(mMulityTypeList);
+                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报计划数目为" + mPlanWeeklyReport.size());
+                                mAdapter.refreshData(o.getData());
                             }
                         }
                     });

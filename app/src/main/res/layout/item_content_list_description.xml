@@ -1,47 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="workThings"
             type="com.aorise.weeklyreport.bean.WeeklyReportBean"></variable>
+        <variable
+            name="itemworkTime"
+            type="String"></variable>
+        <variable
+            name="percentComplete"
+            type="String"></variable>
+        <variable
+            name="workType"
+            type="String"></variable>
     </data>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:background="@drawable/base_line_cf"
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/white_fill_board"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <RelativeLayout
+            android:background="#FF644A"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="18sp"
+                android:text="工作类型"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="@{workType}"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:layout_centerVertical="true"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+        </RelativeLayout>
+        <RelativeLayout
+            android:background="@drawable/base_line_cf"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:textSize="18sp"
-            android:text="工作内容" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:text="@{workThings.planName}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:text="工作安排" />
 
-            android:layout_toLeftOf="@+id/worktype_content_icon_right"
-            android:textSize="18sp"
-            android:layout_marginRight="5dp"
-            android:textColor="#C5C5C5"
-            android:layout_centerVertical="true" />
-        <ImageView
-            android:id="@+id/worktype_content_icon_right"
-            android:layout_centerVertical="true"
-            android:src="@drawable/you"
-            android:layout_marginTop="10dp"
+            <TextView
+                android:text="@{workThings.projectName}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:textColor="#C5C5C5"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:background="@drawable/base_line_cf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:text="具体事项" />
+
+            <TextView
+                android:text="@{workThings.planName}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:textColor="#C5C5C5"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:background="@drawable/base_line_cf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:text="工时 (天)" />
+
+            <TextView
+                android:text="@{itemworkTime}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:textColor="#C5C5C5"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:text="完成百分比" />
+
+            <TextView
+                android:text="@{percentComplete}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:textColor="#C5C5C5"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
 </layout>

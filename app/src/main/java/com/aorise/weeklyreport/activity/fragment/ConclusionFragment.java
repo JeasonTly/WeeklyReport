@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.WeeklyReportDetailActivity;
 import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
+import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
@@ -47,14 +48,14 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     private FragmentConclusionBinding mViewDataBinding;
     // TODO: Rename and change types of parameters
 //    private OnFragmentInteractionListener mListener;
-    private int userId = 2;
-    private int projectId = 1;
-    private int weeks = 28;
+    private int userId = -1;
+    private int projectId = -1;
+    private int weeks = -1;
     private boolean isManagerMode = false;//这个判断来源是否为项目负责人查看周报
 
     //    private OnFragmentInteractionListener mListener;
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
-    private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
+   // private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
     private WorkTypeRecyclerAdapter mAdapter;
 
 
@@ -85,8 +86,8 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            userId = getArguments().getInt(ARG_PARAM1);
-            projectId = getArguments().getInt(ARG_PARAM2);
+            projectId = getArguments().getInt(ARG_PARAM1);
+            userId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
             isManagerMode = getArguments().getBoolean(ARG_PARAM4);
         }
@@ -104,7 +105,8 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
         userId = sharedPreferences.getInt("userId",2);
 
         mViewDataBinding.summaryRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mMulityTypeList,isManagerMode);
+        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mPlanWeeklyReport,isManagerMode);
+        mViewDataBinding.summaryRecycler.addItemDecoration(new SpacesItemDecoration(8));
         mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
 
         return mViewDataBinding.getRoot();
@@ -158,9 +160,9 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
                                 mPlanWeeklyReport.clear();
                                 mPlanWeeklyReport.addAll(o.getData());
                                 LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-                                LogT.d("size is " + mMulityTypeList.size());
-                                mAdapter.refreshData(mMulityTypeList);
+//                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
+//                                LogT.d("size is " + mMulityTypeList.size());
+                                mAdapter.refreshData(o.getData());
                             }
                         }
                     });
@@ -186,9 +188,9 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
                                 mPlanWeeklyReport.clear();
                                 mPlanWeeklyReport.addAll(o.getData());
                                 LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-                                LogT.d("size is " + mMulityTypeList.size());
-                                mAdapter.refreshData(mMulityTypeList);
+//                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
+//                                LogT.d("size is " + mMulityTypeList.size());
+                                mAdapter.refreshData(o.getData());
                             }
                         }
                     });

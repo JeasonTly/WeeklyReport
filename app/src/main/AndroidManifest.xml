@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ProjectOverviewActivity"></activity>
+        <activity android:name=".activity.ChooseProjectActivity"></activity>
+        <activity android:name=".activity.ProjectInfoActivity" />
+        <activity android:name=".activity.ReviewAndToFillReportActivity" />
+        <activity android:name=".activity.ProjectOverviewActivity" />
         <activity android:name=".activity.OverAllSituationActivity" />
         <activity android:name=".activity.MemberManagerActivity" />
         <activity android:name=".activity.HeaderWeeklyReportDetailActivity" />

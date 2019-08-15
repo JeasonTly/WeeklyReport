@@ -8,28 +8,6 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
-        <!--<RelativeLayout-->
-        <!--android:background="@color/colorPrimary"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp">-->
-
-        <!--<Spinner-->
-        <!--android:id="@+id/weeks_to_choose"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_centerHorizontal="true"></Spinner>-->
-        <!--</RelativeLayout>-->
-
-        <!--<android.support.design.widget.TabLayout-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:id="@+id/fragment_tab_host"-->
-        <!--android:layout_width="180dp"-->
-        <!--android:layout_height="50dp" />-->
-
-        <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/viewpager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
         <LinearLayout
             android:orientation="horizontal"
             android:id="@+id/main_vp"
@@ -56,18 +34,6 @@
                 android:drawableTop="@drawable/tab_home"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:id="@+id/group_member"
-                style="@style/Main_RadioButton"
-                android:text="管理"
-
-                android:drawableTop="@drawable/tab_manager"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 

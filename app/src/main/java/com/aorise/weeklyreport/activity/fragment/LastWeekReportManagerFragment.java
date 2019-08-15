@@ -12,12 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
-import com.aorise.weeklyreport.base.CommonUtils;
+import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.databinding.FragmentHeaderBinding;
@@ -67,7 +65,7 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
      * @return A new instance of fragment LastWeekReportManagerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LastWeekReportManagerFragment newInstance(int useId, int projectId ,int weeks) {
+    public static LastWeekReportManagerFragment newInstance(int useId, int projectId, int weeks) {
         LastWeekReportManagerFragment fragment = new LastWeekReportManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, useId);
@@ -97,30 +95,31 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding.lastReportPlt.setRefreshListener(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId",2);
+        userId = sharedPreferences.getInt("userId", 2);
 
         mViewDataBinding.lastReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MulityStageRecyclerAdapter(getActivity(),mMulityTypeList);
+        mAdapter = new MulityStageRecyclerAdapter(getActivity(), memberWeeklyModelListBeans);
+        mViewDataBinding.lastReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
 
-        mViewDataBinding.summaryTotal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mHeaderItemBean == null) {
-                    ToastUtils.show("当前无项目具体信息!");
-                    return;
-                }
-                Intent mIntent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("detail",mHeaderItemBean);
-                mIntent.putExtra("item_detail",bundle);
-                mIntent.putExtra("projectId",projectId);
-                mIntent.putExtra("weeks",weeks);
-                mIntent.putExtra("type",1);
-                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
-                startActivity(mIntent);
-            }
-        });
+//        mViewDataBinding.summaaryTotal.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mHeaderItemBean == null) {
+//                    ToastUtils.show("当前无项目具体信息!");
+//                    return;
+//                }
+//                Intent mIntent = new Intent();
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("detail", mHeaderItemBean);
+//                mIntent.putExtra("item_detail", bundle);
+//                mIntent.putExtra("projectId", projectId);
+//                mIntent.putExtra("weeks", weeks);
+//                mIntent.putExtra("type", 1);
+//                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
+//                startActivity(mIntent);
+//            }
+//        });
         return mViewDataBinding.getRoot();
     }
 
@@ -160,13 +159,9 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
                                 memberWeeklyModelListBeans.clear();
                                 memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
                             }
-                            mMulityTypeList = CommonUtils.getInstance().resortStage(memberWeeklyModelListBeans);
+                            // mMulityTypeList = CommonUtils.getInstance().resortStage(memberWeeklyModelListBeans);
 
-                            for (MulityTypeItem mulityTypeItem : mMulityTypeList) {
-                                LogT.d("......111" + mulityTypeItem.toString());
-                            }
-
-                            mAdapter.refreshData(mMulityTypeList);
+                            mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }
                 });

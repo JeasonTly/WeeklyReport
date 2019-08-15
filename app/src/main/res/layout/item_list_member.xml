@@ -1,33 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
-
         <variable
             name="memberlist"
             type="com.aorise.weeklyreport.bean.MemberListBean" />
+        <variable
+            name="planTime"
+            type="String"/>
+        <variable
+            name="useTime"
+            type="String"/>
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/base_line"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/member_board">
+        <LinearLayout
             android:layout_marginLeft="15dp"
-            android:text="@{memberlist.userName}"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/you" />
-    </RelativeLayout>
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/xm"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="姓名"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="end"
+                android:textSize="18sp"
+                android:text="@{memberlist.userName}"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/gw"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="岗位"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="end"
+                android:textSize="18sp"
+                android:text="@{memberlist.post}"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/kssj"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="开始时间"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="end"
+                android:textSize="18sp"
+                android:text="@{memberlist.startTime}"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/jssj"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="结束时间"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="end"
+                android:textSize="18sp"
+                android:text="@{memberlist.endTime}"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/jhgs"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="计划工时"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="end"
+                android:textSize="18sp"
+                android:text="@{planTime}"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/ysygs"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="已使用工时"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="end"
+                android:textSize="18sp"
+                android:text="@{useTime}"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/zbzt"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textSize="18sp"
+                android:text="周报状态"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="center"
+                android:textSize="18sp"
+                android:id="@+id/reportStates_txt"
+                android:layout_marginLeft="15dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
 </layout>

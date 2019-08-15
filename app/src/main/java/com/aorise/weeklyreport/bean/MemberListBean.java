@@ -7,16 +7,33 @@ import android.databinding.BaseObservable;
  * Date: 2019/7/3.
  */
 public class MemberListBean extends BaseObservable {
+    @Override
+    public String toString() {
+        return "MemberListBean{" +
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", userId=" + userId +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", planWorkTime=" + planWorkTime +
+                ", post='" + post + '\'' +
+                ", useWorkTime=" + useWorkTime +
+                ", userName='" + userName + '\'' +
+                ", weeklyState=" + weeklyState +
+                '}';
+    }
 
     /**
-     * id : 3
-     * projectId : 3
+     * id : 2
+     * projectId : 2
      * userId : 2
-     * startTime : 2019-07-03 09:59:54
-     * endTime : 2019-07-28 09:59:57
+     * startTime : 2019-07-03 09:55:16
+     * endTime : 2019-07-07 09:55:19
      * planWorkTime : 5
-     * post : 是爱迪生ad阿萨德
+     * post : 多少电阿萨德阿萨德去
+     * useWorkTime : 1154
      * userName : 涂立沅
+     * weeklyState : 2
      */
 
     private int id;
@@ -26,7 +43,9 @@ public class MemberListBean extends BaseObservable {
     private String endTime;
     private int planWorkTime;
     private String post;
+    private int useWorkTime;
     private String userName;
+    private int weeklyState;
 
     public int getId() {
         return id;
@@ -84,11 +103,27 @@ public class MemberListBean extends BaseObservable {
         this.post = post;
     }
 
+    public int getUseWorkTime() {
+        return useWorkTime;
+    }
+
+    public void setUseWorkTime(int useWorkTime) {
+        this.useWorkTime = useWorkTime;
+    }
+
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public int getWeeklyState() {
+        return weeklyState;
+    }
+
+    public void setWeeklyState(int weeklyState) {
+        this.weeklyState = weeklyState;
     }
 }

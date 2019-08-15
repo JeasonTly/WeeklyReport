@@ -18,19 +18,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_white" />
+                android:layout_marginRight="10dp" />
         </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
-        <Button
-            android:background="@drawable/login_btn_background_gray"
-            android:textSize="18sp"
-            android:text="整体情况"
-            android:id="@+id/summary_total"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
+        <!--<Button-->
+            <!--android:background="@drawable/login_btn_background_gray"-->
+            <!--android:textSize="18sp"-->
+            <!--android:text="整体情况"-->
+            <!--android:id="@+id/summary_total"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginLeft="40dp"-->
+            <!--android:layout_marginRight="40dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp" />-->
     </RelativeLayout>
 </layout>

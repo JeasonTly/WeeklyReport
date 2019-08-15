@@ -7,13 +7,18 @@ import android.view.View;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
+import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
+import com.aorise.weeklyreport.bean.UploadManagerReport;
 import com.aorise.weeklyreport.databinding.ActivityOverAllSituationBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
+
+import okhttp3.RequestBody;
 
 public class OverAllSituationActivity extends AppCompatActivity {
     private ActivityOverAllSituationBinding mViewDataBinding;
@@ -29,13 +34,7 @@ public class OverAllSituationActivity extends AppCompatActivity {
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_over_all_situation);
         WRApplication.getInstance().addActivity(this);
 
-        mBean = (HeaderItemBean) getIntent().getBundleExtra("item_detail").get("detail");
-        LogT.d("mBean info is " + mBean.toString());
-        if (mBean != null) {
-            updateOverallSituation = (mBean.getId() != 0);
-            mViewDataBinding.oveallSituationPercent.setText(mBean.getPercentComplete() + "%");
-            mViewDataBinding.oveallSituationSpth.setText(mBean.getOverallSituation());
-        }
+
         projectId = getIntent().getIntExtra("projectId", -1);
         weeks = getIntent().getIntExtra("weeks", -1);
         type = getIntent().getIntExtra("type", 1);
@@ -60,9 +59,57 @@ public class OverAllSituationActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        queryBean();
+       // mBean = (HeaderItemBean) getIntent().getBundleExtra("item_detail").get("detail");
+    }
+    private void queryBean(){
+        ApiService.Utils.getInstance(this).getHeaderList(projectId, weeks, type)
+                .compose(ApiService.Utils.schedulersTransformer())
+                .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this) {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        LogT.d("错误" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Result<HeaderItemBean> o) {
+                        super.onNext(o);
+                        LogT.d(" O " + o.toString());
+                        if (o.isRet()) {
+                            LogT.d(" o " + o.getData().getPlanDetailsList().size());
+                            mBean = o.getData();
+                            LogT.d("mBean info is " + mBean.toString());
+                            if (mBean != null) {
+                                updateOverallSituation = (mBean.getId() != 0);
+                                mViewDataBinding.oveallSituationPercent.setText(mBean.getPercentComplete() + "%");
+                                mViewDataBinding.oveallSituationSpth.setText(mBean.getOverallSituation());
+                            }
+                        }
+                    }
+                });
+    }
     private void postCommand() {
+        Gson gson = new Gson();
+        UploadManagerReport managerReport = new UploadManagerReport();
+        managerReport.setProjectId(projectId);
+        managerReport.setByWeek(weeks);
+        managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
+        managerReport.setPercentComplete(mBean.getPercentComplete());
+
+        String json = gson.toJson(managerReport);
+        RequestBody requestBody = CommonUtils.getRequestBody(json);
+
         ApiService.Utils.getInstance(this).
-                postHeaderReport(projectId,weeks,type,mViewDataBinding.oveallSituationSpth.getText().toString(),mBean.getPercentComplete())
+                postHeaderReport(requestBody)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<Integer>>(this) {
                     @Override
@@ -90,8 +137,18 @@ public class OverAllSituationActivity extends AppCompatActivity {
     }
 
     private void putCommand() {
+        Gson gson = new Gson();
+        UploadManagerReport managerReport = new UploadManagerReport();
+        managerReport.setProjectId(projectId);
+        managerReport.setByWeek(weeks);
+        managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
+        managerReport.setPercentComplete(mBean.getPercentComplete());
+
+        String json = gson.toJson(managerReport);
+        RequestBody requestBody = CommonUtils.getRequestBody(json);
+
         ApiService.Utils.getInstance(this).
-                putHeaderReport(projectId,weeks,type,mViewDataBinding.oveallSituationSpth.getText().toString(),mBean.getPercentComplete())
+                putHeaderReport(requestBody)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<Integer>>(this) {
                     @Override

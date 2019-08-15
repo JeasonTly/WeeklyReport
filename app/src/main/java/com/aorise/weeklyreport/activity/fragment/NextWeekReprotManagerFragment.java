@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.activity.HeaderWeeklyReportDetailActivity;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
+import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
@@ -49,9 +49,9 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
     // TODO: Rename and change types of parameters
 
     private FragmentMemeberCheckBinding mViewDataBinding;
-    private int userId = 2;
-    private int projectId = 1;
-    private int weeks = 28;
+    private int userId = -1;
+    private int projectId = -1;
+    private int weeks = -1;
 
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
     private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
@@ -101,27 +101,20 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         userId = sharedPreferences.getInt("userId", 2);
 
         mViewDataBinding.nextReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MulityStageRecyclerAdapter(getActivity(), mMulityTypeList);
+        mAdapter = new MulityStageRecyclerAdapter(getActivity(), memberWeeklyModelListBeans);
+        mViewDataBinding.nextReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
 
-        mViewDataBinding.planTotal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mHeaderItemBean == null) {
-                    ToastUtils.show("当前无项目具体信息!");
-                    return;
-                }
-                Intent mIntent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("detail", mHeaderItemBean);
-                mIntent.putExtra("item_detail", bundle);
-                mIntent.putExtra("projectId",projectId);
-                mIntent.putExtra("weeks",weeks);
-                mIntent.putExtra("type",2);
-                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
-                startActivity(mIntent);
-            }
-        });
+//        mViewDataBinding.planTotal.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mHeaderItemBean == null) {
+//                    ToastUtils.show("当前无项目具体信息!");
+//                    return;
+//                }
+//
+//            }
+//        });
         return mViewDataBinding.getRoot();
     }
 
@@ -163,9 +156,8 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
                             }
                             LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + ".....周的周报计划数目为" + memberWeeklyModelListBeans.size());
 
-                            mMulityTypeList = CommonUtils.getInstance().resortStage(memberWeeklyModelListBeans);
 
-                            mAdapter.refreshData(mMulityTypeList);
+                            mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }
                 });
