@@ -21,7 +21,6 @@ import com.aorise.weeklyreport.bean.WeeklyReportUploadBean;
 import com.aorise.weeklyreport.databinding.ActivityAddPlanOrSummaryBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
-import com.aorise.weeklyreport.network.CustomSubscriberNoDialog;
 import com.aorise.weeklyreport.network.Result;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.RequestBody;
 
@@ -51,6 +51,7 @@ public class EditReportActivity extends AppCompatActivity {
     private int planId = 1;//计划ID
     private int percent = 10;//百分比
     private int status = 1;//完成状态
+    private float work_time = 1;
     private int reportId = -1;
     private boolean isEdit = false;
 
@@ -71,10 +72,19 @@ public class EditReportActivity extends AppCompatActivity {
     private OptionsPickerView<String> planOptionsView;
     private OptionsPickerView<String> percentOptionsView;
 
+    private int DEFAULT_WORKTYPE_SELECTION = 0;
+    private int DEFAULT_PROJECT_SELECTION = 0;
+    private int DEFAULT_PLAN_SELECTION = 0;
+    private int DEFAULT_PERCENT_SELECTION = 1;
     private String isEdit_WorkType = "";
     private String isEdit_projectName = "";
     private String isEdit_planName = "";
     private String isEdit_Percent = "";
+
+    private Calendar start_calendar;
+    private Calendar end_calendar;
+
+
     private List<String> workType = new ArrayList<>();
 
     @Override
@@ -85,8 +95,19 @@ public class EditReportActivity extends AppCompatActivity {
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         LogT.d(" 是否在编辑" + isEdit);
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        mViewDataBinding.startTime.setText(sdf.format(new Date()));
-        mViewDataBinding.endTime.setText(sdf.format(new Date()));
+        SimpleDateFormat defaultTime = new SimpleDateFormat("yyyy-MM-dd");
+        start_calendar = Calendar.getInstance(TimeZone.getDefault());
+        start_calendar.set(Calendar.HOUR, 8);
+        start_calendar.set(Calendar.MINUTE, 30);
+        start_calendar.set(Calendar.SECOND, 0);
+        end_calendar = Calendar.getInstance(TimeZone.getDefault());
+        end_calendar.set(Calendar.HOUR, 18);
+        end_calendar.set(Calendar.MINUTE, 0);
+        end_calendar.set(Calendar.SECOND, 0);
+
+        mViewDataBinding.startTime.setText(defaultTime.format(new Date()) + " 08:30:00");
+        mViewDataBinding.endTime.setText(defaultTime.format(new Date()) + " 18:00:00");
+        mViewDataBinding.workTime.setText(String.valueOf(work_time));
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         sp = getSharedPreferences("UserInfo", MODE_PRIVATE);
@@ -107,7 +128,8 @@ public class EditReportActivity extends AppCompatActivity {
         workType.add("部门工作");
         workType.add("其他工作");
         if (!isEdit) {
-            mViewDataBinding.workType.setText(workType.get(0));
+            mViewDataBinding.workType.setText(workType.get(DEFAULT_WORKTYPE_SELECTION));
+            work_type = DEFAULT_WORKTYPE_SELECTION + 1;
         } else {
             mViewDataBinding.workType.setText(isEdit_WorkType);
         }
@@ -128,7 +150,7 @@ public class EditReportActivity extends AppCompatActivity {
                 .setSubmitColor(0xFFffffff)//确定颜色
                 .isCenterLabel(true)
                 .setLabels("", "", "")
-                .setSelectOptions(0)
+                .setSelectOptions(DEFAULT_WORKTYPE_SELECTION)
                 //标题文字
                 .setTitleText("选择工作类型")
                 .build();
@@ -146,16 +168,22 @@ public class EditReportActivity extends AppCompatActivity {
      */
     private void initProjectListPicker() {
         if (mProjectList.size() == 0) {
+            LogT.d("当前没有工作项目");
             mViewDataBinding.workProjectName.setText("");
             return;
         }
         for (ProjectList projectList : mProjectList) {
+            LogT.d("添加的工作项目名称为：" + projectList.getName());
             mProjectNameList.add(projectList.getName());
         }
         if (!isEdit && mProjectNameList.size() != 0) {
-            mViewDataBinding.workProjectName.setText(mProjectNameList.get(0));
+            LogT.d("当前为新增周报 ,且周报列表长度不为0");
+            mViewDataBinding.workProjectName.setText(mProjectNameList.get(DEFAULT_PROJECT_SELECTION));
+            projectId = mProjectList.get(DEFAULT_PROJECT_SELECTION).getId();
         } else {
+            LogT.d("当前为编辑周报 ,isEdit_projectName " + isEdit_projectName);
             mViewDataBinding.workProjectName.setText(isEdit_projectName);
+            // if(TextUtils.isEmpty())
         }
         if (projectOptionsView != null) {
             projectOptionsView.setPicker(mProjectNameList);
@@ -182,7 +210,7 @@ public class EditReportActivity extends AppCompatActivity {
                     .setLabels("", "", "")
                     //标题文字
                     .setTitleText("选择项目")
-                    .setSelectOptions(0)
+                    .setSelectOptions(DEFAULT_PROJECT_SELECTION)
                     .build();
             projectOptionsView.setPicker(mProjectNameList);
         }
@@ -199,19 +227,27 @@ public class EditReportActivity extends AppCompatActivity {
      */
     private void initPlanListPicker() {
         if (mProjectPlan.size() == 0) {
+            LogT.d("当前项目没有具体工作事项列表");
             mViewDataBinding.workPlanName.setText("");
             return;
         }
         for (ProjectPlan projectPlan : mProjectPlan) {
+            LogT.d("添加周报列表 " + projectPlan.getName());
             mProjectPlanNameList.add(projectPlan.getName());
         }
+
         if (!isEdit && mProjectPlanNameList.size() != 0) {
-            mViewDataBinding.workPlanName.setText(mProjectPlanNameList.get(0));
+            LogT.d("当前为新增周报,且默认周报位置为第一个");
+            mViewDataBinding.workPlanName.setText(mProjectPlanNameList.get(DEFAULT_PLAN_SELECTION));
+            planId = mProjectPlan.get(DEFAULT_PLAN_SELECTION).getId();
         } else {
+            LogT.d("当前为编辑周报 isEdit_planName " + isEdit_planName);
             mViewDataBinding.workPlanName.setText(isEdit_planName);
         }
+
         if (planOptionsView != null) {
             planOptionsView.setPicker(mProjectPlanNameList);
+            // planOptionsView.setSelectOptions(DEFAULT_PLAN_SELECTION);
         } else {
             planOptionsView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
                 @Override
@@ -233,8 +269,8 @@ public class EditReportActivity extends AppCompatActivity {
                     .isCenterLabel(true)
                     .setLabels("", "", "")
                     //标题文字
-                    .setTitleText("选择计划")
-                    .setSelectOptions(0)
+                    .setTitleText("选择具体工作事项")
+                    .setSelectOptions(DEFAULT_PLAN_SELECTION)
                     .build();
             planOptionsView.setPicker(mProjectPlanNameList);
         }
@@ -255,7 +291,8 @@ public class EditReportActivity extends AppCompatActivity {
             mPercentTextList.add(i * 10 + "%");
         }
         if (!isEdit) {
-            mViewDataBinding.workPercentText.setText(mPercentTextList.get(1));
+            mViewDataBinding.workPercentText.setText(mPercentTextList.get(DEFAULT_PERCENT_SELECTION));
+            percent = mPercentList.get(DEFAULT_PERCENT_SELECTION);
         } else {
             mViewDataBinding.workPercentText.setText(isEdit_Percent);
         }
@@ -279,7 +316,7 @@ public class EditReportActivity extends AppCompatActivity {
                 .setLabels("", "", "")
                 //标题文字
                 .setTitleText("选择百分比")
-                .setSelectOptions(1)
+                .setSelectOptions(DEFAULT_PERCENT_SELECTION)
                 .build();
         percentOptionsView.setPicker(mPercentTextList);
         mViewDataBinding.workPercentArea.setOnClickListener(new View.OnClickListener() {
@@ -340,6 +377,7 @@ public class EditReportActivity extends AppCompatActivity {
             mViewDataBinding.showHow.setText(explain);
             mViewDataBinding.needHelp.setText(issue);
         }
+
     }
 
 
@@ -353,13 +391,15 @@ public class EditReportActivity extends AppCompatActivity {
         mViewDataBinding.startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectDate(mViewDataBinding.startTime);
+
+                selectDate(mViewDataBinding.startTime, start_calendar);
             }
         });
         mViewDataBinding.endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectDate(mViewDataBinding.endTime);
+
+                selectDate(mViewDataBinding.endTime, end_calendar);
             }
         });
 
@@ -432,10 +472,10 @@ public class EditReportActivity extends AppCompatActivity {
 
         String start_time = mViewDataBinding.startTime.getText().toString();
         String end_time = mViewDataBinding.endTime.getText().toString();
-        List<WeeklyReportUploadBean.WeeklyDateModelsBean> workTimeList = TimeUtil.getInstance().getWorkDateList(start_time,end_time);
-        int work_time = 1;
+        List<WeeklyReportUploadBean.WeeklyDateModelsBean> workTimeList = TimeUtil.getInstance().getWorkDateList(start_time, end_time);
+
         try {
-            work_time = Integer.valueOf(mViewDataBinding.workTime.getText().toString());
+            work_time = Float.valueOf(mViewDataBinding.workTime.getText().toString());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -446,6 +486,9 @@ public class EditReportActivity extends AppCompatActivity {
 
         WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
         mUploadInfo.setApprovalState(3);//1,通过，2驳回，3未审批
+        if (type == 2 && !isEdit) {
+            weeks++;
+        }
         mUploadInfo.setByWeek(weeks);//周数
         mUploadInfo.setEndDate(end_time);//结束时间
         mUploadInfo.setExplain(explain);//情况说明
@@ -460,8 +503,8 @@ public class EditReportActivity extends AppCompatActivity {
         mUploadInfo.setUserId(userId);//用户ID
         mUploadInfo.setWorkTime(workTimeList.size());//工作时间
         mUploadInfo.setWorkType(work_type);//工作类型
-        LogT.d(isEdit ?"修改周报":"创建周报" );
-        if(isEdit){
+        LogT.d(isEdit ? "修改周报" : "创建周报");
+        if (isEdit) {
             mUploadInfo.setId(reportId);
         }
         mUploadInfo.setWeeklyDateModels(workTimeList);
@@ -506,7 +549,7 @@ public class EditReportActivity extends AppCompatActivity {
                         @Override
                         public void onError(Throwable e) {
                             super.onError(e);
-                            LogT.d("updateweeklyReportFail "+e.toString());
+                            LogT.d("updateweeklyReportFail " + e.toString());
                         }
 
                         @Override
@@ -524,8 +567,8 @@ public class EditReportActivity extends AppCompatActivity {
         }
     }
 
-    private void selectDate(final Button view) {
-        Calendar selectedDate = Calendar.getInstance();
+    private void selectDate(final Button view, Calendar selectedDate) {
+        //Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
         //startDate.set(2013,1,1);
         Calendar endDate = Calendar.getInstance();
@@ -534,8 +577,8 @@ public class EditReportActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
         //正确设置方式 原因：注意事项有说明
-        startDate.set(2000, 0, 1,0,0,0);
-        endDate.set(2099, 11, 30,0,0,0);
+        startDate.set(2000, 0, 1, 0, 0, 0);
+        endDate.set(2099, 11, 30, 0, 0, 0);
 
         TimePickerBuilder timePickerBuilder = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override

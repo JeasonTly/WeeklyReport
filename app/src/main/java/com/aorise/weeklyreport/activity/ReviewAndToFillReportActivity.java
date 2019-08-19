@@ -35,12 +35,17 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
     private PlanFragment mPlanFragment;         //下周工作计划Fragment
     private ConclusionFragment mConclusionFragment; //本周工作总结Fragment
     // private Fragment mCurrentFragment;
+    private int userId = -1;
+    private int projectId = -1;
+    private int weeks = -1;
 
     private boolean addPlan = false; //是否为添加工作计划，
     private String currentWeeks = ""; //当前需要设置的actionbarTitle
     private int currentWeek = -1;//当前选择的周，比如33 为第三十三周
-    private List<String> weeks = new ArrayList<>(); //周数选择框列表
+    private List<String> weeksList = new ArrayList<>(); //周数选择框列表
+    private int totalweek = -1;
     private MenuPopup menuPopup; //周数选择框
+    private boolean fromHome = true;
 
     //private boolean isNormalMode = true;
     @Override
@@ -50,9 +55,9 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
         WRApplication.getInstance().addActivity(this);
         mViewDataBinding.toreviewActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
 
-        weeks = TimeUtil.getInstance().getHistoryWeeks();
-        currentWeek = TimeUtil.getInstance().getDayofWeek();
-        menuPopup = new MenuPopup(ReviewAndToFillReportActivity.this, weeks.size() - 1, this);
+        weeksList = TimeUtil.getInstance().getHistoryWeeks();
+        totalweek = currentWeek = TimeUtil.getInstance().getDayofWeek();
+        menuPopup = new MenuPopup(ReviewAndToFillReportActivity.this, 0, this);
         mViewDataBinding.toreviewActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
         currentWeeks = "第" + TimeUtil.getInstance().getDayofWeek() + "周";
         mViewDataBinding.toreviewActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +75,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
 
             }
         });
-
+       // initGetIntent();
         initFragment();
         initTabHost();
         initViewPager();
@@ -91,14 +96,21 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
         });
     }
 
+
     //初始化Fragment
     private void initFragment() {
-        mPlanFragment = new PlanFragment();
-        mConclusionFragment = new ConclusionFragment();
+//        if (!fromHome) {
+//            mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, false);
+//            mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, false);
+//        } else {
+            mPlanFragment = new PlanFragment();
+            mConclusionFragment = new ConclusionFragment();
+//        }
         mFragmentList.add(mConclusionFragment);
         mFragmentList.add(mPlanFragment);
         // mCurrentFragment = mPlanFragment;
     }
+
 
     //初始化TabHost
     private void initTabHost() {
@@ -165,26 +177,35 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
     //actionbarTitle的那个周数选择，选择时同时更新当前fragment的数据
     @Override
     public void selectPosistion(int position) {
-        LogT.d("当前选择了。。。。" + position);
-        mViewDataBinding.toreviewActionbar.actionBarTitle.setText(weeks.get(position));
+        LogT.d("当前选择了。。。。" + position + " dddd " + weeksList.get(totalweek - position - 1));
+        mViewDataBinding.toreviewActionbar.actionBarTitle.setText(weeksList.get(totalweek - position - 1));
         currentWeek = position + 1;
-        currentWeeks = weeks.get(position);
-        if (addPlan) {
-            if (mPlanFragment != null) {
-                mPlanFragment.update(currentWeek);
-            } else {
-                mPlanFragment = new PlanFragment();
-                mFragmentList.add(mPlanFragment);
-                mPlanFragment.update(currentWeek);
-            }
+        currentWeeks = weeksList.get(position);
+        // if (addPlan) {
+        if (mPlanFragment != null) {
+            mPlanFragment.update(currentWeek);
         } else {
-            if (mConclusionFragment != null) {
-                mConclusionFragment.update(currentWeek);
-            } else {
-                mConclusionFragment = new ConclusionFragment();
-                mFragmentList.add(mConclusionFragment);
-                mConclusionFragment.update(currentWeek);
-            }
+            mPlanFragment = new PlanFragment();
+//            if (!fromHome) {
+//                mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, false);
+//            } else {
+                mPlanFragment = new PlanFragment();
+//            }
+            mFragmentList.add(mPlanFragment);
+            mPlanFragment.update(currentWeek);
         }
+        //    } else {
+        if (mConclusionFragment != null) {
+            mConclusionFragment.update(currentWeek);
+        } else {
+//            if (!fromHome) {
+//                mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, false);
+//            } else {
+                mConclusionFragment = new ConclusionFragment();
+//            }
+            mFragmentList.add(mConclusionFragment);
+            mConclusionFragment.update(currentWeek);
+        }
+        //   }
     }
 }

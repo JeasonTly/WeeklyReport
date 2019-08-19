@@ -14,22 +14,19 @@ import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.AuditWeeklyReportActivity;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.MemberListBean;
-import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.ItemListMemberBinding;
-import com.aorise.weeklyreport.databinding.ItemListProjectBinding;
 
 import java.util.List;
 
 /**
  * Created by Tuliyuan.
- * 项目列表
+ * 项目成员列表
  * Date: 2019/6/28.
  */
-public class MemberListAdapter extends BaseAdapter<MemberListBean, BaseViewHolder> {
+public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, BaseViewHolder> {
 
     private RecyclerListClickListener mRecyclerListListener;
-
-    public MemberListAdapter(Context context, List<MemberListBean> projectBaseInfos) {
+    public MemberListAdapter(Context context, List<MemberListBean.ListBean> projectBaseInfos) {
         super(context);
         this.mList = projectBaseInfos;
     }
@@ -50,14 +47,6 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean, BaseViewHolde
                // mRecyclerListListener.onClick(position);
                 if(mRecyclerListListener !=null){
                     mRecyclerListListener.onClick(position);
-                }else{
-                    Intent mIntent = new Intent();
-                    mIntent.putExtra("projectId",mList.get(position).getProjectId());
-                    mIntent.putExtra("userId",mList.get(position).getUserId());
-                    mIntent.putExtra("userName",mList.get(position).getUserName());
-                    mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
-                    mIntent.setClass(mContext, AuditWeeklyReportActivity.class);
-                    mContext.startActivity(mIntent);
                 }
 
             }

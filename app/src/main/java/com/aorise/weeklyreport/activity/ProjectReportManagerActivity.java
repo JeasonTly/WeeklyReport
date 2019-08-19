@@ -18,12 +18,16 @@ import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.MenuPopup;
 import com.aorise.weeklyreport.base.TimeUtil;
+import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.databinding.ActivityMemberManagerBinding;
+import com.aorise.weeklyreport.network.ApiService;
+import com.aorise.weeklyreport.network.CustomSubscriber;
+import com.aorise.weeklyreport.network.Result;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemberManagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
+public class ProjectReportManagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityMemberManagerBinding mViewDataBinding;
 
     private Class mFragmentArray[] = {NextWeekReprotManagerFragment.class, LastWeekReportManagerFragment.class,};
@@ -35,12 +39,14 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     private NextWeekReprotManagerFragment mNextReportFragment;
 
     private MenuPopup menuPopup;
-    private List<String> weeks = new ArrayList<>();
+    private int totalWeeks = -1;
+    private List<String> weeksList = new ArrayList<>();
     private String currentWeeks = "";
     private int currentWeekNumber = -1;
 
     private boolean addPlan = false;
-    private int type = -1;
+    // private int type = -1;
+    //private boolean isProjectLeader = false;
 
     private int userId = 1;
     private int projectId = -1;
@@ -50,13 +56,13 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_member_manager);
         WRApplication.getInstance().addActivity(this);
-        currentWeekNumber = TimeUtil.getInstance().getDayofWeek();
+        totalWeeks = currentWeekNumber = TimeUtil.getInstance().getDayofWeek();
 
         mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + currentWeekNumber + "周");
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
-        mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.VISIBLE);
-        weeks = TimeUtil.getInstance().getHistoryWeeks();
-        menuPopup = new MenuPopup(this, weeks.size() - 1, this);
+        // mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.VISIBLE);
+        weeksList = TimeUtil.getInstance().getHistoryWeeks();
+        menuPopup = new MenuPopup(this, 0, this);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
         menuPopup.setOffsetY(36);
         mViewDataBinding.managerActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
@@ -68,28 +74,12 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
         mViewDataBinding.managerActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MemberManagerActivity.this.finish();
+                ProjectReportManagerActivity.this.finish();
             }
         });
-        mViewDataBinding.managerActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (mHeaderItemBean == null) {
-//                    ToastUtils.show("当前无项目具体信息!");
-//                    return;
-//                }
-                Intent mIntent = new Intent();
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("detail", mHeaderItemBean);
-//                mIntent.putExtra("item_detail", bundle);
-                mIntent.putExtra("projectId", projectId);
-                mIntent.putExtra("weeks", currentWeekNumber);
-                mIntent.putExtra("type", type);
-                mIntent.setClass(MemberManagerActivity.this, OverAllSituationActivity.class);
-                startActivity(mIntent);
-            }
-        });
+
         getDefaultIntent();
+       // initProjectDetail();
         initFragment();
         initViewPager();
     }
@@ -116,10 +106,10 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
                 if (tab.getText().equals(TITLE_ONE)) {
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
                     addPlan = true;
-                    type = 1;
+                    //  type = 1;
                 } else if (tab.getText().equals(TITLE_TWO)) {
                     addPlan = false;
-                    type = 2;
+                    // type = 2;
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
                 }
 
@@ -144,6 +134,31 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
         mViewDataBinding.managerViewpager.setCurrentItem(0);
     }
 
+    private void initProjectDetail() {
+        ApiService.Utils.getInstance(this).getProjectInfoById(projectId)
+                .compose(ApiService.Utils.schedulersTransformer())
+                .subscribe(new CustomSubscriber<Result<ProjectBaseInfo>>(this) {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(Result<ProjectBaseInfo> data) {
+                        super.onNext(data);
+                        LogT.d("获取到的项目详细信息为" + data.toString());
+                        if (data.isRet()) {
+
+                        }
+                    }
+                });
+    }
+
     @Override
     public void onPageScrolled(int i, float v, int i1) {
 
@@ -152,7 +167,7 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     @Override
     public void onPageSelected(int i) {
         addPlan = i == 1;
-        type = i + 1;
+        //type = i + 1;
         mViewDataBinding.managerTabHost.setScrollPosition(i, 0, false);
     }
 
@@ -164,25 +179,25 @@ public class MemberManagerActivity extends AppCompatActivity implements ViewPage
     @Override
     public void selectPosistion(int position) {
         LogT.d("当前选择了。。。。" + position);
-        mViewDataBinding.managerActionbar.actionBarTitle.setText(weeks.get(position));
+        mViewDataBinding.managerActionbar.actionBarTitle.setText(weeksList.get(totalWeeks - position - 1));
         currentWeekNumber = position + 1;
-        currentWeeks = weeks.get(position);
-        if (addPlan) {
-            if (mLastReportFragment != null) {
-                mLastReportFragment.updateManagerList(currentWeekNumber);
-            } else {
-                mLastReportFragment = new LastWeekReportManagerFragment();
-                mFragmentList.add(mLastReportFragment);
-                mLastReportFragment.updateManagerList(currentWeekNumber);
-            }
+        currentWeeks = weeksList.get(position);
+        // if (addPlan) {
+        if (mLastReportFragment != null) {
+            mLastReportFragment.updateManagerList(currentWeekNumber);
         } else {
-            if (mNextReportFragment != null) {
-                mNextReportFragment.updateManagerList(currentWeekNumber);
-            } else {
-                mNextReportFragment = new NextWeekReprotManagerFragment();
-                mFragmentList.add(mNextReportFragment);
-                mNextReportFragment.updateManagerList(currentWeekNumber);
-            }
+            mLastReportFragment = new LastWeekReportManagerFragment();
+            mFragmentList.add(mLastReportFragment);
+            mLastReportFragment.updateManagerList(currentWeekNumber);
         }
+        //  } else {
+        if (mNextReportFragment != null) {
+            mNextReportFragment.updateManagerList(currentWeekNumber);
+        } else {
+            mNextReportFragment = new NextWeekReprotManagerFragment();
+            mFragmentList.add(mNextReportFragment);
+            mNextReportFragment.updateManagerList(currentWeekNumber);
+        }
+        // }
     }
 }

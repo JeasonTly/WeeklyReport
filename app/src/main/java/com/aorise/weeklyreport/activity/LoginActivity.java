@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        ToastUtils.show("连接失败，请检查网络!");
+                        ToastUtils.show("登录失败");
                     }
 
                     @Override

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="memberlist"
-            type="com.aorise.weeklyreport.bean.MemberListBean" />
+            type="com.aorise.weeklyreport.bean.MemberListBean.ListBean" />
         <variable
             name="planTime"
             type="String"/>

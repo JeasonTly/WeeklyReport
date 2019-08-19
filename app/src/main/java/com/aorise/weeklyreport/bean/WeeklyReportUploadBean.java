@@ -70,7 +70,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
     private int state;
     private int type;
     private int userId;
-    private int workTime;
+    private float workTime;
     private int workType;
     private List<WeeklyDateModelsBean> weeklyDateModels;
 
@@ -194,11 +194,11 @@ public class WeeklyReportUploadBean extends BaseObservable {
         this.userId = userId;
     }
 
-    public int getWorkTime() {
+    public float getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(int workTime) {
+    public void setWorkTime(float workTime) {
         this.workTime = workTime;
     }
 

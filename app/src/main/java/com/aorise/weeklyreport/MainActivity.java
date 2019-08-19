@@ -8,15 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.RadioGroup;
 
-import com.aorise.weeklyreport.activity.fragment.HomeFragment;
 import com.aorise.weeklyreport.activity.fragment.NewHomeFragment;
 import com.aorise.weeklyreport.activity.fragment.PersonalFragment;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.databinding.ActivityMainBinding;
 import com.hjq.toast.ToastUtils;
 
@@ -31,25 +27,21 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     private List<Fragment> fragmentList = new ArrayList<>();
 
+    /**
+     * 按键双击退出应用
+     */
     private long[] mHints = new long[2];
-    // 时间间隔
     private static final long EXIT_INTERVAL = 2000L;
-    private boolean isManager = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         WRApplication.getInstance().addActivity(this);
-
         SharedPreferences sp = getSharedPreferences("UserInfo",MODE_PRIVATE);
-//        isManager = sp.getInt("userRole",0) ==1;
-
-       // mViewDataBinding.groupMember.setVisibility(isManager ? View.VISIBLE:View.GONE);
-
         mViewDataBinding.pageIndex.setOnCheckedChangeListener(this);
         mViewDataBinding.groupHome.setChecked(true);
-       // LogT.d("Time xxxxxxx"+ TimeUtil.getInstance().getWorkDateList("2019-08-09 18:06:33","2019-08-19 23:56:33"));
+    //    LogT.d("Time xxxxxxx"+ TimeUtil.getInstance().getWorkDateList("2019-08-09 18:06:33","2019-08-19 23:56:33"));
 
     }
 
@@ -89,20 +81,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /*添加fragment*/
     private void showFragment(Fragment fragment) {
@@ -133,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.group_home:
-
                 if(mNewHomeFragment == null){
                     mNewHomeFragment = new NewHomeFragment();
                 }

@@ -16,10 +16,8 @@ import com.aorise.weeklyreport.activity.WeeklyReportDetailActivity;
 import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
-import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
-import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 import com.aorise.weeklyreport.databinding.FragmentConclusionBinding;
 import com.aorise.weeklyreport.network.ApiService;
@@ -37,13 +35,14 @@ import java.util.List;
  * Use the {@link ConclusionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConclusionFragment extends Fragment implements BaseRefreshListener {
+public class ConclusionFragment extends Fragment implements BaseRefreshListener, RecyclerListClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
+    private static final String ARG_PARAM5= "param5";
 
     private FragmentConclusionBinding mViewDataBinding;
     // TODO: Rename and change types of parameters
@@ -51,33 +50,34 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
     private int userId = -1;
     private int projectId = -1;
     private int weeks = -1;
-    private boolean isManagerMode = false;//这个判断来源是否为项目负责人查看周报
-
-    //    private OnFragmentInteractionListener mListener;
+    private boolean isAuditMode = false;//这个判断来源是否为项目负责人查看周报
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
-   // private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
     private WorkTypeRecyclerAdapter mAdapter;
-
+    private boolean canAudit = true; //是否可以审批
 
     public ConclusionFragment() {
         // Required empty public constructor
         weeks = TimeUtil.getInstance().getDayofWeek();
     }
 
+
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * 审核周报界面的初始化
      *
-     * @return A new instance of fragment ConclusionFragment.
+     * @param projectId     项目ID
+     * @param userId        用户ID
+     * @param weeks         选择的周数
+     * @param isAuditMode 是否为项目负责人
+     * @return 返回工作总结Fragment
      */
-    // TODO: Rename and change types and number of parameters
-    public static ConclusionFragment newInstance(int projectId, int userId, int weeks,boolean isManagerMode) {
+    public static ConclusionFragment newInstance(int projectId, int userId, int weeks, boolean isAuditMode,boolean canAudit) {
         ConclusionFragment fragment = new ConclusionFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, projectId);
         args.putInt(ARG_PARAM2, userId);
         args.putInt(ARG_PARAM3, weeks);
-        args.putBoolean(ARG_PARAM4, isManagerMode);
+        args.putBoolean(ARG_PARAM4, isAuditMode);
+        args.putBoolean(ARG_PARAM5, canAudit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,7 +89,8 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
             projectId = getArguments().getInt(ARG_PARAM1);
             userId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
-            isManagerMode = getArguments().getBoolean(ARG_PARAM4);
+            isAuditMode = getArguments().getBoolean(ARG_PARAM4);
+            canAudit = getArguments().getBoolean(ARG_PARAM5);
         }
     }
 
@@ -100,12 +101,13 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_conclusion, container, false);
         mViewDataBinding.summaryPlt.setRefreshListener(this);
         mViewDataBinding.summaryPlt.setCanLoadMore(false);
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId",2);
+        if(!isAuditMode) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+            userId = sharedPreferences.getInt("userId", 2);
+        }
 
         mViewDataBinding.summaryRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mPlanWeeklyReport,isManagerMode);
+        mAdapter = new WorkTypeRecyclerAdapter(getContext(), mPlanWeeklyReport, this);
         mViewDataBinding.summaryRecycler.addItemDecoration(new SpacesItemDecoration(8));
         mViewDataBinding.summaryRecycler.setAdapter(mAdapter);
 
@@ -137,8 +139,8 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
 
     public void updateList(int weeks) {
         this.weeks = weeks;
-        LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks);
-        if (isManagerMode) {
+        LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks + " 是否为项目负责人 " + isAuditMode);
+        if (isAuditMode) {
             ApiService.Utils.getInstance(getContext()).getWeeklyReport(projectId, userId, weeks, 1)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<WeeklyReportBean>>>(this.getContext()) {
@@ -159,9 +161,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
                             if (o.isRet()) {
                                 mPlanWeeklyReport.clear();
                                 mPlanWeeklyReport.addAll(o.getData());
-                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-//                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-//                                LogT.d("size is " + mMulityTypeList.size());
+                                LogT.d("项目负责人根据用户ID审核周报界面 周报总结数目为" + mPlanWeeklyReport.size());
                                 mAdapter.refreshData(o.getData());
                             }
                         }
@@ -187,9 +187,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
                             if (o.isRet()) {
                                 mPlanWeeklyReport.clear();
                                 mPlanWeeklyReport.addAll(o.getData());
-                                LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + "周的周报总结数目为" + mPlanWeeklyReport.size());
-//                                mMulityTypeList = CommonUtils.getInstance().resortWorkTypeMulityTypeList(mPlanWeeklyReport);
-//                                LogT.d("size is " + mMulityTypeList.size());
+                                LogT.d("自己查看周报界面，当前周的周报总结数目为" + mPlanWeeklyReport.size());
                                 mAdapter.refreshData(o.getData());
                             }
                         }
@@ -197,4 +195,18 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener 
         }
     }
 
+    @Override
+    public void onClick(int position) {
+        Intent mIntent = new Intent();
+        mIntent.setClass(getContext(), WeeklyReportDetailActivity.class);
+        mIntent.putExtra("reportId", mPlanWeeklyReport.get(position).getId());
+        mIntent.putExtra("isAuditMode", isAuditMode);
+        mIntent.putExtra("canAudit", canAudit);
+        startActivity(mIntent);
+    }
+
+    @Override
+    public void onLongClick(int position) {
+
+    }
 }

@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import com.aorise.weeklyreport.databinding.FragmentHeaderBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
-import com.hjq.toast.ToastUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
@@ -45,9 +45,9 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
     // TODO: Rename and change types of parameters
 
     private FragmentHeaderBinding mViewDataBinding;
-    private int userId = 2;
-    private int projectId = 1;
-    private int weeks = 28;
+    private int userId = -1;
+    private int projectId = -1;
+    private int weeks = -1;
 
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
     private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
@@ -101,25 +101,17 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         mAdapter = new MulityStageRecyclerAdapter(getActivity(), memberWeeklyModelListBeans);
         mViewDataBinding.lastReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
-
-//        mViewDataBinding.summaaryTotal.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mHeaderItemBean == null) {
-//                    ToastUtils.show("当前无项目具体信息!");
-//                    return;
-//                }
-//                Intent mIntent = new Intent();
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("detail", mHeaderItemBean);
-//                mIntent.putExtra("item_detail", bundle);
-//                mIntent.putExtra("projectId", projectId);
-//                mIntent.putExtra("weeks", weeks);
-//                mIntent.putExtra("type", 1);
-//                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
-//                startActivity(mIntent);
-//            }
-//        });
+        mViewDataBinding.lastOverall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent();
+                mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("weeks", weeks);
+                mIntent.putExtra("type", 1);
+                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
+                startActivity(mIntent);
+            }
+        });
         return mViewDataBinding.getRoot();
     }
 
@@ -128,7 +120,9 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         super.onResume();
         updateManagerList(weeks);
     }
+    public void updateIsProjectLeader(boolean isProjectLeader){
 
+    }
     public void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
@@ -151,7 +145,7 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
                         super.onNext(o);
                         LogT.d(" O " + o.toString());
                         if (o.isRet()) {
-                            LogT.d(" o " + o.getData().getPlanDetailsList().size());
+                           // LogT.d(" o " + o.getData().getPlanDetailsList().size());
                             mHeaderItemBean = o.getData();
                             if (memberWeeklyModelListBeans != null && memberWeeklyModelListBeans.size() != 0) {
                                 memberWeeklyModelListBeans = o.getData().getPlanDetailsList();
@@ -160,7 +154,8 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
                                 memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
                             }
                             // mMulityTypeList = CommonUtils.getInstance().resortStage(memberWeeklyModelListBeans);
-
+                            mViewDataBinding.setLastStage(mHeaderItemBean.getPercentComplete() +"%");
+                            mViewDataBinding.setLastSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());
                             mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }

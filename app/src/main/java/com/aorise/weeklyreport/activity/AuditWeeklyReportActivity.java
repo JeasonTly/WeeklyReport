@@ -28,14 +28,13 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private Class FragmentArray[] = {ConclusionFragment.class, PlanFragment.class};
     private String FragmentTitle[] = {"本周工作总结", "下周工作计划"};
-    private boolean addPlan = false;
     private int projectId = -1;
     private int userId = -1;
     private int weeks = -1;
+    private int totalweek = -1;
+    private boolean canAudit = true;
     private List<String> weeksList = new ArrayList<>();
     private MenuPopup menuPopup;
-    private String userName;
-
     private ConclusionFragment mConclusionFragment;
     private PlanFragment mPlanFragment;
 
@@ -48,9 +47,11 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         initFragment();
         initTabHost();
         initViewPager();
+
         //mViewDataBinding.auditActionbar.actionBarTitle.setText(userName + "的个人周报");
+        totalweek = TimeUtil.getInstance().getDayofWeek();
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
-        menuPopup = new MenuPopup(this, weeksList.size() - 1, this);
+        menuPopup = new MenuPopup(this, 0, this);
         mViewDataBinding.auditActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
         mViewDataBinding.auditActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         mViewDataBinding.auditActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
@@ -74,13 +75,14 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         projectId = mIntent.getIntExtra("projectId", -1);
         userId = mIntent.getIntExtra("userId", -1);
         weeks = mIntent.getIntExtra("weeks", -1);
-        userName = mIntent.getStringExtra("userName");
-        LogT.d(" project Id is " + projectId + " userId is " + userId + " weeks " + weeks);
+        canAudit = mIntent.getBooleanExtra("canAudit",true);
+
+        LogT.d(" project Id is " + projectId + " userId is " + userId + " weeks " + weeks +" 是否可以编辑周报(默认为true)" + canAudit);
     }
 
     private void initFragment() {
-        mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true);
-        mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true);
+        mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true,canAudit);
+        mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true,canAudit);
         mFragmentList.add(mConclusionFragment);
         mFragmentList.add(mPlanFragment);
     }
@@ -94,9 +96,7 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getText().equals("下周工作计划")) {
                     mViewDataBinding.viewpager.setCurrentItem(1);
-                    addPlan = true;
                 } else if (tab.getText().equals("本周工作总结")) {
-                    addPlan = false;
                     mViewDataBinding.viewpager.setCurrentItem(0);
                 }
 
@@ -128,7 +128,6 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     @Override
     public void onPageSelected(int i) {
         LogT.d("当前选择index为 " + i);
-        addPlan = (i == 1);
         mViewDataBinding.auditTabHost.setScrollPosition(i, 0, false);
     }
 
@@ -140,25 +139,25 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     @Override
     public void selectPosistion(int position) {
         LogT.d("当前选择了。。。。" + position);
-        mViewDataBinding.auditActionbar.actionBarTitle.setText(weeksList.get(position));
+        mViewDataBinding.auditActionbar.actionBarTitle.setText(weeksList.get(totalweek - position - 1));
 
         //weeks = weeksList.get(position);
-        if (addPlan) {
-            if (mPlanFragment != null) {
-                mPlanFragment.update(position + 1);
-            } else {
-                mPlanFragment = new PlanFragment();
-                mFragmentList.add(mPlanFragment);
-                mPlanFragment.update(position + 1);
-            }
+        // if (addPlan) {
+        if (mPlanFragment != null) {
+            mPlanFragment.update(position + 1);
         } else {
-            if (mConclusionFragment != null) {
-                mConclusionFragment.update(position + 1);
-            } else {
-                mConclusionFragment = new ConclusionFragment();
-                mFragmentList.add(mConclusionFragment);
-                mConclusionFragment.update(position + 1);
-            }
+            mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true,canAudit);
+            mFragmentList.add(mPlanFragment);
+            mPlanFragment.update(position + 1);
         }
+        // } else {
+        if (mConclusionFragment != null) {
+            mConclusionFragment.update(position + 1);
+        } else {
+            mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true,canAudit);
+            mFragmentList.add(mConclusionFragment);
+            mConclusionFragment.update(position + 1);
+        }
+        // }
     }
 }

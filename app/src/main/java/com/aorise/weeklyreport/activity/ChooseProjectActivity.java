@@ -22,21 +22,25 @@ import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
 import com.hjq.toast.ToastUtils;
+import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseProjectActivity extends AppCompatActivity implements RecyclerListClickListener {
+public class ChooseProjectActivity extends AppCompatActivity implements RecyclerListClickListener, BaseRefreshListener {
     private ArrayList<ProjectList> mProjectList = new ArrayList<>();
-    private List<MemberListBean> mMemberList = new ArrayList<>();
+    private List<MemberListBean.ListBean> mMemberList = new ArrayList<>();
     private ActivityChooseProjectBinding mViewDataBinding;
     private ProjectListAdapter mAdapter;
     private MemberListAdapter mMemberAdatper;
     private boolean isProjectList = true;
+    private int currentIndex = 1;
+    private int everPage = 10;
+    private int totalPage = 1;
 
     private int projectId = -1;
     private boolean isReview = false;//是否为审核周报  true为审核周报界面    false则为项目概况界面
-    private boolean isHeaderReport = false;
+    private boolean isHeaderReport = false; //是则为选择项目对应的项目周报 否则为负责人选择项目对应的成员周报
     private int userId = -1;
 
     @Override
@@ -44,11 +48,12 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_choose_project);
         mProjectList = (ArrayList<ProjectList>) getIntent().getBundleExtra("projectList").getSerializable("_projectList");
-        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo",MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId",-1);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId", -1);
         isReview = getIntent().getBooleanExtra("isReview", false);
         isHeaderReport = getIntent().getBooleanExtra("isHeaderReport", false);
         isProjectList = mProjectList.size() != 1;
+
         LogT.d(" show projectList size is " + mProjectList.size());
         mAdapter = new ProjectListAdapter(this, mProjectList);
         mAdapter.setClickListener(this);
@@ -59,13 +64,18 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
             @Override
             public void onClick(int position) {
                 LogT.d("点击查看此人的项目详情咯");
-                Intent mIntent = new Intent();
-                mIntent.setClass(ChooseProjectActivity.this, AuditWeeklyReportActivity.class);
-                mIntent.putExtra("projectId", projectId);
-                mIntent.putExtra("userId", mMemberList.get(position).getUserId());
-                mIntent.putExtra("userName", mMemberList.get(position).getUserName());
-                mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
-                startActivity(mIntent);
+                if(isReview){
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(ChooseProjectActivity.this, AuditWeeklyReportActivity.class);
+                    mIntent.putExtra("projectId", projectId);
+                    mIntent.putExtra("userId", mMemberList.get(position).getUserId());
+                    mIntent.putExtra("userName", mMemberList.get(position).getUserName());
+                    mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
+                    startActivity(mIntent);
+                }else{
+
+                }
+
             }
 
             @Override
@@ -76,9 +86,9 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
         if (isProjectList) { //如果当前是审核周报选择，且该用户的项目列表不为1 则显示项目列表，隐藏项目成员列表
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);
-            mViewDataBinding.memberList.setVisibility(View.GONE);
+            mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
         } else { //如果当前是审核周报选择，且该用户的项目列表不为1 则，隐藏项目列表 显示项目成员列表
-            mViewDataBinding.memberList.setVisibility(View.VISIBLE);
+            mViewDataBinding.memberPltChoose.setVisibility(View.VISIBLE);
             mViewDataBinding.projectList.setVisibility(View.GONE);
         }
 
@@ -90,7 +100,8 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                     ChooseProjectActivity.this.finish();
                 } else {
                     mViewDataBinding.projectList.setVisibility(View.VISIBLE);
-                    mViewDataBinding.memberList.setVisibility(View.GONE);
+                    mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
+                    isProjectList = true;
                 }
             }
         });
@@ -103,6 +114,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         mViewDataBinding.memberList.setLayoutManager(new LinearLayoutManager(this));
         mViewDataBinding.memberList.addItemDecoration(new SpacesItemDecoration(8));
 
+        mViewDataBinding.memberPltChoose.setRefreshListener(this);
         mViewDataBinding.projectList.setAdapter(mAdapter);
         mViewDataBinding.memberList.setAdapter(mMemberAdatper);
 
@@ -110,13 +122,16 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        LogT.d("");
-        if(!isProjectList){
+
+        LogT.d(" 项目和成员选择界面 onBackPressed ");
+        if (isReview && mProjectList.size() == 1 && mMemberList.size() > 1) {
+            super.onBackPressed();
+        }
+        if (!isProjectList) {
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);
-            mViewDataBinding.memberList.setVisibility(View.GONE);
+            mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
             isProjectList = true;
-        }else{
+        } else {
             this.finish();
         }
     }
@@ -132,9 +147,9 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
     private void getMemberList(int projectId) {
         LogT.d("project id is " + projectId);
-        ApiService.Utils.getInstance(this).getMemberList(1, 100, projectId, TimeUtil.getInstance().getDayofWeek())
+        ApiService.Utils.getInstance(this).getMemberList(currentIndex, everPage, projectId, TimeUtil.getInstance().getDayofWeek())
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<MemberListBean>>>(this) {
+                .subscribe(new CustomSubscriber<Result<MemberListBean>>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -145,19 +160,22 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                         super.onError(e);
                         LogT.d("error " + e.toString());
                         ToastUtils.show("当前项目组下无项目成员");
+                        mViewDataBinding.memberPltChoose.finishLoadMore();
                     }
 
                     @Override
-                    public void onNext(Result<List<MemberListBean>> o) {
+                    public void onNext(Result<MemberListBean> o) {
                         super.onNext(o);
                         LogT.d("o is " + o.toString());
                         if (o.isRet()) {
                             mMemberList.clear();
-                            mMemberList.addAll(o.getData());
-                            mViewDataBinding.memberList.setVisibility(View.VISIBLE);
+                            mMemberList.addAll(o.getData().getList());
+                            mViewDataBinding.memberPltChoose.setVisibility(View.VISIBLE);
                             mViewDataBinding.projectList.setVisibility(View.GONE);
+                            mMemberAdatper.refreshData(o.getData().getList());
+                            totalPage = o.getData().getTotalPage();
 
-                            mMemberAdatper.refreshData(o.getData());
+                            mViewDataBinding.memberPltChoose.finishLoadMore();
                             isProjectList = false;
                         }
                     }
@@ -169,16 +187,17 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         LogT.d("当前选择的projectInfo为" + mProjectList.get(position));
         projectId = mProjectList.get(position).getId();
         if (!isReview) {//非周报审核
-            if(!isHeaderReport) {//非项目周报
+            if (!isHeaderReport) {//非项目周报,为项目概况
                 Intent mIntent = new Intent();
                 mIntent.putExtra("project_info", mProjectList.get(position));
+                mIntent.putExtra("isReview", isReview);
                 mIntent.setClass(this, ProjectInfoActivity.class);
                 startActivity(mIntent);
-            }else{//项目周报
+            } else {//项目周报
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("userId", userId);
-                mIntent.setClass(this, MemberManagerActivity.class);
+                mIntent.setClass(this, ProjectReportManagerActivity.class);
                 startActivity(mIntent);
             }
         } else {
@@ -191,6 +210,26 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
     @Override
     public void onLongClick(int position) {
+
+    }
+
+    @Override
+    public void refresh() {
+        currentIndex = 1;
+        mViewDataBinding.memberPltChoose.finishRefresh();
+    }
+
+    @Override
+    public void loadMore() {
+        currentIndex++;
+        if (currentIndex <= totalPage) {
+            if (!isProjectList) {
+                getMemberList(projectId);
+            }
+        } else {
+            ToastUtils.show("已加载全部成员列表!");
+            mViewDataBinding.memberPltChoose.finishLoadMore();
+        }
 
     }
 }

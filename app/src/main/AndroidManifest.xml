@@ -15,16 +15,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <!--项目选择 项目组成员选择 界面 -->
         <activity android:name=".activity.ChooseProjectActivity"></activity>
+        <!--项目概况 界面 -->
         <activity android:name=".activity.ProjectInfoActivity" />
+        <!--项目周报添加与查看界面-->
         <activity android:name=".activity.ReviewAndToFillReportActivity" />
-        <activity android:name=".activity.ProjectOverviewActivity" />
+        <!--项目周报整体情况填写界面-->
         <activity android:name=".activity.OverAllSituationActivity" />
-        <activity android:name=".activity.MemberManagerActivity" />
-        <activity android:name=".activity.HeaderWeeklyReportDetailActivity" />
+        <!--项目周报查看界面-->
+        <activity android:name=".activity.ProjectReportManagerActivity" />
+        <!--项目周报详情界面-->
         <activity android:name=".activity.WeeklyReportDetailActivity" />
+        <!-- 项目组成员 周报查看界面 -->
         <activity android:name=".activity.AuditWeeklyReportActivity" />
+        <!--新增或者编辑周报界面 -->
         <activity android:name=".activity.EditReportActivity" />
+        <!-- 登录界面 -->
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,13 +42,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
     </application>
 

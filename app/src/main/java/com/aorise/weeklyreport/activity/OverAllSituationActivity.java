@@ -23,6 +23,7 @@ import okhttp3.RequestBody;
 public class OverAllSituationActivity extends AppCompatActivity {
     private ActivityOverAllSituationBinding mViewDataBinding;
     private int projectId;
+    private int managerReportId = -1;
     private int weeks;
     private int type;
     private HeaderItemBean mBean;
@@ -63,9 +64,10 @@ public class OverAllSituationActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         queryBean();
-       // mBean = (HeaderItemBean) getIntent().getBundleExtra("item_detail").get("detail");
+        // mBean = (HeaderItemBean) getIntent().getBundleExtra("item_detail").get("detail");
     }
-    private void queryBean(){
+
+    private void queryBean() {
         ApiService.Utils.getInstance(this).getHeaderList(projectId, weeks, type)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this) {
@@ -90,6 +92,7 @@ public class OverAllSituationActivity extends AppCompatActivity {
                             LogT.d("mBean info is " + mBean.toString());
                             if (mBean != null) {
                                 updateOverallSituation = (mBean.getId() != 0);
+                                managerReportId = mBean.getId();
                                 mViewDataBinding.oveallSituationPercent.setText(mBean.getPercentComplete() + "%");
                                 mViewDataBinding.oveallSituationSpth.setText(mBean.getOverallSituation());
                             }
@@ -97,14 +100,18 @@ public class OverAllSituationActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void postCommand() {
         Gson gson = new Gson();
         UploadManagerReport managerReport = new UploadManagerReport();
         managerReport.setProjectId(projectId);
+        if (type == 2) {
+            weeks++;
+        }
         managerReport.setByWeek(weeks);
         managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
         managerReport.setPercentComplete(mBean.getPercentComplete());
-
+        managerReport.setType(type);
         String json = gson.toJson(managerReport);
         RequestBody requestBody = CommonUtils.getRequestBody(json);
 
@@ -126,10 +133,10 @@ public class OverAllSituationActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Result<Integer> data) {
                         super.onNext(data);
-                        if(data.isRet()){
+                        if (data.isRet()) {
                             ToastUtils.show("项目负责人周报提交成功!");
                             OverAllSituationActivity.this.finish();
-                        }else{
+                        } else {
                             ToastUtils.show("项目负责人周报提交失败!");
                         }
                     }
@@ -140,9 +147,11 @@ public class OverAllSituationActivity extends AppCompatActivity {
         Gson gson = new Gson();
         UploadManagerReport managerReport = new UploadManagerReport();
         managerReport.setProjectId(projectId);
+        managerReport.setId(managerReportId);
         managerReport.setByWeek(weeks);
         managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
         managerReport.setPercentComplete(mBean.getPercentComplete());
+        managerReport.setType(type);
 
         String json = gson.toJson(managerReport);
         RequestBody requestBody = CommonUtils.getRequestBody(json);
@@ -159,17 +168,17 @@ public class OverAllSituationActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        ToastUtils.show("项目负责人周报提交失败!");
+                        ToastUtils.show("项目负责人周报修改失败!");
                     }
 
                     @Override
                     public void onNext(Result<Integer> data) {
                         super.onNext(data);
-                        if(data.isRet()){
-                            ToastUtils.show("项目负责人周报提交成功!");
+                        if (data.isRet()) {
+                            ToastUtils.show("项目负责人周报修改成功!");
                             OverAllSituationActivity.this.finish();
-                        }else{
-                            ToastUtils.show("项目负责人周报提交失败!");
+                        } else {
+                            ToastUtils.show("项目负责人周报修改失败!");
                         }
                     }
                 });

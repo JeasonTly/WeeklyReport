@@ -13,8 +13,6 @@ public class NetworkURLConfig {
 
     public static final String LOGIN_URL = "/api/user/login";
     public static final String LOGIN_URL_N = "/api/v1/login";
-   // public static final String LIST_MEMBER = "api/projectMember/pageIndex/{pageIndex}/pageNum/{pageNum}";//查询项目程序按列表
-   // public static final String LIST_MEMBER = "api/projectMember/projectId/{projectId}";//查询项目程序按列表
     public static final String LIST_MEMBER = "api/projectMember/pageIndex/{pageIndex}/pageNum/{pageNum}";//查询项目程序按列表
     public static final String LIST_PROJECT_BY_USERID = "api/project";//查询项目列表
     public static final String PROJECT_BASE_INFO = "api/project/{id}";

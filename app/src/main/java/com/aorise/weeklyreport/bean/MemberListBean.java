@@ -2,128 +2,220 @@ package com.aorise.weeklyreport.bean;
 
 import android.databinding.BaseObservable;
 
+import java.util.List;
+
 /**
  * Created by Tuliyuan.
  * Date: 2019/7/3.
  */
 public class MemberListBean extends BaseObservable {
+
     @Override
     public String toString() {
         return "MemberListBean{" +
-                "id=" + id +
-                ", projectId=" + projectId +
-                ", userId=" + userId +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
-                ", planWorkTime=" + planWorkTime +
-                ", post='" + post + '\'' +
-                ", useWorkTime=" + useWorkTime +
-                ", userName='" + userName + '\'' +
-                ", weeklyState=" + weeklyState +
+                "everyPage=" + everyPage +
+                ", totalPage=" + totalPage +
+                ", currentPage=" + currentPage +
+                ", beginIndex=" + beginIndex +
+                ", totalCount=" + totalCount +
+                ", sort=" + sort +
+                ", list=" + list +
                 '}';
     }
 
     /**
-     * id : 2
-     * projectId : 2
-     * userId : 2
-     * startTime : 2019-07-03 09:55:16
-     * endTime : 2019-07-07 09:55:19
-     * planWorkTime : 5
-     * post : 多少电阿萨德阿萨德去
-     * useWorkTime : 1154
-     * userName : 涂立沅
-     * weeklyState : 2
+     * everyPage : 10
+     * totalPage : 1
+     * currentPage : 1
+     * beginIndex : 0
+     * totalCount : 2
+     * sort : false
+     * list : [{"id":1,"projectId":3,"userId":5,"startTime":"2019-07-03 00:00:00","endTime":"2019-07-05 00:00:00","planWorkTime":5,"post":"add撒打算","useWorkTime":0,"userName":"SPL","weeklyState":2},{"id":3,"projectId":3,"userId":2,"startTime":"2019-07-03 09:59:54","endTime":"2019-07-28 09:59:57","planWorkTime":5,"post":"移动端开发","useWorkTime":1536,"userName":"涂立沅","weeklyState":3}]
      */
 
-    private int id;
-    private int projectId;
-    private int userId;
-    private String startTime;
-    private String endTime;
-    private int planWorkTime;
-    private String post;
-    private int useWorkTime;
-    private String userName;
-    private int weeklyState;
+    private int everyPage;
+    private int totalPage;
+    private int currentPage;
+    private int beginIndex;
+    private int totalCount;
+    private boolean sort;
+    private List<ListBean> list;
 
-    public int getId() {
-        return id;
+    public int getEveryPage() {
+        return everyPage;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEveryPage(int everyPage) {
+        this.everyPage = everyPage;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public int getTotalPage() {
+        return totalPage;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getCurrentPage() {
+        return currentPage;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public int getBeginIndex() {
+        return beginIndex;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setBeginIndex(int beginIndex) {
+        this.beginIndex = beginIndex;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public int getTotalCount() {
+        return totalCount;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 
-    public int getPlanWorkTime() {
-        return planWorkTime;
+    public boolean isSort() {
+        return sort;
     }
 
-    public void setPlanWorkTime(int planWorkTime) {
-        this.planWorkTime = planWorkTime;
+    public void setSort(boolean sort) {
+        this.sort = sort;
     }
 
-    public String getPost() {
-        return post;
+    public List<ListBean> getList() {
+        return list;
     }
 
-    public void setPost(String post) {
-        this.post = post;
+    public void setList(List<ListBean> list) {
+        this.list = list;
     }
 
-    public int getUseWorkTime() {
-        return useWorkTime;
-    }
+    public static class ListBean {
+        @Override
+        public String toString() {
+            return "ListBean{" +
+                    "id=" + id +
+                    ", projectId=" + projectId +
+                    ", userId=" + userId +
+                    ", startTime='" + startTime + '\'' +
+                    ", endTime='" + endTime + '\'' +
+                    ", planWorkTime=" + planWorkTime +
+                    ", post='" + post + '\'' +
+                    ", useWorkTime=" + useWorkTime +
+                    ", userName='" + userName + '\'' +
+                    ", weeklyState=" + weeklyState +
+                    '}';
+        }
 
-    public void setUseWorkTime(int useWorkTime) {
-        this.useWorkTime = useWorkTime;
-    }
+        /**
+         * id : 1
+         * projectId : 3
+         * userId : 5
+         * startTime : 2019-07-03 00:00:00
+         * endTime : 2019-07-05 00:00:00
+         * planWorkTime : 5
+         * post : add撒打算
+         * useWorkTime : 0
+         * userName : SPL
+         * weeklyState : 2
+         */
 
-    public String getUserName() {
-        return userName;
-    }
+        private int id;
+        private int projectId;
+        private int userId;
+        private String startTime;
+        private String endTime;
+        private float planWorkTime;
+        private String post;
+        private float useWorkTime;
+        private String userName;
+        private int weeklyState;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+        public int getId() {
+            return id;
+        }
 
-    public int getWeeklyState() {
-        return weeklyState;
-    }
+        public void setId(int id) {
+            this.id = id;
+        }
 
-    public void setWeeklyState(int weeklyState) {
-        this.weeklyState = weeklyState;
+        public int getProjectId() {
+            return projectId;
+        }
+
+        public void setProjectId(int projectId) {
+            this.projectId = projectId;
+        }
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
+        }
+
+        public float getPlanWorkTime() {
+            return planWorkTime;
+        }
+
+        public void setPlanWorkTime(float planWorkTime) {
+            this.planWorkTime = planWorkTime;
+        }
+
+        public String getPost() {
+            return post;
+        }
+
+        public void setPost(String post) {
+            this.post = post;
+        }
+
+        public float getUseWorkTime() {
+            return useWorkTime;
+        }
+
+        public void setUseWorkTime(float useWorkTime) {
+            this.useWorkTime = useWorkTime;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public int getWeeklyState() {
+            return weeklyState;
+        }
+
+        public void setWeeklyState(int weeklyState) {
+            this.weeklyState = weeklyState;
+        }
     }
 }

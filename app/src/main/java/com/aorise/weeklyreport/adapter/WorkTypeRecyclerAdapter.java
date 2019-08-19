@@ -1,7 +1,6 @@
 package com.aorise.weeklyreport.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.BR;
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.activity.WeeklyReportDetailActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 
@@ -21,17 +19,12 @@ import java.util.List;
  */
 public class WorkTypeRecyclerAdapter extends BaseAdapter<WeeklyReportBean, BaseViewHolder> {
     private ViewDataBinding mViewDataBinding;
-    private boolean isManagerMode = false;//是否从审批界面进入？
+    private RecyclerListClickListener recyclerListClickListener;
 
-    public WorkTypeRecyclerAdapter(Context context, List<WeeklyReportBean> typeItems, boolean isManagerMode) {
+    public WorkTypeRecyclerAdapter(Context context, List<WeeklyReportBean> typeItems, RecyclerListClickListener recyclerListClickListener) {
         super(context);
         this.mList = typeItems;
-        this.isManagerMode = isManagerMode;
-    }
-
-    public enum TypeTAG {
-        TYPE_TAG,
-        TYPE_CONTENT,
+        this.recyclerListClickListener = recyclerListClickListener;
     }
 
     @Override
@@ -66,12 +59,7 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<WeeklyReportBean, BaseV
         baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogT.d("detail id is " + weeklyReportBean.getId());
-                Intent mIntent = new Intent();
-                mIntent.setClass(mContext, WeeklyReportDetailActivity.class);
-                mIntent.putExtra("reportId", weeklyReportBean.getId());
-                mIntent.putExtra("isManagerMode", isManagerMode);
-                mContext.startActivity(mIntent);
+                recyclerListClickListener.onClick(position);
             }
         });
         baseViewHolder.getBinding().executePendingBindings();

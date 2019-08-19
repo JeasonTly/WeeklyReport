@@ -20,7 +20,6 @@ import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.databinding.ActivityWeeklyReportDetailBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
-import com.aorise.weeklyreport.network.CustomSubscriberNoDialog;
 import com.aorise.weeklyreport.network.Result;
 import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
@@ -32,7 +31,8 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     private int id = -1;
     private WeeklyReportDetailBean mDetailBean;
     private String approvalText = "";
-    private boolean isManagerMode = false;
+    private boolean isAuditMode = false;
+    private boolean canAudit = false; //是否可以审批
     private int workStatus = 1;
 
     @Override
@@ -41,37 +41,38 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_weekly_report_detail);
         WRApplication.getInstance().addActivity(this);
         id = getIntent().getIntExtra("reportId", -1);
-        isManagerMode = getIntent().getBooleanExtra("isManagerMode", false);
-        LogT.d(" isManager Mode " + isManagerMode);
-        mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+        isAuditMode = getIntent().getBooleanExtra("isAuditMode", false);
+        canAudit = getIntent().getBooleanExtra("canAudit", false);
+        LogT.d(" isManager Mode " + isAuditMode + " canAudit " + canAudit);
+        mViewDataBinding.auditArea.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
         mViewDataBinding.detailActionbar.actionMenu.setImageResource(R.drawable.bianji);
         mViewDataBinding.detailActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent mIntent = new Intent();
                 mIntent.setClass(WeeklyReportDetailActivity.this, EditReportActivity.class);
-                mIntent.putExtra("isEdit",true);
-                mIntent.putExtra("reportId",id);
+                mIntent.putExtra("isEdit", true);
+                mIntent.putExtra("reportId", id);
                 mIntent.putExtra("title", "周报编辑");
                 mIntent.putExtra("weeks", mDetailBean.getByWeek());
-                mIntent.putExtra("isAddPlan",mDetailBean.getType()==2);
+                mIntent.putExtra("isAddPlan", mDetailBean.getType() == 2);
                 mIntent.putExtra("workType", mDetailBean.getWorkType());
-                mIntent.putExtra("projectId",mDetailBean.getProjectId());
-                mIntent.putExtra("projectName",mDetailBean.getProjectName());
-                mIntent.putExtra("planId",mDetailBean.getPlanId());
-                mIntent.putExtra("planName",mDetailBean.getPlanName());
-                mIntent.putExtra("startDate",mDetailBean.getStartDate());
-                mIntent.putExtra("endDate",mDetailBean.getEndDate());
-                mIntent.putExtra("percent",mDetailBean.getPercentComplete());
-                mIntent.putExtra("workTime",mDetailBean.getWorkTime());
-                mIntent.putExtra("output",mDetailBean.getOutput());
-                mIntent.putExtra("explain",mDetailBean.getExplain());
-                mIntent.putExtra("issue",mDetailBean.getIssue());
+                mIntent.putExtra("projectId", mDetailBean.getProjectId());
+                mIntent.putExtra("projectName", mDetailBean.getProjectName());
+                mIntent.putExtra("planId", mDetailBean.getPlanId());
+                mIntent.putExtra("planName", mDetailBean.getPlanName());
+                mIntent.putExtra("startDate", mDetailBean.getStartDate());
+                mIntent.putExtra("endDate", mDetailBean.getEndDate());
+                mIntent.putExtra("percent", mDetailBean.getPercentComplete());
+                mIntent.putExtra("workTime", mDetailBean.getWorkTime());
+                mIntent.putExtra("output", mDetailBean.getOutput());
+                mIntent.putExtra("explain", mDetailBean.getExplain());
+                mIntent.putExtra("issue", mDetailBean.getIssue());
                 startActivity(mIntent);
             }
         });
-        //mViewDataBinding.detailWorkStatus.setVisibility(isManagerMode ? View.GONE : View.VISIBLE);
-        mViewDataBinding.detailWorkStatusSpinner.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+        //mViewDataBinding.detailWorkStatus.setVisibility(isAuditMode ? View.GONE : View.VISIBLE);
+        mViewDataBinding.detailWorkStatusSpinner.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
         mViewDataBinding.detailWorkStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -83,7 +84,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
             }
         });
-        //mViewDataBinding.pass.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
+        //mViewDataBinding.pass.setVisibility(isAuditMode ? View.VISIBLE : View.GONE);
 
         mViewDataBinding.detailActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +143,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mModel.setRemark(approvalText);//备注
         mModel.setStatue(approvestatus);//审批状态
         String json = gson.toJson(mModel);
-        LogT.d("json is "+json);
+        LogT.d("json is " + json);
         RequestBody model = CommonUtils.getRequestBody(json);
         ApiService.Utils.getInstance(this).approvalWeeklyReport(model)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -236,24 +237,31 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
                 mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
                 mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
+                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
                 mViewDataBinding.pass.setText("已通过");
+                mViewDataBinding.pass.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 checkStatus = "已驳回";
                 mViewDataBinding.auditArea.setVisibility(View.GONE);
+
                 mViewDataBinding.pass.setText("已驳回");
+                mViewDataBinding.pass.setVisibility(View.VISIBLE);
                 mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
                 mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
+                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 checkStatus = "未审批";
                 mViewDataBinding.pass.setVisibility(View.GONE);
-                mViewDataBinding.auditArea.setVisibility(isManagerMode ? View.VISIBLE : View.GONE);
-                if(isManagerMode) {
+                mViewDataBinding.auditArea.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
+                if (isAuditMode && canAudit) {
                     mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.VISIBLE);
-                }else{
+                    mViewDataBinding.detailWorkStatus.setVisibility(View.GONE);
+                } else {
+                    LogT.d("为本人周报且可以登录周报");
                     mViewDataBinding.detailStatusArea.setVisibility(View.GONE);
-                    mViewDataBinding.detailActionbar.actionMenu.setVisibility(View.VISIBLE);
+                    mViewDataBinding.detailActionbar.actionMenu.setVisibility(canAudit ? View.VISIBLE : View.GONE);
                 }
                 break;
         }

@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
-import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
@@ -24,7 +24,6 @@ import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
-import com.hjq.toast.ToastUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
@@ -105,6 +104,17 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         mViewDataBinding.nextReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
 
+        mViewDataBinding.nextOverall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent();
+                mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("weeks", weeks);
+                mIntent.putExtra("type", 2);
+                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
+                startActivity(mIntent);
+            }
+        });
 //        mViewDataBinding.planTotal.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -124,10 +134,11 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
         updateManagerList(weeks);
     }
 
+
     public void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
-        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks, 2)
+        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
                     @Override
@@ -156,7 +167,8 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
                             }
                             LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + ".....周的周报计划数目为" + memberWeeklyModelListBeans.size());
 
-
+                            mViewDataBinding.setNextStage(mHeaderItemBean.getPercentComplete() + "%");
+                            mViewDataBinding.setNextSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());
                             mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }

@@ -22,9 +22,10 @@
                    layout="@layout/actionbar"
                    android:id="@+id/detail_actionbar"></include>
                 <!--工作类型-->
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="15dp"
@@ -36,20 +37,23 @@
                         android:textColor="#A8A8A8"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:text="工作类型" />
 
                     <TextView
                         android:id="@+id/detail_work_type"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"></TextView>
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+
+                        android:gravity="end"
+                        android:textAlignment="textEnd"></TextView>
+                </LinearLayout>
                 <!--工作安排-->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -63,20 +67,23 @@
                         android:textColor="#A8A8A8"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:text="工作安排" />
 
                     <TextView
-                        android:id="@+id/detail_work_content_list"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/detail_WorkContent_List"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"></TextView>
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd"></TextView>
+                </LinearLayout>
                 <!--具体事项-->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -95,13 +102,15 @@
 
                     <TextView
                         android:id="@+id/detail_specific_things"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="15dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_centerVertical="true"></TextView>
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd"></TextView>
+                </LinearLayout>
                 <!--计划开始时间-->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -162,7 +171,8 @@
                         android:text="2019-06-27"></TextView>
                 </RelativeLayout>
                 <!--实际完成百分比-->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -176,20 +186,22 @@
                         android:textColor="#A8A8A8"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:text="完成百分比" />
 
                     <TextView
                         android:id="@+id/detail_plan_percent"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"></TextView>
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd"></TextView>
+                </LinearLayout>
                 <!--工时-->
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -203,20 +215,23 @@
                         android:textColor="#A8A8A8"
                         android:textSize="18sp"
                         android:paddingBottom="10dp"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:text="工时" />
 
                     <TextView
                         android:id="@+id/detail_work_time"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_alignParentRight="true"
-                        android:focusableInTouchMode="true" />
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd" />
+                </LinearLayout>
                 <!--输出物 -->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -231,23 +246,23 @@
                         android:textColor="#A8A8A8"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:text="输出物" />
 
                     <TextView
                         android:id="@+id/detail_output"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/detail_title_text"
-                        android:gravity="end"></TextView>
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd"></TextView>
+                </LinearLayout>
                 <!--实际完成情况说明/计划完成进度 -->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -262,21 +277,20 @@
                         android:textColor="#A8A8A8"
                         android:textSize="18sp"
                         android:paddingBottom="10dp"
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:text="计划完成进度" />
 
                     <TextView
                         android:id="@+id/detail_show_how"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="15dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_toRightOf="@+id/plan_or_summary_txt"
-                        android:gravity="end" />
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd" />
+                </LinearLayout>
                 <!-- 状态-->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -304,6 +318,7 @@
                         android:layout_centerVertical="true"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
+                        android:visibility="gone"
                         android:layout_marginLeft="15dp"
                         android:gravity="end"></TextView>
                     <Spinner
@@ -316,7 +331,8 @@
                         android:entries="@array/plan_status"></Spinner>
                 </RelativeLayout>
                 <!--问题和需要配合的项-->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -338,14 +354,13 @@
                         android:id="@+id/detail_need_help"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginRight="1dp"
                         android:paddingBottom="10dp"
                         android:textSize="18sp"
-                        android:layout_toRightOf="@id/detail_issue_text"
-                        android:gravity="end"></TextView>
-                </RelativeLayout>
+                        android:layout_gravity="center_vertical"
+                        android:gravity="end"
+                        android:textAlignment="textEnd"></TextView>
+                </LinearLayout>
                 <!--审批状态-->
                 <RelativeLayout
                     android:layout_width="match_parent"

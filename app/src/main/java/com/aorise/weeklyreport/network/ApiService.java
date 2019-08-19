@@ -111,7 +111,7 @@ public interface ApiService {
      * @return
      */
     @GET(NetworkURLConfig.LIST_MEMBER)
-    Observable<Result<List<MemberListBean>>> getMemberList(@Path("pageIndex") int pageIndex,
+    Observable<Result<MemberListBean>> getMemberList(@Path("pageIndex") int pageIndex,
                                                            @Path("pageNum") int pageNum,
                                                            @Query("projectId") int projectId,
                                                            @Query("byWeek") int byWeek);
@@ -133,13 +133,6 @@ public interface ApiService {
      *
      * @return
      */
-//    @FormUrlEncoded
-//    @POST(NetworkURLConfig.APPROVAL_WEEKLY_REPORT)
-//    Observable<Result> approvalWeeklyReport(@Field("weeklyId") int weekyId,
-//                                            @Field("planStatus") int status,
-//                                            @Field("approvalStatus") int approvalStatus,
-//                                            @Field("remark") String remark);
-
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.APPROVAL_WEEKLY_REPORT)
     Observable<Result> approvalWeeklyReport(@Body RequestBody model);

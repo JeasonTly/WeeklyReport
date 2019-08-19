@@ -61,7 +61,7 @@ public class WeeklyReportBean extends BaseObservable {
     private String startDate;
     private String endDate;
     private int percentComplete;
-    private int workTime;
+    private float workTime;
     private String output;
     private String explain;
     private String issue;
@@ -143,11 +143,11 @@ public class WeeklyReportBean extends BaseObservable {
         this.percentComplete = percentComplete;
     }
 
-    public int getWorkTime() {
+    public float getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(int workTime) {
+    public void setWorkTime(float workTime) {
         this.workTime = workTime;
     }
 

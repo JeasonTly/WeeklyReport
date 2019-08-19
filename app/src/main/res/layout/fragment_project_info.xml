@@ -86,7 +86,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="项目近况"
+                    android:text="项目介绍"
                     android:gravity="start|center_vertical"
                     android:textSize="18sp" />
 

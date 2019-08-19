@@ -1,10 +1,5 @@
 package com.aorise.weeklyreport.base;
 
-import android.text.TextUtils;
-
-import com.aorise.weeklyreport.adapter.WorkTypeRecyclerAdapter;
-import com.aorise.weeklyreport.bean.MulityTypeItem;
-import com.aorise.weeklyreport.bean.WeeklyReportBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,50 +44,50 @@ public class CommonUtils {
         return title;
     }
 
-    public List<MulityTypeItem> resortWorkTypeMulityTypeList(List<WeeklyReportBean> resortList) {
-        List<MulityTypeItem> list = new ArrayList<>();
-        String typeTextDescription = "";
-
-        for (int i = 0; i < resortList.size(); i++) {
-            LogT.d("重新排列后的工作类型" + resortList.get(i).getWorkType());
-            int workType = resortList.get(i).getWorkType();
-            switch (workType) {
-                case 1:
-                    typeTextDescription = "项目工作";
-                    break;
-                case 2:
-                    typeTextDescription = "部门工作";
-                    break;
-                case 3:
-                    typeTextDescription = "临时工作";
-                    break;
-            }
-            if (i == 0) {
-                MulityTypeItem mulityTypeItem = new MulityTypeItem();
-                mulityTypeItem.setData(typeTextDescription);
-                mulityTypeItem.setData_type(WorkTypeRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
-                mulityTypeItem.setItem_name(typeTextDescription);
-                list.add(mulityTypeItem);
-            } else {
-                int lastWorkType = resortList.get(i - 1).getWorkType();
-                if (lastWorkType != workType) {
-                    MulityTypeItem mulityTypeItem = new MulityTypeItem();
-                    mulityTypeItem.setData(typeTextDescription);
-                    mulityTypeItem.setData_type(WorkTypeRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
-                    mulityTypeItem.setItem_name(typeTextDescription);
-                    list.add(mulityTypeItem);
-                }
-            }
-            MulityTypeItem mulityTypeItem = new MulityTypeItem();
-            mulityTypeItem.setData(resortList.get(i));
-            mulityTypeItem.setData_type(WorkTypeRecyclerAdapter.TypeTAG.TYPE_CONTENT.ordinal());
-            mulityTypeItem.setItem_name(typeTextDescription);
-
-            list.add(mulityTypeItem);
-        }
-        LogT.d("现在复合类型的list数目为" + list.toString());
-        return list;
-    }
+//    public List<MulityTypeItem> resortWorkTypeMulityTypeList(List<WeeklyReportBean> resortList) {
+//        List<MulityTypeItem> list = new ArrayList<>();
+//        String typeTextDescription = "";
+//
+//        for (int i = 0; i < resortList.size(); i++) {
+//            LogT.d("重新排列后的工作类型" + resortList.get(i).getWorkType());
+//            int workType = resortList.get(i).getWorkType();
+//            switch (workType) {
+//                case 1:
+//                    typeTextDescription = "项目工作";
+//                    break;
+//                case 2:
+//                    typeTextDescription = "部门工作";
+//                    break;
+//                case 3:
+//                    typeTextDescription = "临时工作";
+//                    break;
+//            }
+//            if (i == 0) {
+//                MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//                mulityTypeItem.setData(typeTextDescription);
+//                mulityTypeItem.setData_type(WorkTypeRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                mulityTypeItem.setItem_name(typeTextDescription);
+//                list.add(mulityTypeItem);
+//            } else {
+//                int lastWorkType = resortList.get(i - 1).getWorkType();
+//                if (lastWorkType != workType) {
+//                    MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//                    mulityTypeItem.setData(typeTextDescription);
+//                    mulityTypeItem.setData_type(WorkTypeRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                    mulityTypeItem.setItem_name(typeTextDescription);
+//                    list.add(mulityTypeItem);
+//                }
+//            }
+//            MulityTypeItem mulityTypeItem = new MulityTypeItem();
+//            mulityTypeItem.setData(resortList.get(i));
+//            mulityTypeItem.setData_type(WorkTypeRecyclerAdapter.TypeTAG.TYPE_CONTENT.ordinal());
+//            mulityTypeItem.setItem_name(typeTextDescription);
+//
+//            list.add(mulityTypeItem);
+//        }
+//        LogT.d("现在复合类型的list数目为" + list.toString());
+//        return list;
+//    }
 
     public static RequestBody getRequestBody(String string) {
         LogT.d("json is "+string);

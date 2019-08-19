@@ -32,14 +32,14 @@ public class MenuPopup extends BasePopupWindow {
     private int defaultSelected = -1;
     private MenuPopupSelectedListener menuPopupSelectedListener;
 
-    public MenuPopup(Context context, int defaultPosition,MenuPopupSelectedListener menuPopupSelectedListener) {
+    public MenuPopup(Context context, int defaultPosition, MenuPopupSelectedListener menuPopupSelectedListener) {
         super(context);
         setAlignBackground(false);
         setPopupGravity(Gravity.BOTTOM);
         defaultSelected = defaultPosition;
         mListView = (ListView) findViewById(R.id.list_item);
         mList = TimeUtil.getInstance().getHistoryWeeks();
-        this.menuPopupSelectedListener =  menuPopupSelectedListener;
+        this.menuPopupSelectedListener = menuPopupSelectedListener;
 
         LogT.d("aaarestart.....?");
         mAdapter = new MyArrayAdatper(getContext(), R.layout.listview_item, mList);
@@ -76,8 +76,8 @@ public class MenuPopup extends BasePopupWindow {
     @Override
     public void showPopupWindow(View v) {
         setOffsetX(v.getWidth() / 2);
-      //  mListView.setSelection(mListView.getBottom());
-     //   mListView.smoothScrollToPosition(mList.size()-1);
+        //  mListView.setSelection(mListView.getBottom());
+        //   mListView.smoothScrollToPosition(mList.size()-1);
         super.showPopupWindow(v);
     }
 
@@ -103,11 +103,11 @@ public class MenuPopup extends BasePopupWindow {
 
             for (int i = 0; i < mList.size(); i++) {
                 isSelected[i] = false;
-                if(i == position){
+                if (i == position) {
                     isSelected[i] = true;
                 }
             }
-            menuPopupSelectedListener.selectPosistion(position);
+            menuPopupSelectedListener.selectPosistion(mList.size() - position -1);
             notifyDataSetChanged();
         }
 
@@ -129,7 +129,8 @@ public class MenuPopup extends BasePopupWindow {
             return view;
         }
     }
-    public interface MenuPopupSelectedListener{
+
+    public interface MenuPopupSelectedListener {
         void selectPosistion(int position);
     }
 }

@@ -30,6 +30,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -59,6 +60,7 @@
                         <ImageView
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="5dp"
+                            android:textSize="18sp"
                             android:src="@drawable/dropdown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -66,45 +68,51 @@
                     </LinearLayout>
                 </RelativeLayout>
                 <!--工作安排-->
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="15dp"
+                    android:orientation="horizontal"
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:layout_gravity="center_vertical"
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:text="工作安排" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/work_project_area"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:orientation="horizontal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:textSize="18sp"
-                            android:gravity="start"
+                            android:gravity="end"
+                            android:layout_marginLeft="15dp"
                             android:id="@+id/work_project_name"
+                            android:layout_toLeftOf="@id/work_project_img"
                             android:layout_gravity="center_vertical"
-                            android:layout_width="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <ImageView
-                            android:layout_gravity="center_vertical"
+                            android:id="@+id/work_project_img"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginLeft="5dp"
                             android:src="@drawable/dropdown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
-                    </LinearLayout>
-                </RelativeLayout>
+                    </RelativeLayout>
+                </LinearLayout>
                 <!--具体事项-->
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
@@ -113,34 +121,40 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:layout_gravity="center_vertical"
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:text="具体事项" />
 
-                    <LinearLayout
+                    <RelativeLayout
+                        android:layout_gravity="center_vertical"
                         android:id="@+id/work_plan_area"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:orientation="horizontal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:textSize="18sp"
-                            android:gravity="start"
+                            android:gravity="end"
+                            android:layout_marginLeft="15dp"
                             android:id="@+id/work_plan_name"
+                            android:layout_toLeftOf="@+id/work_plan_img"
+                            android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <ImageView
+                            android:id="@+id/work_plan_img"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="5dp"
                             android:src="@drawable/dropdown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
-                    </LinearLayout>
-                </RelativeLayout>
+                    </RelativeLayout>
+                </LinearLayout>
                 <!--计划开始时间-->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -151,6 +165,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -175,6 +190,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -199,6 +215,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -236,12 +253,14 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="工时 (单位:天)" />
 
                     <EditText
+                        android:textSize="18sp"
                         android:id="@+id/work_time"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
@@ -262,6 +281,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -270,6 +290,7 @@
                     <EditText
                         android:id="@+id/output"
                         android:layout_width="200dp"
+                        android:textSize="18sp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -288,6 +309,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:id="@+id/plan_or_summary_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -297,6 +319,7 @@
                     <EditText
                         android:id="@+id/show_how"
                         android:layout_width="200dp"
+                        android:textSize="18sp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -338,6 +361,7 @@
                     android:background="@drawable/base_line">
 
                     <TextView
+                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -346,6 +370,7 @@
                     <EditText
                         android:id="@+id/need_help"
                         android:layout_width="200dp"
+                        android:textSize="18sp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="1dp"

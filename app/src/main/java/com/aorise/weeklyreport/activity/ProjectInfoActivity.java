@@ -23,25 +23,31 @@ import java.util.List;
 
 public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityProjectInfoBinding mViewDataBinding;
-    private int projectId = -1;
+    private int projectId = -1;//当前项目的项目ID 来源为getIntent()传递的projectInfo;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private Class FragmentArray[] = {ProjectInfoFragment.class, MemberInfoFragment.class,};
     private String FragmentTitle[] = {"基本信息", "成员信息"};
-    private ProjectInfoFragment mProjectInfoFragment;
-    private MemberInfoFragment mMemberInfoFragment;
+    private ProjectInfoFragment mProjectInfoFragment;//基本信息所对应的Fragment
+    private MemberInfoFragment mMemberInfoFragment;//成员信息所对应的Fragment
+    private boolean isReview = false;
+    /**
+     * 当前周数
+     */
     private int currentWeeks = -1;
+    private int totalweek = -1;
     private List<String> weeksList = new ArrayList<>();
     private String currentWeeksTitle = "";
     private MenuPopup menuPopup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_project_info);
-        currentWeeks = TimeUtil.getInstance().getDayofWeek();
+        totalweek = currentWeeks = TimeUtil.getInstance().getDayofWeek();
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
         currentWeeksTitle = "第" + currentWeeks + "周";
-        menuPopup = new MenuPopup(this, weeksList.size() - 1, this);
+        menuPopup = new MenuPopup(this, 0, this);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
         menuPopup.setOffsetY(36);
         mViewDataBinding.infoActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
@@ -62,6 +68,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         if (projectinfo != null) {
             projectId = projectinfo.getId();
         }
+        isReview = getIntent().getBooleanExtra("isReview",false);
         initFragment();
         initTabHost();
         initViewPager();
@@ -85,7 +92,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
 
     private void initFragment() {
         mProjectInfoFragment = ProjectInfoFragment.newInstance(projectId);
-        mMemberInfoFragment = MemberInfoFragment.newInstance(projectId,currentWeeks);
+        mMemberInfoFragment = MemberInfoFragment.newInstance(projectId, currentWeeks,isReview);
         mFragmentList.add(mProjectInfoFragment);
         mFragmentList.add(mMemberInfoFragment);
         // mCurrentFragment = mPlanFragment;
@@ -144,12 +151,12 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
     @Override
     public void selectPosistion(int position) {
         currentWeeks = position + 1;
-        currentWeeksTitle = weeksList.get(position);
+        currentWeeksTitle = weeksList.get(totalweek - position - 1);
         mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况" + currentWeeksTitle);
         if (mMemberInfoFragment != null) {
             mMemberInfoFragment.updateWeeks(currentWeeks);
         } else {
-            mMemberInfoFragment = MemberInfoFragment.newInstance(projectId, currentWeeks);
+            mMemberInfoFragment = MemberInfoFragment.newInstance(projectId, currentWeeks,isReview);
         }
     }
 }
