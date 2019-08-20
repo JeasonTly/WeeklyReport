@@ -74,7 +74,7 @@ public class ProjectPlan extends BaseObservable {
         this.ownerList = ownerList;
     }
 
-    class OwnerListBean {
+    public static class OwnerListBean {
         private int id;
         private int planId;
         private int ownerId;

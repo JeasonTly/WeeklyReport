@@ -45,12 +45,21 @@ public class TimeUtil {
         return weeklist;
     }
 
+    public String date2date(String time) {
+        String dateStr = "";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(time, new ParsePosition(0));
+        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        dateStr = simpleDateFormat1.format(date);
+        return dateStr;
+    }
+
     public String getSpecifiedDayAfter(String specifiedDay, int appendCount) {
         Calendar c = Calendar.getInstance();
         Date date = null;
 
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(specifiedDay, new ParsePosition(0));
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(specifiedDay, new ParsePosition(0));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,20 +67,19 @@ public class TimeUtil {
         int day = c.get(Calendar.DATE);
         c.set(Calendar.DATE, day + appendCount);
 
-        String dayAfter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
+        String dayAfter = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
         return dayAfter;
     }
 
-    public List<WeeklyReportUploadBean.WeeklyDateModelsBean> getWorkDateList(String startDate, String endDate) {
-        List<WeeklyReportUploadBean.WeeklyDateModelsBean> workDateList = new ArrayList<>();
-        Date _startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(startDate, new ParsePosition(0));
-        Date _endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(endDate, new ParsePosition(0));
-        //getSpecifiedDayAfter(startDate);
-        // caclulateDiffByDate(_startDate, _endDate);
+    public List<String> getWorkDateList(String startDate, String endDate) {
+        List<String> workDateList = new ArrayList<>();
+        Date _startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate, new ParsePosition(0));
+        Date _endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDate, new ParsePosition(0));
+
         for (int i = 0; i < caclulateDiffByDate(_startDate, _endDate); i++) {
-            WeeklyReportUploadBean.WeeklyDateModelsBean modelsBean = new WeeklyReportUploadBean.WeeklyDateModelsBean();
-            modelsBean.setWorkDate(getSpecifiedDayAfter(startDate, i));
-            workDateList.add(modelsBean);
+//            WeeklyReportUploadBean.WeeklyDateModelsBean modelsBean = new WeeklyReportUploadBean.WeeklyDateModelsBean();
+//            modelsBean.setWorkDate(getSpecifiedDayAfter(startDate, i));
+            workDateList.add(getSpecifiedDayAfter(startDate, i));
         }
         LogT.d("workDateList " + workDateList.toString());
         return workDateList;
@@ -81,19 +89,12 @@ public class TimeUtil {
         int diff = -1;
         long from1 = date.getTime();
         long to1 = nextDate.getTime();
-        int diffhour = (int) ((to1 - from1) / (1000 * 60 * 60));
-        diff = (int) ((to1 - from1) / (1000 * 60 * 60 * 24));
-        int moreday = diffhour % 24;
-        if(moreday >0){
-            diff ++;
-        }
-//
-//        if (diff > 0 && diffhour < 24) {
-//            diff = 1;
-//        }
+        LogT.d(" from1 " + from1 + " to1 " + to1);
 
-        LogT.d("diffhour " + diffhour + " diff day " + diff);
+        diff = (int) ((to1 - from1) / (1000 * 60 * 60 * 24));
         LogT.d("差距了" + diff + "天");
-        return diff;
+
+
+        return diff + 1;
     }
 }

@@ -16,37 +16,31 @@ import android.widget.TextView;
 import com.aorise.weeklyreport.MainActivity;
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
-import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.UserInfoBean;
 import com.aorise.weeklyreport.databinding.ActivityLoginBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
-import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import okhttp3.RequestBody;
 
 public class LoginActivity extends BaseActivity {
     private ActivityLoginBinding mViewDataBinding;
-    private SharedPreferences sp,spAccount;
+    private SharedPreferences sp, spAccount;
     private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         sp = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         spAccount = getSharedPreferences("UserAccount", Context.MODE_PRIVATE);
-        String userName = spAccount.getString("userName","");
-        String pwd = spAccount.getString("pwd","");
-        boolean shouldAutonLogin = sp.getBoolean("autoLogin",false);
+        String userName = spAccount.getString("userName", "");
+        String pwd = spAccount.getString("pwd", "");
+        boolean shouldAutonLogin = sp.getBoolean("autoLogin", false);
         mViewDataBinding.userName.setText(userName);
         mViewDataBinding.pwd.setText(pwd);
-        if(shouldAutonLogin && !TextUtils.isEmpty(mViewDataBinding.userName.getText().toString()) && !TextUtils.isEmpty(mViewDataBinding.pwd.getText().toString())){
+        if (shouldAutonLogin && !TextUtils.isEmpty(mViewDataBinding.userName.getText().toString()) && !TextUtils.isEmpty(mViewDataBinding.pwd.getText().toString())) {
             LoginClick(mViewDataBinding.btnLogin);
         }
         WRApplication.getInstance().addActivity(this);
@@ -81,11 +75,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void LoginClick(View view) {
-        if(TextUtils.isEmpty(mViewDataBinding.userName.getText())){
+        if (TextUtils.isEmpty(mViewDataBinding.userName.getText())) {
             ToastUtils.show("账户名为空，请输入！");
             return;
         }
-        if(TextUtils.isEmpty(mViewDataBinding.pwd.getText())){
+        if (TextUtils.isEmpty(mViewDataBinding.pwd.getText())) {
             ToastUtils.show("密码为空，请输入！");
             return;
         }
@@ -99,7 +93,7 @@ public class LoginActivity extends BaseActivity {
         String userName = mViewDataBinding.userName.getText().toString();
         String pwd = mViewDataBinding.pwd.getText().toString();
 
-        ApiService.Utils.getInstance(this).login(userName,pwd)
+        ApiService.Utils.getInstance(this).login(userName, pwd)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<UserInfoBean>>(this) {
                     @Override
@@ -117,24 +111,26 @@ public class LoginActivity extends BaseActivity {
                     public void onNext(Result<UserInfoBean> o) {
                         super.onNext(o);
                         LogT.d(" 11111111 o is " + o.toString());
-                        if(o.isRet()){
+                        if (o.isRet()) {
                             editor = sp.edit();
-                            editor.putInt("userId",o.getData().getId());
+                            editor.putInt("userId", o.getData().getId());
                             //editor.putInt("userId",2);
-                            editor.putString("fullName",o.getData().getFullName());
-                            editor.putString("uuid",o.getData().getUuid());
-                            if(!TextUtils.isEmpty(o.getData().getRoleName())){
-                                if(o.getData().getRoleName().equals("普通成员")){
-                                    editor.putInt("userRole",0);
-                                }else{
-                                    editor.putInt("userRole",1);
+                            editor.putString("fullName", o.getData().getFullName());
+                            editor.putString("uuid", o.getData().getUuid());
+                            if (!TextUtils.isEmpty(o.getData().getRoleName())) {
+                                if (o.getData().getRoleName().equals("普通成员")) {
+                                    editor.putInt("userRole", 0);
+                                } else if (o.getData().getRoleName().equals("超级管理员")) {
+                                    editor.putInt("userRole", 2);
+                                } else {
+                                    editor.putInt("userRole", 1);
                                 }
                             }
-                            editor.putBoolean("autoLogin",true);
+                            editor.putBoolean("autoLogin", true);
                             editor.apply();
                             SharedPreferences.Editor accountEditor = spAccount.edit();
-                            accountEditor.putString("userName",mViewDataBinding.userName.getText().toString());
-                            accountEditor.putString("pwd",mViewDataBinding.pwd.getText().toString());
+                            accountEditor.putString("userName", mViewDataBinding.userName.getText().toString());
+                            accountEditor.putString("pwd", mViewDataBinding.pwd.getText().toString());
                             accountEditor.commit();
 
                             Intent mIntent = new Intent();
@@ -144,5 +140,10 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        WRApplication.getInstance().exit();
     }
 }

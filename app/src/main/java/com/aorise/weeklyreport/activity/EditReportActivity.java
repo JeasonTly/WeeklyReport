@@ -1,10 +1,12 @@
 package com.aorise.weeklyreport.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +19,7 @@ import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectPlan;
+import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.bean.WeeklyReportUploadBean;
 import com.aorise.weeklyreport.databinding.ActivityAddPlanOrSummaryBinding;
 import com.aorise.weeklyreport.network.ApiService;
@@ -86,6 +89,11 @@ public class EditReportActivity extends AppCompatActivity {
 
 
     private List<String> workType = new ArrayList<>();
+    private List<WeeklyReportUploadBean.WeeklyDateModelsBean> mUpdateDateList = new ArrayList<>();
+    private String dialog_item_name[];
+    private boolean dialog_item_selected[];
+    private WeeklyReportDetailBean mDetailBean;
+    private boolean reselectDate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +102,7 @@ public class EditReportActivity extends AppCompatActivity {
         WRApplication.getInstance().addActivity(this);
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         LogT.d(" 是否在编辑" + isEdit);
-        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat defaultTime = new SimpleDateFormat("yyyy-MM-dd");
         start_calendar = Calendar.getInstance(TimeZone.getDefault());
         start_calendar.set(Calendar.HOUR, 8);
@@ -104,10 +112,11 @@ public class EditReportActivity extends AppCompatActivity {
         end_calendar.set(Calendar.HOUR, 18);
         end_calendar.set(Calendar.MINUTE, 0);
         end_calendar.set(Calendar.SECOND, 0);
-
-        mViewDataBinding.startTime.setText(defaultTime.format(new Date()) + " 08:30:00");
-        mViewDataBinding.endTime.setText(defaultTime.format(new Date()) + " 18:00:00");
-        mViewDataBinding.workTime.setText(String.valueOf(work_time));
+        if (!isEdit) {
+            mViewDataBinding.startTime.setText(defaultTime.format(new Date()));
+            mViewDataBinding.endTime.setText(defaultTime.format(new Date()));
+            mViewDataBinding.workTime.setText(String.valueOf(work_time));
+        }
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         sp = getSharedPreferences("UserInfo", MODE_PRIVATE);
@@ -337,6 +346,8 @@ public class EditReportActivity extends AppCompatActivity {
             type = 1;
             mViewDataBinding.planOrSummaryTxt.setText("实际完成情况说明");
         }
+//        LogT.d(" m detail bean is " + ((WeeklyReportDetailBean) mIntent.getSerializableExtra("detailBean")).toString());
+
         String title = "";
         title = mIntent.getStringExtra("title");
         String isAddplan = !isAddPlan ? "工作总结" : "工作计划";
@@ -346,7 +357,7 @@ public class EditReportActivity extends AppCompatActivity {
         if (isEdit) {
             reportId = mIntent.getIntExtra("reportId", -1);
             int _workType = mIntent.getIntExtra("workType", -1);
-
+            mDetailBean = (WeeklyReportDetailBean) mIntent.getSerializableExtra("detailBean");
             switch (_workType) {
                 case 1:
                     isEdit_WorkType = "项目工作";
@@ -467,112 +478,166 @@ public class EditReportActivity extends AppCompatActivity {
 
     }
 
+    private void showMutilDialog(List<String> workTimeList) {
+        //[1]构造对话框的实例
+        dialog_item_name = new String[workTimeList.size()];
+        dialog_item_selected = new boolean[workTimeList.size()];
+        for (int j = 0; j < workTimeList.size(); j++) {
+            dialog_item_name[j] = workTimeList.get(j);
+            dialog_item_selected[j] = true;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请勾选您的工作日期");
+        builder.setMultiChoiceItems(dialog_item_name, dialog_item_selected, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                dialog_item_selected[which] = isChecked;
+            }
+        });
+        //[2]设置确定和取消按钮
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              //  StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < dialog_item_selected.length; i++) {
+                    //判断一下是选中的
+                    if (dialog_item_selected[i]) {
+                        //把选中的水果取出来     数据在哪里存着就去哪里取
+                        LogT.d("已选择" + dialog_item_name[i]);
+                        WeeklyReportUploadBean.WeeklyDateModelsBean modelsBean = new WeeklyReportUploadBean.WeeklyDateModelsBean();
+                        modelsBean.setWorkDate(dialog_item_name[i]);
+                        mUpdateDateList.add(modelsBean);
+                    }
+                }
+                int weeks = EditReportActivity.this.weeks;
+                String start_time = mViewDataBinding.startTime.getText().toString();
+                String end_time = mViewDataBinding.endTime.getText().toString();
+                try {
+                    work_time = Float.valueOf(mViewDataBinding.workTime.getText().toString());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                String output = mViewDataBinding.output.getText().toString();
+                String explain = mViewDataBinding.showHow.getText().toString();
+                String issue = mViewDataBinding.needHelp.getText().toString();
+                Gson gson = new Gson();
+
+                WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
+                mUploadInfo.setApprovalState(3);//1,通过，2驳回，3未审批
+                if (type == 2 && !isEdit) {
+                    weeks++;
+                }
+                mUploadInfo.setByWeek(weeks);//周数
+                mUploadInfo.setEndDate(end_time);//结束时间
+                mUploadInfo.setExplain(explain);//情况说明
+                mUploadInfo.setIssue(issue);//遇到的问题
+                mUploadInfo.setOutput(output);//输出物
+                mUploadInfo.setPercentComplete(percent);//完成百分比
+                mUploadInfo.setPlanId(planId);//计划ID
+                mUploadInfo.setProjectId(projectId);//项目ID
+                mUploadInfo.setStartDate(start_time);//开始日期
+                mUploadInfo.setType(type);//工作类型 计划还是总结
+                mUploadInfo.setUserId(userId);//用户ID
+                mUploadInfo.setWorkTime(mUpdateDateList.size());//工作时间
+                mUploadInfo.setWorkType(work_type);//工作类型
+                LogT.d(isEdit ? "修改周报" : "创建周报");
+                if (isEdit) {
+                    mUploadInfo.setId(reportId);
+                }
+                mUploadInfo.setWeeklyDateModels(mUpdateDateList);
+                LogT.d(" upload info is " + mUploadInfo.toString());
+                String jsonData = gson.toJson(mUploadInfo);
+                RequestBody mResponseBody = CommonUtils.getRequestBody(jsonData);
+                if (!isEdit) {
+                    ApiService.Utils.getInstance(EditReportActivity.this).fillInWeeklyReprot(mResponseBody)
+                            .compose(ApiService.Utils.schedulersTransformer())
+                            .subscribe(new CustomSubscriber<Result>(EditReportActivity.this) {
+                                @Override
+                                public void onCompleted() {
+                                    super.onCompleted();
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                }
+
+                                @Override
+                                public void onNext(Result o) {
+                                    super.onNext(o);
+                                    LogT.d(" fillInWeeklyReprot data is " + o);
+                                    if (o.isRet()) {
+                                        ToastUtils.show("添加成功");
+                                        EditReportActivity.this.finish();
+                                    } else {
+                                        ToastUtils.show("添加失败");
+                                    }
+                                }
+                            });
+                } else {
+                    ApiService.Utils.getInstance(EditReportActivity.this).updateWeeklyReprot(mResponseBody)
+                            .compose(ApiService.Utils.schedulersTransformer())
+                            .subscribe(new CustomSubscriber<Result<Integer>>(EditReportActivity.this) {
+                                @Override
+                                public void onCompleted() {
+                                    super.onCompleted();
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    LogT.d("updateweeklyReportFail " + e.toString());
+                                }
+
+                                @Override
+                                public void onNext(Result<Integer> o) {
+                                    super.onNext(o);
+                                    LogT.d(" updateweeklyReport data is " + o);
+                                    if (o.isRet()) {
+                                        ToastUtils.show("修改成功");
+                                        EditReportActivity.this.finish();
+                                    } else {
+                                        ToastUtils.show("修改失败");
+                                    }
+                                }
+                            });
+                }
+                dialog.dismiss();
+            }
+        });
+        //[3]展示对话框  和toast一样 一定要记得show出来
+        builder.show();
+    }
+
     public void CommitClick(View view) {
         int weeks = this.weeks;
-
         String start_time = mViewDataBinding.startTime.getText().toString();
         String end_time = mViewDataBinding.endTime.getText().toString();
-        List<WeeklyReportUploadBean.WeeklyDateModelsBean> workTimeList = TimeUtil.getInstance().getWorkDateList(start_time, end_time);
-
-        try {
-            work_time = Float.valueOf(mViewDataBinding.workTime.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        String output = mViewDataBinding.output.getText().toString();
-        String explain = mViewDataBinding.showHow.getText().toString();
-        String issue = mViewDataBinding.needHelp.getText().toString();
-        Gson gson = new Gson();
-
-        WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
-        mUploadInfo.setApprovalState(3);//1,通过，2驳回，3未审批
-        if (type == 2 && !isEdit) {
-            weeks++;
-        }
-        mUploadInfo.setByWeek(weeks);//周数
-        mUploadInfo.setEndDate(end_time);//结束时间
-        mUploadInfo.setExplain(explain);//情况说明
-        mUploadInfo.setIssue(issue);//遇到的问题
-        mUploadInfo.setOutput(output);//输出物
-        mUploadInfo.setPercentComplete(percent);//完成百分比
-        mUploadInfo.setPlanId(planId);//计划ID
-        mUploadInfo.setProjectId(projectId);//项目ID
-        mUploadInfo.setStartDate(start_time);//开始日期
-        // mUploadInfo.setState(status);//完成状态
-        mUploadInfo.setType(type);//工作类型 计划还是总结
-        mUploadInfo.setUserId(userId);//用户ID
-        mUploadInfo.setWorkTime(workTimeList.size());//工作时间
-        mUploadInfo.setWorkType(work_type);//工作类型
-        LogT.d(isEdit ? "修改周报" : "创建周报");
-        if (isEdit) {
-            mUploadInfo.setId(reportId);
-        }
-        mUploadInfo.setWeeklyDateModels(workTimeList);
-        LogT.d(" upload info is " + mUploadInfo.toString());
-        String jsonData = gson.toJson(mUploadInfo);
-        RequestBody mResponseBody = CommonUtils.getRequestBody(jsonData);
+        List<String> workTimeList = new ArrayList<>();
         if (!isEdit) {
-            ApiService.Utils.getInstance(this).fillInWeeklyReprot(mResponseBody)
-                    .compose(ApiService.Utils.schedulersTransformer())
-                    .subscribe(new CustomSubscriber<Result>(this) {
-                        @Override
-                        public void onCompleted() {
-                            super.onCompleted();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                        }
-
-                        @Override
-                        public void onNext(Result o) {
-                            super.onNext(o);
-                            LogT.d(" fillInWeeklyReprot data is " + o);
-                            if (o.isRet()) {
-                                ToastUtils.show("添加成功");
-                                EditReportActivity.this.finish();
-                            } else {
-                                ToastUtils.show("添加失败");
-                            }
-                        }
-                    });
+            workTimeList = TimeUtil.getInstance().getWorkDateList(start_time, end_time);
         } else {
-            ApiService.Utils.getInstance(this).updateWeeklyReprot(mResponseBody)
-                    .compose(ApiService.Utils.schedulersTransformer())
-                    .subscribe(new CustomSubscriber<Result<Integer>>(this) {
-                        @Override
-                        public void onCompleted() {
-                            super.onCompleted();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            LogT.d("updateweeklyReportFail " + e.toString());
-                        }
-
-                        @Override
-                        public void onNext(Result<Integer> o) {
-                            super.onNext(o);
-                            LogT.d(" updateweeklyReport data is " + o);
-                            if (o.isRet()) {
-                                ToastUtils.show("修改成功");
-                                EditReportActivity.this.finish();
-                            } else {
-                                ToastUtils.show("修改失败");
-                            }
-                        }
-                    });
+            if(!reselectDate) {
+                for (int i = 0; i < mDetailBean.getWeeklyDateModels().size(); i++) {
+                    workTimeList.add(mDetailBean.getWeeklyDateModels().get(i).getWorkDate());
+                }
+            }else{
+                workTimeList = TimeUtil.getInstance().getWorkDateList(start_time, end_time);
+            }
         }
+        showMutilDialog(workTimeList);
+
     }
 
     private void selectDate(final Button view, Calendar selectedDate) {
-        //Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
-        //startDate.set(2013,1,1);
         Calendar endDate = Calendar.getInstance();
-        //endDate.set(2020,1,1);
         if (inputMethodManager.isActive()) {
             inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
@@ -584,7 +649,7 @@ public class EditReportActivity extends AppCompatActivity {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
 //                tvTime.setText(getTime(date));
-
+                reselectDate = true;
                 String format = sdf.format(date);
                 view.setText(format);
 
@@ -603,7 +668,7 @@ public class EditReportActivity extends AppCompatActivity {
             }
         });
         timePickerBuilder
-                .setType(new boolean[]{true, true, true, true, true, true})// 默认全部显示
+                .setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
                 .setCancelText("取消")//取消按钮文字
                 .setSubmitText("确定")//确认按钮文字
                 .setSubCalSize(14)//确定和取消文字大小

@@ -365,7 +365,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="问题和需要配合的项" />
+                        android:text="遇到的问题及解决办法" />
 
                     <EditText
                         android:id="@+id/need_help"

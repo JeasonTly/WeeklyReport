@@ -1,27 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/remark_level_radio"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/remark_high"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="1.描述完整详细、客观、真实"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/remark_middle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="2.描述一般，相对客观，基本属实"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/remark_low"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="3.描述不清楚，不客观，不属实"
+            android:textSize="18sp" />
+    </RadioGroup>
+
     <TextView
         android:layout_width="match_parent"
-        android:text="审批理由"
-        android:textSize="18sp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_height="wrap_content" />
+        android:text="审批理由"
+        android:textSize="18sp" />
+
     <EditText
         android:id="@+id/approval_mark"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:inputType="textMultiLine"
+        android:background="@drawable/bg_edittext"
         android:gravity="top|left"
+        android:inputType="textMultiLine"
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
-        android:textCursorDrawable="@drawable/cusor"
-        android:background="@drawable/bg_edittext"
         android:paddingBottom="10dp"
-        android:textSize="18sp"/>
+        android:textCursorDrawable="@drawable/cusor"
+        android:textSize="18sp" />
 </LinearLayout>

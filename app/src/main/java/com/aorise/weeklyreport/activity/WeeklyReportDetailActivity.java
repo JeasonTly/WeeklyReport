@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.AuditReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.databinding.ActivityWeeklyReportDetailBinding;
@@ -34,6 +37,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     private boolean isAuditMode = false;
     private boolean canAudit = false; //是否可以审批
     private int workStatus = 1;
+    private int reamarkStatus = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +65,14 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 mIntent.putExtra("projectName", mDetailBean.getProjectName());
                 mIntent.putExtra("planId", mDetailBean.getPlanId());
                 mIntent.putExtra("planName", mDetailBean.getPlanName());
-                mIntent.putExtra("startDate", mDetailBean.getStartDate());
-                mIntent.putExtra("endDate", mDetailBean.getEndDate());
+                mIntent.putExtra("startDate", TimeUtil.getInstance().date2date(mDetailBean.getStartDate()));
+                mIntent.putExtra("endDate", TimeUtil.getInstance().date2date(mDetailBean.getEndDate()));
                 mIntent.putExtra("percent", mDetailBean.getPercentComplete());
                 mIntent.putExtra("workTime", mDetailBean.getWorkTime());
                 mIntent.putExtra("output", mDetailBean.getOutput());
                 mIntent.putExtra("explain", mDetailBean.getExplain());
                 mIntent.putExtra("issue", mDetailBean.getIssue());
+                mIntent.putExtra("detailBean", mDetailBean);
                 startActivity(mIntent);
             }
         });
@@ -114,6 +119,25 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     private void showApproveDialog(final boolean pass) {
         View inputView = LayoutInflater.from(this).inflate(R.layout.dialog_input_contentview, null);
         final EditText approvalMark = (EditText) inputView.findViewById(R.id.approval_mark);
+        final RadioGroup radioGroup = (RadioGroup) inputView.findViewById(R.id.remark_level_radio);
+        final RadioButton remarkHigh = (RadioButton) inputView.findViewById(R.id.remark_high);
+        remarkHigh.setChecked(true);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.remark_high:
+                        reamarkStatus = 1;
+                        break;
+                    case R.id.remark_middle:
+                        reamarkStatus = 2;
+                        break;
+                    case R.id.remark_low:
+                        reamarkStatus = 3;
+                        break;
+                }
+            }
+        });
         AlertDialog.Builder mDialog = new AlertDialog.Builder(this)
                 .setTitle("周报审批")
                 .setView(inputView)
@@ -126,6 +150,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         approvalText = approvalMark.getText().toString();
+
                         CommitApproveResult(pass);
                     }
                 });
@@ -141,6 +166,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mModel.setWeeklyId(mDetailBean.getId());//周报ID
         mModel.setPlanStatus(workStatus);//项目周报上的完成状态
         mModel.setRemark(approvalText);//备注
+        mModel.setRemarkState(reamarkStatus);
         mModel.setStatue(approvestatus);//审批状态
         String json = gson.toJson(mModel);
         LogT.d("json is " + json);
@@ -269,8 +295,8 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mViewDataBinding.detailWorkType.setText(workType);
         mViewDataBinding.detailWorkContentList.setText(data.getProjectName());
         mViewDataBinding.detailSpecificThings.setText(data.getPlanName());
-        mViewDataBinding.detailStartTime.setText(data.getStartDate());
-        mViewDataBinding.detailEndTime.setText(data.getEndDate());
+        mViewDataBinding.detailStartTime.setText(TimeUtil.getInstance().date2date(data.getStartDate()));
+        mViewDataBinding.detailEndTime.setText(TimeUtil.getInstance().date2date(data.getEndDate()));
         mViewDataBinding.detailPlanPercent.setText(data.getPercentComplete() + "%");
         mViewDataBinding.detailWorkTime.setText(data.getWorkTime() + "天");
         mViewDataBinding.detailOutput.setText(data.getOutput());

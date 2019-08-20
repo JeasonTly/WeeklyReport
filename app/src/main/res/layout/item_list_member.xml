@@ -10,6 +10,12 @@
         <variable
             name="useTime"
             type="String"/>
+        <variable
+            name="startTime"
+            type="String"/>
+        <variable
+            name="endTime"
+            type="String"/>
     </data>
 
     <LinearLayout
@@ -97,7 +103,7 @@
             <TextView
                 android:gravity="end"
                 android:textSize="18sp"
-                android:text="@{memberlist.startTime}"
+                android:text="@{startTime}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -125,7 +131,7 @@
             <TextView
                 android:gravity="end"
                 android:textSize="18sp"
-                android:text="@{memberlist.endTime}"
+                android:text="@{endTime}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

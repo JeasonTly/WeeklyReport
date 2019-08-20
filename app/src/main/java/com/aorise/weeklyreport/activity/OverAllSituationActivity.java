@@ -20,6 +20,10 @@ import com.hjq.toast.ToastUtils;
 
 import okhttp3.RequestBody;
 
+/**
+ * 整体情况
+ */
+
 public class OverAllSituationActivity extends AppCompatActivity {
     private ActivityOverAllSituationBinding mViewDataBinding;
     private int projectId;
@@ -64,9 +68,12 @@ public class OverAllSituationActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         queryBean();
-        // mBean = (HeaderItemBean) getIntent().getBundleExtra("item_detail").get("detail");
+
     }
 
+    /**
+     * 查询整体情况
+     */
     private void queryBean() {
         ApiService.Utils.getInstance(this).getHeaderList(projectId, weeks, type)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -85,11 +92,11 @@ public class OverAllSituationActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Result<HeaderItemBean> o) {
                         super.onNext(o);
-                        LogT.d(" O " + o.toString());
+                        LogT.d("整体情况" + o.toString());
                         if (o.isRet()) {
-                            LogT.d(" o " + o.getData().getPlanDetailsList().size());
+                            LogT.d(" 整体情况列表 " + o.getData().getPlanDetailsList().size());
                             mBean = o.getData();
-                            LogT.d("mBean info is " + mBean.toString());
+                            LogT.d("HeaderItemBean info is " + mBean.toString());
                             if (mBean != null) {
                                 updateOverallSituation = (mBean.getId() != 0);
                                 managerReportId = mBean.getId();

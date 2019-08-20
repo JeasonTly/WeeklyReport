@@ -19,7 +19,6 @@ import com.aorise.weeklyreport.activity.ChooseProjectActivity;
 import com.aorise.weeklyreport.activity.ProjectInfoActivity;
 import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
 import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
-import com.aorise.weeklyreport.base.GlideImageLoader;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.FragmentNewHomeBinding;
@@ -330,7 +329,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         list.add("http://ym-moblie.oss-cn-shenzhen.aliyuncs.com//oss/71ceab6cf6254c859fa06f63175b2b8e.jpg");
         mViewDataBinding.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置图片加载器
-        mViewDataBinding.banner.setImageLoader(new GlideImageLoader());
+       // mViewDataBinding.banner.setImageLoader(new GlideImageLoader());
         //设置图片集合
         mViewDataBinding.banner.setImages(list);
         mViewDataBinding.banner.setImageLoader(new com.youth.banner.loader.ImageLoader() {

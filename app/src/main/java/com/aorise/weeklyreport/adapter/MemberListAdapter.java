@@ -82,6 +82,8 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, Base
         String useTime = mList.get(position).getUseWorkTime()+"天";
         viewHolder.getBinding().setVariable(BR.planTime, planTime);
         viewHolder.getBinding().setVariable(BR.useTime, useTime);
+        viewHolder.getBinding().setVariable(BR.startTime,TimeUtil.getInstance().date2date(mList.get(position).getStartTime()));
+        viewHolder.getBinding().setVariable(BR.endTime,TimeUtil.getInstance().date2date(mList.get(position).getEndTime()));
         //viewHolder.getBinding().setVariable(BR.reportStates, weeklyStates);
         viewHolder.getBinding().setVariable(BR.memberlist, mList.get(position));
         viewHolder.getBinding().executePendingBindings();

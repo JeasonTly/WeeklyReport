@@ -2,13 +2,14 @@ package com.aorise.weeklyreport.bean;
 
 import android.databinding.BaseObservable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Tuliyuan.
  * Date: 2019/7/4.
  */
-public class WeeklyReportDetailBean extends BaseObservable {
+public class WeeklyReportDetailBean extends BaseObservable implements Serializable {
     @Override
     public String toString() {
         return "WeeklyReportDetailBean{" +
@@ -239,7 +240,20 @@ public class WeeklyReportDetailBean extends BaseObservable {
         this.weeklyDateModels = weeklyDateModels;
     }
 
-    public static class ApprovalModelBean {
+    public static class ApprovalModelBean implements Serializable  {
+        @Override
+        public String toString() {
+            return "ApprovalModelBean{" +
+                    "id=" + id +
+                    ", weeklyId=" + weeklyId +
+                    ", remark='" + remark + '\'' +
+                    ", approvalTime='" + approvalTime + '\'' +
+                    ", statue=" + statue +
+                    ", planStatus=" + planStatus +
+                    ", approvalState=" + approvalState +
+                    '}';
+        }
+
         private int id;
         private int weeklyId;//周报ID
         private String remark;//审核理由
@@ -308,7 +322,15 @@ public class WeeklyReportDetailBean extends BaseObservable {
         }
     }
 
-    public static class WeeklyDateModelsBean {
+    public static class WeeklyDateModelsBean implements Serializable {
+        @Override
+        public String toString() {
+            return "WeeklyDateModelsBean{" +
+                    "weeklyId=" + weeklyId +
+                    ", workDate='" + workDate + '\'' +
+                    '}';
+        }
+
         /**
          * weeklyId : 175
          * workDate : 2019-08-21

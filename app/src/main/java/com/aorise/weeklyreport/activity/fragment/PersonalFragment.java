@@ -87,6 +87,9 @@ public class PersonalFragment extends Fragment {
             case 1:
                 isManagerText = "项目负责人";
                 break;
+            case 2:
+                isManagerText = "超级管理员";
+                break;
             default:
                 isManagerText = "无信息";
                 break;

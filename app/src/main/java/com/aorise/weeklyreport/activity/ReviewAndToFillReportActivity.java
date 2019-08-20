@@ -180,7 +180,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
         LogT.d("当前选择了。。。。" + position + " dddd " + weeksList.get(totalweek - position - 1));
         mViewDataBinding.toreviewActionbar.actionBarTitle.setText(weeksList.get(totalweek - position - 1));
         currentWeek = position + 1;
-        currentWeeks = weeksList.get(position);
+        currentWeeks = weeksList.get(totalweek - position - 1);
         // if (addPlan) {
         if (mPlanFragment != null) {
             mPlanFragment.update(currentWeek);

@@ -11,12 +11,14 @@ public class AuditReportBean extends BaseObservable {
     /**
      * planStatus : 0 周报完成状态
      * remark : string  审批意见
+     * remarkState : 0
      * statue : 0 审批状态
      * weeklyId : 0 周报ID
      */
 
     private int planStatus;
     private String remark;
+    private int remarkState;
     private int statue;
     private int weeklyId;
 
@@ -34,6 +36,14 @@ public class AuditReportBean extends BaseObservable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public int getRemarkState() {
+        return remarkState;
+    }
+
+    public void setRemarkState(int remarkState) {
+        this.remarkState = remarkState;
     }
 
     public int getStatue() {
