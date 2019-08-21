@@ -46,7 +46,7 @@ public class FillReportActivity extends AppCompatActivity {
     private int type = 1;//类型：1总结，2计划
     private int work_type = 1;//工作类型 '1-项目工作，2-部门工作，3-临时工作'
     private int planId = 1;//计划ID
-    private float percent = 10;//百分比
+    private double percent = 10;//百分比
     private int status = 1;//完成状态
     private float work_time = 1;
     private int reportId = -1;
@@ -58,7 +58,7 @@ public class FillReportActivity extends AppCompatActivity {
 
     private List<ProjectList> mProjectList = new ArrayList<>();
     private List<ProjectPlan> mProjectPlan = new ArrayList<>();
-    private List<Float> mPercentList = new ArrayList<>();
+    private List<Double> mPercentList = new ArrayList<>();
 
     private List<String> mProjectNameList = new ArrayList<>();
     private List<String> mProjectPlanNameList = new ArrayList<>();
@@ -338,7 +338,7 @@ public class FillReportActivity extends AppCompatActivity {
      */
     private void initPercentListPicker() {
         for (int i = 0; i <= 10; i++) {
-            float percentNumber = (float) (i * 10);
+            double percentNumber = (double) (i * 10);
             mPercentList.add(percentNumber);
             mPercentTextList.add(i * 10 + "%");
         }

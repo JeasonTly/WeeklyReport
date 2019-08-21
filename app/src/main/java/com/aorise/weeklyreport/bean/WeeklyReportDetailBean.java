@@ -69,8 +69,8 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
     private int planId;
     private String startDate;
     private String endDate;
-    private int percentComplete;
-    private int workTime;
+    private double percentComplete;
+    private float workTime;
     private String output;
     private String explain;
     private String issue;
@@ -147,19 +147,19 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
         this.endDate = endDate;
     }
 
-    public int getPercentComplete() {
+    public double getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(int percentComplete) {
+    public void setPercentComplete(double percentComplete) {
         this.percentComplete = percentComplete;
     }
 
-    public int getWorkTime() {
+    public float getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(int workTime) {
+    public void setWorkTime(float workTime) {
         this.workTime = workTime;
     }
 

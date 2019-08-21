@@ -217,13 +217,13 @@
                     app:min_year="2019"
                     app:min_year_day="10"
                     app:min_year_month="5"
-                    app:month_view="com.aorise.weeklyreport.view.CustomMultiMonthView"
+                    app:month_view="com.aorise.weeklyreport.view.CustomMonthView"
                     app:month_view_show_mode="mode_only_current"
                     app:scheme_lunar_text_color="@android:color/holo_green_dark"
                     app:scheme_text="起止时间"
                     app:scheme_text_color="@android:color/holo_red_light"
                     app:scheme_theme_color="@android:color/holo_purple"
-                    app:select_mode="multi_mode"
+                    app:select_mode="range_mode"
                     app:selected_theme_color="#3DD078"
                     app:week_view="com.haibin.calendarview.DefaultWeekView" />
             </LinearLayout>

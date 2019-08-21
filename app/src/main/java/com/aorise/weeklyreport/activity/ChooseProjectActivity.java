@@ -127,8 +127,9 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     public void onBackPressed() {
 
         LogT.d(" 项目和成员选择界面 onBackPressed ");
-        if (isReview && mProjectList.size() == 1 && mMemberList.size() > 1) {
-            super.onBackPressed();
+        if (mProjectList.size() == 1 && mMemberList.size() > 1) {
+           // super.onBackPressed();
+            this.finish();
         }
         if (!isProjectList) {
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -232,8 +233,9 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                             LogT.d(" mDetailBean.getWeeklyDateModels() size " + mDetailBean.getWeeklyDateModels() + "\n mSelectDateSize " + mSelectDateList.size());
                             if (mSelectDateList != null && mSelectDateList.size() != 0) {
                                 for (Calendar calendar : mSelectDateList) {
-                                    mViewDataBinding.detailCalendar.putMultiSelect(calendar);
+                                    mViewDataBinding.detailCalendar.addSchemeDate(calendar);
                                 }
+//                                mViewDataBinding.detailCalendar.onInterceptTouchEvent(new View.on);
                             }
                         }
                     }
@@ -254,6 +256,23 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 mViewDataBinding.detailCalendar.putMultiSelect(calendar);
             }
         }
+        mViewDataBinding.detailCalendar.setSelected(false);
+        mViewDataBinding.detailCalendar.setOnCalendarMultiSelectListener(new CalendarView.OnCalendarMultiSelectListener() {
+            @Override
+            public void onCalendarMultiSelectOutOfRange(Calendar calendar) {
+
+            }
+
+            @Override
+            public void onMultiSelectOutOfSize(Calendar calendar, int maxSize) {
+
+            }
+
+            @Override
+            public void onCalendarMultiSelect(Calendar calendar, int curSize, int maxSize) {
+
+            }
+        });
 
     }
 
@@ -287,7 +306,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 workState = "终止";
                 break;
             default:
-                workState = "尚未审批";
+                workState = "尚未审批状态";
                 break;
         }
 
@@ -341,6 +360,6 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mViewDataBinding.detailShowHow.setText(data.getExplain());
         mViewDataBinding.detailWorkStatus.setText(workState);
         mViewDataBinding.detailNeedHelp.setText(data.getIssue());
-        //  mViewDataBinding.detailCheckStatus.setText(checkStatus);
+        //mViewDataBinding.detailCheckStatus.setText(checkStatus);
     }
 }

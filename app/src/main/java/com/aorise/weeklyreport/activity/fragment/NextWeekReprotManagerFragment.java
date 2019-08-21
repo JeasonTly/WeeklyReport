@@ -148,6 +148,8 @@ public class NextWeekReprotManagerFragment extends Fragment {
                     public void onError(Throwable e) {
                         super.onError(e);
                         LogT.d("错误" + e.toString());
+                        memberWeeklyModelListBeans.clear();
+                        mAdapter.refreshData(memberWeeklyModelListBeans);
                     }
 
                     @Override

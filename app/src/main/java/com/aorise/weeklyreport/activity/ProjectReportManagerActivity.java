@@ -30,7 +30,7 @@ import java.util.List;
 public class ProjectReportManagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityMemberManagerBinding mViewDataBinding;
 
-    private Class mFragmentArray[] = {NextWeekReprotManagerFragment.class, LastWeekReportManagerFragment.class,};
+    private Class mFragmentArray[] = {LastWeekReportManagerFragment.class,NextWeekReprotManagerFragment.class };
     private static final String TITLE_ONE = "本周周报总结";
     private static final String TITLE_TWO = "下周周报计划";
     private String mFragmentTitle[] = {TITLE_ONE, TITLE_TWO};
@@ -60,7 +60,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
 
         mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + currentWeekNumber + "周");
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
-        // mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.VISIBLE);
+        mViewDataBinding.managerActionbar.actionMenu.setImageResource(R.drawable.xiafarenwu);
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
         menuPopup = new MenuPopup(this, 0, this);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
@@ -116,10 +116,10 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getText().equals(TITLE_ONE)) {
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
-                    addPlan = true;
+                    addPlan = false;
                     //  type = 1;
                 } else if (tab.getText().equals(TITLE_TWO)) {
-                    addPlan = false;
+                    addPlan = true;
                     // type = 2;
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
                 }

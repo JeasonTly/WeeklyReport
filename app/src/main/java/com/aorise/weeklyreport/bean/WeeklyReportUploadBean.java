@@ -65,7 +65,7 @@ public class WeeklyReportUploadBean extends BaseObservable implements Serializab
     private int id;
     private String issue;
     private String output;
-    private float percentComplete;
+    private double percentComplete;
     private int percentStage;
     private int planId;
     private int projectId;
@@ -134,11 +134,11 @@ public class WeeklyReportUploadBean extends BaseObservable implements Serializab
         this.output = output;
     }
 
-    public float getPercentComplete() {
+    public double getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(float percentComplete) {
+    public void setPercentComplete(double percentComplete) {
         this.percentComplete = percentComplete;
     }
 

@@ -117,9 +117,7 @@ public class LastWeekReportManagerFragment extends Fragment{
         super.onResume();
         updateManagerList(weeks);
     }
-    public void updateIsProjectLeader(boolean isProjectLeader){
 
-    }
     public void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
@@ -135,6 +133,8 @@ public class LastWeekReportManagerFragment extends Fragment{
                     public void onError(Throwable e) {
                         super.onError(e);
                         LogT.d("错误" + e.toString());
+                        memberWeeklyModelListBeans.clear();
+                        mAdapter.refreshData(memberWeeklyModelListBeans);
                     }
 
                     @Override

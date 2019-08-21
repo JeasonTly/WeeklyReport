@@ -36,7 +36,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
 
     private List<MemberListSpinnerBean> mMemberList = new ArrayList<>();
     private List<ProjectPlan> mProjectPlan = new ArrayList<>();
-    private List<Float> mPercentList = new ArrayList<>();
+    private List<Double> mPercentList = new ArrayList<>();
 
     private List<String> mMemberNameList = new ArrayList<>();
     private List<String> mProjectPlanNameList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private int userId = -1;
     private String userName = "";
     private int planId = -1;
-    private float percent = 10;
+    private double percent = 10;
     private int projectId = -1;
     private String projectName = "";
 
@@ -136,6 +136,12 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.NWPlanActionbar.actionMenu.setVisibility(View.GONE);
         mViewDataBinding.NWPlanActionbar.actionBarDropdown.setVisibility(View.GONE);
         mViewDataBinding.NWPlanActionbar.actionbarBack.setVisibility(View.VISIBLE);
+        mViewDataBinding.NWPlanActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingsNextWeekPlanActivity.this.finish();
+            }
+        });
         mViewDataBinding.NWPlanActionbar.actionBarTitle.setText("指定项目计划");
     }
 
@@ -251,7 +257,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
      */
     private void initPercentListPicker() {
         for (int i = 0; i <= 10; i++) {
-            float percentNumber = (float) (i * 10);
+            double percentNumber = (double) (i * 10);
             mPercentList.add(percentNumber);
             mPercentTextList.add(i * 10 + "%");
         }
