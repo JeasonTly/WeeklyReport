@@ -106,7 +106,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="具体事项"
+                android:text="工作计划"
                 android:textSize="18sp" />
 
             <TextView

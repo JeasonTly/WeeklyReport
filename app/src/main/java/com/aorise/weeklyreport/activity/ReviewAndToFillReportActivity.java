@@ -16,7 +16,7 @@ import com.aorise.weeklyreport.activity.fragment.ConclusionFragment;
 import com.aorise.weeklyreport.activity.fragment.PlanFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.MenuPopup;
+import com.aorise.weeklyreport.view.MenuPopup;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.databinding.ActivityToReviewReportBinding;
 
@@ -67,11 +67,11 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
             }
         });
         menuPopup.setPopupGravity(Gravity.BOTTOM);
-        menuPopup.setOffsetY(36);//纵向偏移量
-        mViewDataBinding.toreviewActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
+        //menuPopup.setOffsetY(34);//纵向偏移量
+        mViewDataBinding.toreviewActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuPopup.showPopupWindow(mViewDataBinding.toreviewActionbar.actionBarTitle);
+                menuPopup.showPopupWindow(mViewDataBinding.toreviewActionbar.actionBarTitleArea);
 
             }
         });
@@ -90,7 +90,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
                 mIntent.putExtra("isAddPlan", addPlan);
                 mIntent.putExtra("title", currentWeeks);
                 mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
-                mIntent.setClass(ReviewAndToFillReportActivity.this, EditReportActivity.class);
+                mIntent.setClass(ReviewAndToFillReportActivity.this, FillReportActivity.class);
                 startActivity(mIntent);
             }
         });
@@ -126,6 +126,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
                     if (mPlanFragment != null) {
                         mPlanFragment.update(currentWeek);
                     }
+                    mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.GONE);
                     // mCurrentFragment = mPlanFragment;
                 } else if (tab.getText().equals("本周工作总结")) {
                     addPlan = false;
@@ -134,6 +135,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
                     if (mConclusionFragment != null) {
                         mConclusionFragment.update(currentWeek);
                     }
+                    mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -166,6 +168,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
     public void onPageSelected(int i) {
         LogT.d("当前选择index为 " + i);
         addPlan = (i == 1);
+        mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(addPlan ? View.GONE :View.VISIBLE);
         mViewDataBinding.toreviewTabHost.setScrollPosition(i, 0, false);
     }
 

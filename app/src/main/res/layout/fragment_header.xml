@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout >
     <data>
         <variable
             name="last_stage"
@@ -8,122 +8,125 @@
             name="last_specificThings"
             type="String"></variable>
     </data>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.aorise.weeklyreport.view.MyScrollview
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
         tools:context=".activity.fragment.LastWeekReportManagerFragment">
-        <RelativeLayout
-            android:id="@+id/last_overall"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#3DD078"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+            <RelativeLayout
+                android:id="@+id/last_overall"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="工作阶段"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:background="#3DD078"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="工作阶段"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="整体情况"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="整体情况"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/base_line_cf">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/base_line_cf">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="阶段完成"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@{last_stage}"
+                    android:textColor="#C5C5C5"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="阶段完成"
-                android:textSize="18sp" />
+                android:background="@drawable/base_line_cf">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="@{last_stage}"
-                android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="具体工作事项"
+                    android:textSize="18sp" />
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/base_line_cf">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@{last_specificThings}"
+                    android:textColor="#C5C5C5"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="具体工作事项"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="@{last_specificThings}"
-                android:textColor="#C5C5C5"
-                android:textSize="18sp" />
-
-        </RelativeLayout>
-        <!-- TODO: Update blank fragment layout -->
-        <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
-            android:id="@+id/last_Report_plt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            </RelativeLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/last_Report_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp" />
-        </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
+            <!-- TODO: Update blank fragment layout -->
 
-    </LinearLayout>
+        </LinearLayout>
+    </com.aorise.weeklyreport.view.MyScrollview>
+
 </layout>

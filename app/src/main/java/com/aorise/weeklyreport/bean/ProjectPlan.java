@@ -30,7 +30,7 @@ public class ProjectPlan extends BaseObservable {
 
     private int id;
     private String name;
-    private int workTime;
+    private float workTime;
     private int percentComplete;
     private List<OwnerListBean> ownerList;
 
@@ -50,11 +50,11 @@ public class ProjectPlan extends BaseObservable {
         this.name = name;
     }
 
-    public int getWorkTime() {
+    public float getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(int workTime) {
+    public void setWorkTime(float workTime) {
         this.workTime = workTime;
     }
 

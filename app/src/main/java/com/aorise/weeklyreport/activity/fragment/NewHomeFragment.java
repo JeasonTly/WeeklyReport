@@ -295,6 +295,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                                 if (mProjectList.size() == 1) {
                                     Intent mIntent = new Intent();
                                     mIntent.putExtra("projectId", mProjectList.get(0).getId());
+                                    mIntent.putExtra("projectName", mProjectList.get(0).getName());
                                     mIntent.putExtra("userId", userId);
                                     mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
                                     startActivity(mIntent);

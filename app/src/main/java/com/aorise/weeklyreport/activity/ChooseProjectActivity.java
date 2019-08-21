@@ -39,6 +39,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     private int totalPage = 1;
 
     private int projectId = -1;
+    private String projectName = "";
     private boolean isReview = false;//是否为审核周报  true为审核周报界面    false则为项目概况界面
     private boolean isHeaderReport = false; //是则为选择项目对应的项目周报 否则为负责人选择项目对应的成员周报
     private int userId = -1;
@@ -53,7 +54,8 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         isReview = getIntent().getBooleanExtra("isReview", false);
         isHeaderReport = getIntent().getBooleanExtra("isHeaderReport", false);
         isProjectList = mProjectList.size() != 1;
-
+        mViewDataBinding.chooseProjectActionbar.actionMenu.setVisibility(View.GONE);
+        mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择");
         LogT.d(" show projectList size is " + mProjectList.size());
         mAdapter = new ProjectListAdapter(this, mProjectList);
         mAdapter.setClickListener(this);
@@ -64,7 +66,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
             @Override
             public void onClick(int position) {
                 LogT.d("点击查看此人的项目详情咯");
-                if(isReview){
+                if (isReview) {
                     Intent mIntent = new Intent();
                     mIntent.setClass(ChooseProjectActivity.this, AuditWeeklyReportActivity.class);
                     mIntent.putExtra("projectId", projectId);
@@ -72,7 +74,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                     mIntent.putExtra("userName", mMemberList.get(position).getUserName());
                     mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
                     startActivity(mIntent);
-                }else{
+                } else {
 
                 }
 
@@ -90,6 +92,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         } else { //如果当前是审核周报选择，且该用户的项目列表不为1 则，隐藏项目列表 显示项目成员列表
             mViewDataBinding.memberPltChoose.setVisibility(View.VISIBLE);
             mViewDataBinding.projectList.setVisibility(View.GONE);
+            mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("成员选择");
         }
 
         mViewDataBinding.chooseProjectActionbar.actionbarBack.setVisibility(View.VISIBLE);
@@ -101,13 +104,13 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                 } else {
                     mViewDataBinding.projectList.setVisibility(View.VISIBLE);
                     mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
+                    mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择");
                     isProjectList = true;
                 }
             }
         });
 
-        mViewDataBinding.chooseProjectActionbar.actionMenu.setVisibility(View.GONE);
-        mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目管理");
+
         mViewDataBinding.projectList.setLayoutManager(new LinearLayoutManager(this));
         mViewDataBinding.projectList.addItemDecoration(new SpacesItemDecoration(8));
 
@@ -141,6 +144,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         super.onResume();
         if (isReview && mProjectList.size() == 1) {
             projectId = mProjectList.get(0).getId();
+            projectName = mProjectList.get(0).getName();
             getMemberList(mProjectList.get(0).getId());
         }
     }
@@ -186,6 +190,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     public void onClick(int position) {
         LogT.d("当前选择的projectInfo为" + mProjectList.get(position));
         projectId = mProjectList.get(position).getId();
+        projectName = mProjectList.get(position).getName();
         if (!isReview) {//非周报审核
             if (!isHeaderReport) {//非项目周报,为项目概况
                 Intent mIntent = new Intent();
@@ -196,12 +201,14 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
             } else {//项目周报
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("projectName", projectName);
                 mIntent.putExtra("userId", userId);
                 mIntent.setClass(this, ProjectReportManagerActivity.class);
                 startActivity(mIntent);
             }
         } else {
 //            mViewDataBinding.projectList.swapAdapter(mMemberAdatper, true);
+
             mViewDataBinding.projectList.setVisibility(View.GONE);
             getMemberList(projectId);
         }

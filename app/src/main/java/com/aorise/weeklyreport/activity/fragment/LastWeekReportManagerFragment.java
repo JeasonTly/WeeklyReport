@@ -35,7 +35,7 @@ import java.util.List;
  * Use the {@link LastWeekReportManagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LastWeekReportManagerFragment extends Fragment implements BaseRefreshListener {
+public class LastWeekReportManagerFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -50,7 +50,6 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
     private int weeks = -1;
 
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
-    private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
     private MulityStageRecyclerAdapter mAdapter;
     private HeaderItemBean mHeaderItemBean;
 
@@ -91,8 +90,6 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
         // Inflate the layout for this fragment
 
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_header, container, false);
-        mViewDataBinding.lastReportPlt.setCanLoadMore(false);
-        mViewDataBinding.lastReportPlt.setRefreshListener(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", 2);
@@ -162,14 +159,4 @@ public class LastWeekReportManagerFragment extends Fragment implements BaseRefre
                 });
     }
 
-    @Override
-    public void refresh() {
-        updateManagerList(weeks);
-        mViewDataBinding.lastReportPlt.finishRefresh();
-    }
-
-    @Override
-    public void loadMore() {
-
-    }
 }

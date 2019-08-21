@@ -6,14 +6,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.fragment.MemberInfoFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectInfoFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
-import com.aorise.weeklyreport.base.MenuPopup;
+import com.aorise.weeklyreport.view.MenuPopup;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.ActivityProjectInfoBinding;
@@ -46,18 +45,19 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_project_info);
         totalweek = currentWeeks = TimeUtil.getInstance().getDayofWeek();
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
-        currentWeeksTitle = "第" + currentWeeks + "周";
-        menuPopup = new MenuPopup(this, 0, this);
-        menuPopup.setPopupGravity(Gravity.BOTTOM);
-        menuPopup.setOffsetY(36);
-        mViewDataBinding.infoActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
-        mViewDataBinding.infoActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuPopup.showPopupWindow(mViewDataBinding.infoActionbar.actionBarTitle);
-            }
-        });
-        mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况" + currentWeeksTitle);
+//        currentWeeksTitle = "第" + currentWeeks + "周";
+//        menuPopup = new MenuPopup(this, 0, this);
+//        menuPopup.setPopupGravity(Gravity.BOTTOM);
+//        menuPopup.setOffsetY(36);
+//        mViewDataBinding.infoActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
+//        mViewDataBinding.infoActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                menuPopup.showPopupWindow(mViewDataBinding.infoActionbar.actionBarTitle);
+//            }
+//        });
+//        mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况" + currentWeeksTitle);
+        mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况");
         mViewDataBinding.infoActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,9 +150,9 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
 
     @Override
     public void selectPosistion(int position) {
-        currentWeeks = position + 1;
-        currentWeeksTitle = weeksList.get(totalweek - position - 1);
-        mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况" + currentWeeksTitle);
+        currentWeeks = totalweek - position - 1;
+//        currentWeeksTitle = weeksList.get(totalweek - position - 1);
+//        mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况" + currentWeeksTitle);
         if (mMemberInfoFragment != null) {
             mMemberInfoFragment.updateWeeks(currentWeeks);
         } else {

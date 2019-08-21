@@ -38,7 +38,7 @@ import java.util.List;
  */
 
 
-public class NextWeekReprotManagerFragment extends Fragment implements BaseRefreshListener {
+public class NextWeekReprotManagerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -93,8 +93,6 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_memeber_check, container, false);
-        mViewDataBinding.nextReportPlt.setCanLoadMore(false);
-        mViewDataBinding.nextReportPlt.setRefreshListener(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", 2);
@@ -109,7 +107,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
             public void onClick(View v) {
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
-                mIntent.putExtra("weeks", weeks);
+                mIntent.putExtra("weeks", weeks + 1);
                 mIntent.putExtra("type", 2);
                 mIntent.setClass(getActivity(), OverAllSituationActivity.class);
                 startActivity(mIntent);
@@ -175,14 +173,4 @@ public class NextWeekReprotManagerFragment extends Fragment implements BaseRefre
                 });
     }
 
-    @Override
-    public void refresh() {
-        updateManagerList(weeks);
-        mViewDataBinding.nextReportPlt.finishRefresh();
-    }
-
-    @Override
-    public void loadMore() {
-
-    }
 }

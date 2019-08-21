@@ -31,32 +31,34 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
                 ", userId=" + userId +
                 ", projectName='" + projectName + '\'' +
                 ", planName='" + planName + '\'' +
+                ", specificItem='" + specificItem + '\'' +
                 ", approvalModelList=" + approvalModelList +
                 ", weeklyDateModels=" + weeklyDateModels +
                 '}';
     }
 
     /**
-     * id : 175
-     * byWeek : 34
-     * projectId : 28
-     * type : 2
+     * id : 165
+     * byWeek : 33
+     * projectId : 26
+     * type : 1
      * workType : 1
-     * planId : 98
-     * startDate : 2019-08-21 00:00:00
-     * endDate : 2019-08-23 00:00:00
+     * planId : 114
+     * startDate : 2019-08-12 00:00:00
+     * endDate : 2019-08-16 00:00:00
      * percentComplete : 100
-     * workTime : 3
-     * output : 《测试大纲》、《测试计划》
-     * explain : 完成测试大纲及测试计划的编写，预计完成100%
-     * issue :
-     * state : 0
-     * approvalState : 3
-     * userId : 22
-     * projectName : 保安服务监管平台-综合服务网项目
-     * planName : 测试用例编写
-     * approvalModelList : []
-     * weeklyDateModels : [{"weeklyId":175,"workDate":"2019-08-21"},{"weeklyId":175,"workDate":"2019-08-22"},{"weeklyId":175,"workDate":"2019-08-23"}]
+     * workTime : 5
+     * output : bug清单，已提交《辰溪公安智能箱运维平台bug》、jira
+     * explain : 1、完成用户账号、监控箱统计、工单走势分析、工单综合统计管理模块的第一轮功能测试100%
+     2、完成《辰溪公安智能箱运维平台bug》回归测试、jira共提出10个bug,已回归10个
+     * issue : 运行概览、补光规则模块后新增的，暂未测试
+     * state : 2
+     * approvalState : 1
+     * userId : 45
+     * projectName : 辰溪公安智能箱运维平台
+     * planName : 叶婷功能测试
+     * approvalModelList : [{"id":662,"weeklyId":165,"remark":"","approvalTime":"2019-08-16 17:50:24","approvalState":1}]
+     * weeklyDateModels : [{"weeklyId":165,"workDate":"2019-08-12"},{"weeklyId":165,"workDate":"2019-08-13"},{"weeklyId":165,"workDate":"2019-08-14"},{"weeklyId":165,"workDate":"2019-08-15"},{"weeklyId":165,"workDate":"2019-08-16"}]
      */
 
     private int id;
@@ -77,7 +79,8 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
     private int userId;
     private String projectName;
     private String planName;
-    private List<ApprovalModelBean> approvalModelList;
+    private String specificItem;
+    private List<ApprovalModelListBean> approvalModelList;
     private List<WeeklyDateModelsBean> weeklyDateModels;
 
     public int getId() {
@@ -224,11 +227,19 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
         this.planName = planName;
     }
 
-    public List<ApprovalModelBean> getApprovalModelList() {
+    public String getSpecificItem() {
+        return specificItem;
+    }
+
+    public void setSpecificItem(String specificItem) {
+        this.specificItem = specificItem;
+    }
+
+    public List<ApprovalModelListBean> getApprovalModelList() {
         return approvalModelList;
     }
 
-    public void setApprovalModelList(List<ApprovalModelBean> approvalModelList) {
+    public void setApprovalModelList(List<ApprovalModelListBean> approvalModelList) {
         this.approvalModelList = approvalModelList;
     }
 
@@ -240,29 +251,30 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
         this.weeklyDateModels = weeklyDateModels;
     }
 
-    public static class ApprovalModelBean implements Serializable  {
+    public static class ApprovalModelListBean implements Serializable{
         @Override
         public String toString() {
-            return "ApprovalModelBean{" +
+            return "ApprovalModelListBean{" +
                     "id=" + id +
                     ", weeklyId=" + weeklyId +
                     ", remark='" + remark + '\'' +
                     ", approvalTime='" + approvalTime + '\'' +
-                    ", statue=" + statue +
-                    ", planStatus=" + planStatus +
                     ", approvalState=" + approvalState +
                     '}';
         }
 
+        /**
+         * id : 662
+         * weeklyId : 165
+         * remark :
+         * approvalTime : 2019-08-16 17:50:24
+         * approvalState : 1
+         */
+
         private int id;
-        private int weeklyId;//周报ID
-        private String remark;//审核理由
+        private int weeklyId;
+        private String remark;
         private String approvalTime;
-        //审核状态1-已通过，2-已驳回
-        private int statue;
-        //计划或总结状态 1-完成，2-正常，3-滞后，4-终止"
-        private int planStatus;
-        //审核状态1-已通过，2-已驳回
         private int approvalState;
 
         public int getId() {
@@ -297,22 +309,6 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
             this.approvalTime = approvalTime;
         }
 
-        public int getStatue() {
-            return statue;
-        }
-
-        public void setStatue(int statue) {
-            this.statue = statue;
-        }
-
-        public int getPlanStatus() {
-            return planStatus;
-        }
-
-        public void setPlanStatus(int planStatus) {
-            this.planStatus = planStatus;
-        }
-
         public int getApprovalState() {
             return approvalState;
         }
@@ -332,8 +328,8 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
         }
 
         /**
-         * weeklyId : 175
-         * workDate : 2019-08-21
+         * weeklyId : 165
+         * workDate : 2019-08-12
          */
 
         private int weeklyId;

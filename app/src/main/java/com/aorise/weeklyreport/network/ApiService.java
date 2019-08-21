@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MemberListBean;
+import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
 import com.aorise.weeklyreport.bean.PersonalBean;
 import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
@@ -74,6 +75,15 @@ public interface ApiService {
     Observable<Result<List<ProjectPlan>>> getProjectPlan(@Path("owner") int userid, @Query("projectId") int projectId);
 
     /**
+     * 获取当前项目下对应用户的计划安排
+     *
+     * @param projectId
+     * @return
+     */
+    @GET(NetworkURLConfig.PROJECT_PLAN_BYPROJECTID)
+    Observable<Result<List<ProjectPlan>>> getProjectPlan(@Query("projectId") int projectId);
+
+    /**
      * 根据项目和用户ID还有第N周获取对应的周报
      *
      * @param userId
@@ -116,6 +126,8 @@ public interface ApiService {
                                                            @Query("projectId") int projectId,
                                                            @Query("byWeek") int byWeek);
 
+    @GET(NetworkURLConfig.LIST_MEMBER_SPINNER)
+    Observable<Result<List<MemberListSpinnerBean>>> getMemberList(@Path("projectId")int projectId);
     /**
      * 获取个人信息
      *

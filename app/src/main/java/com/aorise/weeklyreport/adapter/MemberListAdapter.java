@@ -72,7 +72,7 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, Base
                 reportStates.setTextColor(Color.rgb(255,108,74));
                 break;
             case 3:
-                weeklyStates ="未审核";
+                weeklyStates ="待审批";
                 reportStates.setBackground(mContext.getResources().getDrawable(R.drawable.report_states_orange));
                 reportStates.setTextColor(Color.rgb(255,108,74));
                 break;

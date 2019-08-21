@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
 
+
     <ImageView
         android:id="@+id/action_menu"
         android:layout_width="50dp"
@@ -33,35 +34,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/jiahao" />
-
-    <TextView
-        android:id="@+id/action_bar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        android:text="标题"
-        android:textColor="#FFFFFF"
+        android:id="@+id/action_bar_title_area"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            android:id="@+id/action_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:text="标题"
+            android:textColor="#FFFFFF" />
+        <ImageView
+            android:id="@+id/action_bar_dropdown"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/action_bar_title"
+            app:srcCompat="@drawable/xiala" />
+    </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/action_bar_dropdown"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/action_bar_title"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/xiala" />
 
 </android.support.constraint.ConstraintLayout>
 </layout>

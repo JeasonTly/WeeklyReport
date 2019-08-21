@@ -1,7 +1,6 @@
 package com.aorise.weeklyreport.base;
 
-import com.aorise.weeklyreport.bean.WeeklyReportUploadBean;
-
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,11 +46,30 @@ public class TimeUtil {
 
     public String date2date(String time) {
         String dateStr = "";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = simpleDateFormat.parse(time, new ParsePosition(0));
-        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        dateStr = simpleDateFormat1.format(date);
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = simpleDateFormat.parse(time, new ParsePosition(0));
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+            dateStr = simpleDateFormat1.format(date);
+        }catch (Exception e){
+
+        }
         return dateStr;
+    }
+
+    public com.haibin.calendarview.Calendar stringToCalendar(String time) {
+        com.haibin.calendarview.Calendar calendar = new com.haibin.calendarview.Calendar();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Calendar calendar1 = simpleDateFormat.parse(time, new ParsePosition(0));
+//        LogT.d("date is "+date.toString());
+        int year = Integer.valueOf(time.substring(0, 4));
+        int month = Integer.valueOf(time.substring(5, 7));
+        int day = Integer.valueOf(time.substring(8, 10));
+        calendar.setYear(year);
+        calendar.setMonth(month);
+        calendar.setDay(day);
+        LogT.d(" stringToCalendar " + calendar.toString());
+        return calendar;
     }
 
     public String getSpecifiedDayAfter(String specifiedDay, int appendCount) {
@@ -96,5 +114,13 @@ public class TimeUtil {
 
 
         return diff + 1;
+    }
+
+    public static String appendZero(int time) {
+        if (time < 10) {
+            return "0" + String.valueOf(time);
+        } else {
+            return String.valueOf(time);
+        }
     }
 }

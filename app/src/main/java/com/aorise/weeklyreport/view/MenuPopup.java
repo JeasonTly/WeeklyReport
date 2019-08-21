@@ -1,4 +1,4 @@
-package com.aorise.weeklyreport.base;
+package com.aorise.weeklyreport.view;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;

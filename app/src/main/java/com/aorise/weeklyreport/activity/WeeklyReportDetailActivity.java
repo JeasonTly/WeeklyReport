@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +26,12 @@ import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
 import com.google.gson.Gson;
+import com.haibin.calendarview.Calendar;
+import com.haibin.calendarview.CalendarView;
 import com.hjq.toast.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.RequestBody;
 
@@ -38,12 +44,15 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     private boolean canAudit = false; //是否可以审批
     private int workStatus = 1;
     private int reamarkStatus = 1;
+    private List<Calendar> mSelectDateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_weekly_report_detail);
         WRApplication.getInstance().addActivity(this);
+        mSelectDateList = new ArrayList<>();
+
         id = getIntent().getIntExtra("reportId", -1);
         isAuditMode = getIntent().getBooleanExtra("isAuditMode", false);
         canAudit = getIntent().getBooleanExtra("canAudit", false);
@@ -53,30 +62,23 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mViewDataBinding.detailActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent();
-                mIntent.setClass(WeeklyReportDetailActivity.this, EditReportActivity.class);
-                mIntent.putExtra("isEdit", true);
-                mIntent.putExtra("reportId", id);
-                mIntent.putExtra("title", "周报编辑");
-                mIntent.putExtra("weeks", mDetailBean.getByWeek());
-                mIntent.putExtra("isAddPlan", mDetailBean.getType() == 2);
-                mIntent.putExtra("workType", mDetailBean.getWorkType());
-                mIntent.putExtra("projectId", mDetailBean.getProjectId());
-                mIntent.putExtra("projectName", mDetailBean.getProjectName());
-                mIntent.putExtra("planId", mDetailBean.getPlanId());
-                mIntent.putExtra("planName", mDetailBean.getPlanName());
-                mIntent.putExtra("startDate", TimeUtil.getInstance().date2date(mDetailBean.getStartDate()));
-                mIntent.putExtra("endDate", TimeUtil.getInstance().date2date(mDetailBean.getEndDate()));
-                mIntent.putExtra("percent", mDetailBean.getPercentComplete());
-                mIntent.putExtra("workTime", mDetailBean.getWorkTime());
-                mIntent.putExtra("output", mDetailBean.getOutput());
-                mIntent.putExtra("explain", mDetailBean.getExplain());
-                mIntent.putExtra("issue", mDetailBean.getIssue());
-                mIntent.putExtra("detailBean", mDetailBean);
-                startActivity(mIntent);
+                if (mDetailBean != null) {
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(WeeklyReportDetailActivity.this, FillReportActivity.class);
+                    mIntent.putExtra("isEdit", true);
+                    mIntent.putExtra("title", "周报编辑");
+                    mIntent.putExtra("isAddPlan", mDetailBean.getType() == 2);
+                    mIntent.putExtra("startDate", TimeUtil.getInstance().date2date(mDetailBean.getStartDate()));
+                    mIntent.putExtra("endDate", TimeUtil.getInstance().date2date(mDetailBean.getEndDate()));
+                    mIntent.putExtra("detailBean", mDetailBean);
+                    startActivity(mIntent);
+                } else {
+                    ToastUtils.show("当前无周报详情!");
+                }
             }
         });
-        //mViewDataBinding.detailWorkStatus.setVisibility(isAuditMode ? View.GONE : View.VISIBLE);
+        initCalendar();
+
         mViewDataBinding.detailWorkStatusSpinner.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
         mViewDataBinding.detailWorkStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -105,6 +107,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initDetailInfo();
+
     }
 
     public void AllowClick(View view) {
@@ -221,9 +224,37 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                             initData(o.getData());
                             mDetailBean = o.getData();
                             LogT.d(" mDetailData is " + mDetailBean.toString());
+                            if (mDetailBean.getWeeklyDateModels() != null && mDetailBean.getWeeklyDateModels().size() != 0) {
+                                for (int i = 0; i < mDetailBean.getWeeklyDateModels().size(); i++) {
+                                    mSelectDateList.add(TimeUtil.getInstance().stringToCalendar(mDetailBean.getWeeklyDateModels().get(i).getWorkDate()));
+                                }
+                            }
+                            LogT.d(" mDetailBean.getWeeklyDateModels() size " + mDetailBean.getWeeklyDateModels() + "\n mSelectDateSize " + mSelectDateList.size());
+                            if (mSelectDateList != null && mSelectDateList.size() != 0) {
+                                for (Calendar calendar : mSelectDateList) {
+                                    mViewDataBinding.detailCalendar.putMultiSelect(calendar);
+                                }
+                            }
                         }
                     }
                 });
+    }
+
+    private void initCalendar() {
+
+        mViewDataBinding.monthInfo.setText(mViewDataBinding.detailCalendar.getCurYear() + "年" + mViewDataBinding.detailCalendar.getCurMonth() + "月");
+        mViewDataBinding.detailCalendar.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                mViewDataBinding.monthInfo.setText(year + "年" + month + "月");
+            }
+        });
+        if (mSelectDateList != null && mSelectDateList.size() != 0) {
+            for (Calendar calendar : mSelectDateList) {
+                mViewDataBinding.detailCalendar.putMultiSelect(calendar);
+            }
+        }
+
     }
 
     private void initData(WeeklyReportDetailBean data) {
@@ -254,6 +285,9 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 break;
             case 4:
                 workState = "终止";
+                break;
+            default:
+                workState = "尚未审批";
                 break;
         }
 
@@ -294,15 +328,19 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
         mViewDataBinding.detailWorkType.setText(workType);
         mViewDataBinding.detailWorkContentList.setText(data.getProjectName());
-        mViewDataBinding.detailSpecificThings.setText(data.getPlanName());
-        mViewDataBinding.detailStartTime.setText(TimeUtil.getInstance().date2date(data.getStartDate()));
-        mViewDataBinding.detailEndTime.setText(TimeUtil.getInstance().date2date(data.getEndDate()));
+        mViewDataBinding.detailPlanName.setText(data.getPlanName());
+        mViewDataBinding.detailSpecificth.setText(data.getSpecificItem());
+        if (TextUtils.isEmpty(data.getStartDate()) && TextUtils.isEmpty(data.getEndDate())) {
+            mViewDataBinding.startToEndTxt.setText("尚未设置起止时间");
+        } else {
+            mViewDataBinding.startToEndTxt.setText(TimeUtil.getInstance().date2date(data.getStartDate()) + "----" + TimeUtil.getInstance().date2date(data.getEndDate()));
+        }
         mViewDataBinding.detailPlanPercent.setText(data.getPercentComplete() + "%");
         mViewDataBinding.detailWorkTime.setText(data.getWorkTime() + "天");
         mViewDataBinding.detailOutput.setText(data.getOutput());
         mViewDataBinding.detailShowHow.setText(data.getExplain());
         mViewDataBinding.detailWorkStatus.setText(workState);
         mViewDataBinding.detailNeedHelp.setText(data.getIssue());
-        mViewDataBinding.detailCheckStatus.setText(checkStatus);
+        //  mViewDataBinding.detailCheckStatus.setText(checkStatus);
     }
 }

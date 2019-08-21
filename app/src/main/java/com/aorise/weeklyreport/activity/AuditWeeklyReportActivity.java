@@ -15,7 +15,7 @@ import com.aorise.weeklyreport.activity.fragment.ConclusionFragment;
 import com.aorise.weeklyreport.activity.fragment.PlanFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.MenuPopup;
+import com.aorise.weeklyreport.view.MenuPopup;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.databinding.ActivityAuditWeeklyReportBinding;
 
@@ -54,10 +54,10 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         menuPopup = new MenuPopup(this, 0, this);
         mViewDataBinding.auditActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
         mViewDataBinding.auditActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
-        mViewDataBinding.auditActionbar.actionBarTitle.setOnClickListener(new View.OnClickListener() {
+        mViewDataBinding.auditActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuPopup.showPopupWindow(mViewDataBinding.auditActionbar.actionBarTitle);
+                menuPopup.showPopupWindow(mViewDataBinding.auditActionbar.actionBarTitleArea);
 
             }
         });

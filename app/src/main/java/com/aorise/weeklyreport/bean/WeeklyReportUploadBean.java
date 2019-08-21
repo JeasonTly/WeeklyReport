@@ -2,13 +2,14 @@ package com.aorise.weeklyreport.bean;
 
 import android.databinding.BaseObservable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Tuliyuan.
  * Date: 2019/7/5.
  */
-public class WeeklyReportUploadBean extends BaseObservable {
+public class WeeklyReportUploadBean extends BaseObservable implements Serializable {
 
     @Override
     public String toString() {
@@ -24,6 +25,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
                 ", percentStage=" + percentStage +
                 ", planId=" + planId +
                 ", projectId=" + projectId +
+                ", specificItem='" + specificItem + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", state=" + state +
                 ", type=" + type +
@@ -46,6 +48,7 @@ public class WeeklyReportUploadBean extends BaseObservable {
      * percentStage : 0
      * planId : 0
      * projectId : 0
+     * specificItem : string
      * startDate : string
      * state : 0
      * type : 0
@@ -62,10 +65,11 @@ public class WeeklyReportUploadBean extends BaseObservable {
     private int id;
     private String issue;
     private String output;
-    private int percentComplete;
+    private float percentComplete;
     private int percentStage;
     private int planId;
     private int projectId;
+    private String specificItem;
     private String startDate;
     private int state;
     private int type;
@@ -130,11 +134,11 @@ public class WeeklyReportUploadBean extends BaseObservable {
         this.output = output;
     }
 
-    public int getPercentComplete() {
+    public float getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(int percentComplete) {
+    public void setPercentComplete(float percentComplete) {
         this.percentComplete = percentComplete;
     }
 
@@ -160,6 +164,14 @@ public class WeeklyReportUploadBean extends BaseObservable {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public String getSpecificItem() {
+        return specificItem;
+    }
+
+    public void setSpecificItem(String specificItem) {
+        this.specificItem = specificItem;
     }
 
     public String getStartDate() {
@@ -218,7 +230,8 @@ public class WeeklyReportUploadBean extends BaseObservable {
         this.weeklyDateModels = weeklyDateModels;
     }
 
-    public static class WeeklyDateModelsBean {
+
+    public static class WeeklyDateModelsBean implements Serializable {
         @Override
         public String toString() {
             return "WeeklyDateModelsBean{" +
