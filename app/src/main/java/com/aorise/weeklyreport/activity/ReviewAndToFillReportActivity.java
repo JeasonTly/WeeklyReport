@@ -123,18 +123,12 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
                 if (tab.getText().equals("下周工作计划")) {
                     mViewDataBinding.toreviewViewpager.setCurrentItem(1);
                     addPlan = true;
-                    if (mPlanFragment != null) {
-                        mPlanFragment.update(currentWeek);
-                    }
                     mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.GONE);
                     // mCurrentFragment = mPlanFragment;
                 } else if (tab.getText().equals("本周工作总结")) {
                     addPlan = false;
                     mViewDataBinding.toreviewViewpager.setCurrentItem(0);
-                    //  mCurrentFragment = mConclusionFragment;
-                    if (mConclusionFragment != null) {
-                        mConclusionFragment.update(currentWeek);
-                    }
+
                     mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.VISIBLE);
                 }
 
@@ -170,6 +164,15 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
         addPlan = (i == 1);
         mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(addPlan ? View.GONE :View.VISIBLE);
         mViewDataBinding.toreviewTabHost.setScrollPosition(i, 0, false);
+        if(i == 1) {
+            if (mPlanFragment != null) {
+                mPlanFragment.update(weeks);
+            }
+        }else {
+            if (mConclusionFragment != null) {
+                mConclusionFragment.update(weeks);
+            }
+        }
     }
 
     @Override

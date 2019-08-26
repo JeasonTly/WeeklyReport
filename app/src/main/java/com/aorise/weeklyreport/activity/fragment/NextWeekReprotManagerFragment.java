@@ -134,7 +134,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     }
 
 
-    public void updateManagerList(int weeks) {
+    public synchronized void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
         ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)

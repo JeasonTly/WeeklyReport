@@ -13,6 +13,7 @@ import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
 import com.aorise.weeklyreport.bean.PersonalBean;
 import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
+import com.aorise.weeklyreport.bean.ProjectListBean;
 import com.aorise.weeklyreport.bean.ProjectPlan;
 import com.aorise.weeklyreport.bean.StatisticBean;
 import com.aorise.weeklyreport.bean.UserInfoBean;
@@ -108,6 +109,14 @@ public interface ApiService {
      */
     @GET(NetworkURLConfig.LIST_PROJECT_BY_USERID)
     Observable<Result<List<ProjectList>>> getProjectList(@Query("userId") int userId, @Query("leaderId") int leaderId);
+
+    /**
+     * 分页获取项目列表
+     *
+     * @return
+     */
+    @GET(NetworkURLConfig.LIST_PROJECT)
+    Observable<Result<ProjectListBean>> getProjectList(@Path("pageIndex") String pageIndex, @Path("pageNum") String pageNum);
 
     /**
      * 根据项目ID获取项目信息

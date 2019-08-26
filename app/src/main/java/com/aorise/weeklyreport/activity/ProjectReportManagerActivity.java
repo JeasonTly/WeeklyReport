@@ -118,16 +118,16 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
                     addPlan = false;
                     //  type = 1;
-                    if (mLastReportFragment != null) {
-                        mLastReportFragment.updateManagerList(currentWeekNumber);
-                    }
+//                    if (mLastReportFragment != null) {
+//                        mLastReportFragment.updateManagerList(currentWeekNumber);
+//                    }
                 } else if (tab.getText().equals(TITLE_TWO)) {
                     addPlan = true;
                     // type = 2;
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
-                    if (mNextReportFragment != null) {
-                        mNextReportFragment.updateManagerList(currentWeekNumber);
-                    }
+//                    if (mNextReportFragment != null) {
+//                        mNextReportFragment.updateManagerList(currentWeekNumber);
+//                    }
                 }
                 mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
             }
@@ -151,30 +151,30 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         mViewDataBinding.managerViewpager.setCurrentItem(0);
     }
 
-    private void initProjectDetail() {
-        ApiService.Utils.getInstance(this).getProjectInfoById(projectId)
-                .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<ProjectBaseInfo>>(this) {
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                    }
-
-                    @Override
-                    public void onNext(Result<ProjectBaseInfo> data) {
-                        super.onNext(data);
-                        LogT.d("获取到的项目详细信息为" + data.toString());
-                        if (data.isRet()) {
-
-                        }
-                    }
-                });
-    }
+//    private void initProjectDetail() {
+//        ApiService.Utils.getInstance(this).getProjectInfoById(projectId)
+//                .compose(ApiService.Utils.schedulersTransformer())
+//                .subscribe(new CustomSubscriber<Result<ProjectBaseInfo>>(this) {
+//                    @Override
+//                    public void onCompleted() {
+//                        super.onCompleted();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        super.onError(e);
+//                    }
+//
+//                    @Override
+//                    public void onNext(Result<ProjectBaseInfo> data) {
+//                        super.onNext(data);
+//                        LogT.d("获取到的项目详细信息为" + data.toString());
+//                        if (data.isRet()) {
+//
+//                        }
+//                    }
+//                });
+//    }
 
     @Override
     public void onPageScrolled(int i, float v, int i1) {

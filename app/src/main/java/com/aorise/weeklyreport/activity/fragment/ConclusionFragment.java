@@ -133,11 +133,11 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     }
 
 
-    public void update(int weeks) {
+    public synchronized void update(int weeks) {
         updateList(weeks);
     }
 
-    public void updateList(int weeks) {
+    public synchronized void updateList(int weeks) {
         this.weeks = weeks;
         LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks + " 是否为项目负责人 " + isAuditMode);
         if (isAuditMode) {

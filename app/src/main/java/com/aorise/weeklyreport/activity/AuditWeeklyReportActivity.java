@@ -15,9 +15,9 @@ import com.aorise.weeklyreport.activity.fragment.ConclusionFragment;
 import com.aorise.weeklyreport.activity.fragment.PlanFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.view.MenuPopup;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.databinding.ActivityAuditWeeklyReportBinding;
+import com.aorise.weeklyreport.view.MenuPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,14 +75,14 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         projectId = mIntent.getIntExtra("projectId", -1);
         userId = mIntent.getIntExtra("userId", -1);
         weeks = mIntent.getIntExtra("weeks", -1);
-        canAudit = mIntent.getBooleanExtra("canAudit",true);
+        canAudit = mIntent.getBooleanExtra("canAudit", true);
 
-        LogT.d(" project Id is " + projectId + " userId is " + userId + " weeks " + weeks +" 是否可以编辑周报(默认为true)" + canAudit);
+        LogT.d(" project Id is " + projectId + " userId is " + userId + " weeks " + weeks + " 是否可以编辑周报(默认为true)" + canAudit);
     }
 
     private void initFragment() {
-        mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true,canAudit);
-        mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true,canAudit);
+        mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true, canAudit);
+        mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true, canAudit);
         mFragmentList.add(mConclusionFragment);
         mFragmentList.add(mPlanFragment);
     }
@@ -99,7 +99,6 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
                 } else if (tab.getText().equals("本周工作总结")) {
                     mViewDataBinding.viewpager.setCurrentItem(0);
                 }
-
             }
 
             @Override
@@ -129,6 +128,15 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     public void onPageSelected(int i) {
         LogT.d("当前选择index为 " + i);
         mViewDataBinding.auditTabHost.setScrollPosition(i, 0, false);
+        if(i == 1) {
+            if (mPlanFragment != null) {
+                mPlanFragment.update(weeks);
+            }
+        }else {
+            if (mConclusionFragment != null) {
+                mConclusionFragment.update(weeks);
+            }
+        }
     }
 
     @Override
@@ -142,11 +150,12 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         mViewDataBinding.auditActionbar.actionBarTitle.setText(weeksList.get(totalweek - position - 1));
 
         //weeks = weeksList.get(position);
+        weeks = position + 1;
         // if (addPlan) {
         if (mPlanFragment != null) {
             mPlanFragment.update(position + 1);
         } else {
-            mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true,canAudit);
+            mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true, canAudit);
             mFragmentList.add(mPlanFragment);
             mPlanFragment.update(position + 1);
         }
@@ -154,7 +163,7 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         if (mConclusionFragment != null) {
             mConclusionFragment.update(position + 1);
         } else {
-            mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true,canAudit);
+            mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, true, canAudit);
             mFragmentList.add(mConclusionFragment);
             mConclusionFragment.update(position + 1);
         }

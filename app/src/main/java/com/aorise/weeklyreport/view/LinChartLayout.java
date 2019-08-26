@@ -98,7 +98,7 @@ public class LinChartLayout extends LinearLayout {
             LayoutParams layoutParams = new LayoutParams(scrW - dip2px(getContext(), 10), Math.max(100, caculatMaxItemHeight(maxLengthData, textAreW)));
             LogT.d(" srcW is "+ scrW);
             LogT.d("Params width is "+ (scrW - dip2px(getContext(), 10)));
-            LogT.d("Params Height is "+ Math.max(100, caculatMaxItemHeight(maxLengthData, textAreW)));
+            LogT.d("Params Height is "+ Math.max(120, caculatMaxItemHeight(maxLengthData, textAreW)));
             // 设置居中
             layoutParams.gravity = Gravity.CENTER;
             // 设置Margin

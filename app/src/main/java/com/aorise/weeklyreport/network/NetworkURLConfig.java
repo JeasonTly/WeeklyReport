@@ -16,6 +16,7 @@ public class NetworkURLConfig {
     public static final String LIST_MEMBER = "api/projectMember/pageIndex/{pageIndex}/pageNum/{pageNum}";//查询项目成员列表
     public static final String LIST_MEMBER_SPINNER = "api/projectMember/projectId/{projectId}";//查询项目成员列表
     public static final String LIST_PROJECT_BY_USERID = "api/project";//查询项目列表
+    public static final String LIST_PROJECT = "api/project/pageIndex/{pageIndex}/pageNum/{pageNum}";//查询项目列表
     public static final String PROJECT_BASE_INFO = "api/project/{id}";
     public static final String POST_WEEKLY_REPORT = "api/memberWeekly";//添加周报
     public static final String PUT_WEEKLY_REPORT = "api/memberWeekly";//修改周报

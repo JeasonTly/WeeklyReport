@@ -21,6 +21,7 @@ import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
 import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.ProjectList;
+import com.aorise.weeklyreport.bean.ProjectListBean;
 import com.aorise.weeklyreport.databinding.FragmentNewHomeBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
@@ -54,8 +55,10 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * mProjectList.size() > 1，则进入列表选择界面ChooseProjectActivity;
      */
     private ArrayList<ProjectList> mProjectList = new ArrayList<>();
+    private ArrayList<ProjectListBean.ListBean> mManagerProjectList = new ArrayList<>();
     private int userId; //用户或者项目负责人ID
     private boolean isHeader = false; //是否为项目负责人
+    private boolean isSuperManager = false; //是否为超级管理员
 
 
     public NewHomeFragment() {
@@ -66,8 +69,8 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         super.onCreate(savedInstanceState);
         sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
-        isHeader = sharedPreferences.getInt("userRole", -1) != 0 ; // 1为项目负责人，0为项目成员 ,2为项目负责人
-
+        isHeader = sharedPreferences.getInt("userRole", -1) != 0; // 1为项目负责人，0为项目成员 ,2为超级管理员
+        isSuperManager = sharedPreferences.getInt("userRole", -1) == 2;
     }
 
     @Override
@@ -183,60 +186,127 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * 根据负责人用户的用户ID查询 项目概况 和进行周报审核
      */
     private void queryProjectInfoAsHeaderList(final boolean isReview) {
-        ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId)
-                .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
+        if (isSuperManager) {
+            ApiService.Utils.getInstance(getActivity()).getProjectList("0", "0")
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<ProjectListBean>>(getActivity()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        LogT.d("error msg" + e.toString());
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                        }
 
-                    @Override
-                    public void onNext(Result<List<ProjectList>> o) {
-                        super.onNext(o);
-                        if (o.isRet()) {
-                            mProjectList.clear();
-                            mProjectList.addAll(o.getData());
-                            LogT.d("项目组负责人 mProjectList is " + mProjectList.toString());
-                            if (mProjectList != null && mProjectList.size() != 0) {
-                                if (mProjectList.size() == 1) {
-                                    if (!isReview) {//项目概况
+                        @Override
+                        public void onNext(Result<ProjectListBean> listResult) {
+                            super.onNext(listResult);
+
+                            if (listResult.isRet()) {
+                                mManagerProjectList.clear();
+                                mProjectList.clear();
+                                mManagerProjectList.addAll(listResult.getData().getList());
+                                LogT.d("项目组负责人 mProjectList is " + mProjectList.toString());
+                                for (int i = 0; i < mManagerProjectList.size(); i++) {
+                                    ProjectList projectList = new ProjectList();
+                                    projectList.setId(mManagerProjectList.get(i).getId());
+                                    projectList.setName(mManagerProjectList.get(i).getName());
+                                    LogT.d("周报审核 原始类型 ProjectListBean "+ mManagerProjectList.get(i).toString());
+                                    LogT.d("周报审核 类型转换为projectList "+projectList.toString());
+                                    mProjectList.add(projectList);
+                                }
+
+                                if (mProjectList != null && mProjectList.size() != 0) {
+                                    if (mProjectList.size() == 1) {
+                                        if (!isReview) {//项目概况
+                                            Intent mIntent = new Intent();
+                                            mIntent.putExtra("isReview", isReview);
+                                            mIntent.putExtra("project_info", mProjectList.get(0));
+                                            mIntent.setClass(getActivity(), ProjectInfoActivity.class);
+                                            startActivity(mIntent);
+                                        } else {//项目组周报审核
+                                            Intent mIntent = new Intent();
+                                            mIntent.putExtra("isReview", isReview);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                            mIntent.putExtra("projectList", bundle);
+                                            mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                            startActivity(mIntent);
+                                        }
+                                    } else {
+                                        LogT.d("mProjectList size 大于1");
                                         Intent mIntent = new Intent();
-                                        mIntent.putExtra("isReview", isReview);
-                                        mIntent.putExtra("project_info", mProjectList.get(0));
-                                        mIntent.setClass(getActivity(), ProjectInfoActivity.class);
-                                        startActivity(mIntent);
-                                    } else {//项目组周报审核
-                                        Intent mIntent = new Intent();
-                                        mIntent.putExtra("isReview", isReview);
                                         Bundle bundle = new Bundle();
                                         bundle.putSerializable("_projectList", (Serializable) mProjectList);
                                         mIntent.putExtra("projectList", bundle);
+                                        mIntent.putExtra("isReview", isReview);
                                         mIntent.setClass(getActivity(), ChooseProjectActivity.class);
                                         startActivity(mIntent);
                                     }
                                 } else {
-                                    LogT.d("mProjectList size 大于1");
-                                    Intent mIntent = new Intent();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("_projectList", (Serializable) mProjectList);
-                                    mIntent.putExtra("projectList", bundle);
-                                    mIntent.putExtra("isReview", isReview);
-                                    mIntent.setClass(getActivity(), ChooseProjectActivity.class);
-                                    startActivity(mIntent);
+                                    ToastUtils.show("当前用户角色下无项目!");
                                 }
-                            } else {
-                                ToastUtils.show("当前用户角色下无项目!");
                             }
                         }
-                    }
-                });
+                    });
+        }else {
+            ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId)
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            LogT.d("error msg" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(Result<List<ProjectList>> o) {
+                            super.onNext(o);
+                            if (o.isRet()) {
+                                mProjectList.clear();
+                                mProjectList.addAll(o.getData());
+                                LogT.d("项目组负责人 mProjectList is " + mProjectList.toString());
+                                if (mProjectList != null && mProjectList.size() != 0) {
+                                    if (mProjectList.size() == 1) {
+                                        if (!isReview) {//项目概况
+                                            Intent mIntent = new Intent();
+                                            mIntent.putExtra("isReview", isReview);
+                                            mIntent.putExtra("project_info", mProjectList.get(0));
+                                            mIntent.setClass(getActivity(), ProjectInfoActivity.class);
+                                            startActivity(mIntent);
+                                        } else {//项目组周报审核
+                                            Intent mIntent = new Intent();
+                                            mIntent.putExtra("isReview", isReview);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                            mIntent.putExtra("projectList", bundle);
+                                            mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                            startActivity(mIntent);
+                                        }
+                                    } else {
+                                        LogT.d("mProjectList size 大于1");
+                                        Intent mIntent = new Intent();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                        mIntent.putExtra("projectList", bundle);
+                                        mIntent.putExtra("isReview", isReview);
+                                        mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                        startActivity(mIntent);
+                                    }
+                                } else {
+                                    ToastUtils.show("当前用户角色下无项目!");
+                                }
+                            }
+                        }
+                    });
+        }
     }
 
     /**
@@ -269,53 +339,112 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * 因为该功能只对负责人可见，所以只传入了isHeaderReport = true
      */
     private void startChooseProject() {
+        if (isSuperManager) {
+            ApiService.Utils.getInstance(getActivity()).getProjectList("0", "0")
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<ProjectListBean>>(getActivity()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
 
-        ApiService.Utils.getInstance(getActivity()).getProjectList(-1, userId)
-                .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        LogT.d("error msg" + e.toString());
-                    }
+                        @Override
+                        public void onNext(Result<ProjectListBean> listResult) {
+                            super.onNext(listResult);
 
-                    @Override
-                    public void onNext(Result<List<ProjectList>> o) {
-                        super.onNext(o);
-                        if (o.isRet()) {
-                            mProjectList.clear();
-                            mProjectList.addAll(o.getData());
-                            LogT.d("项目组负责人 mProjectList is " + mProjectList.toString());
-                            if (mProjectList != null && mProjectList.size() != 0) {
-                                if (mProjectList.size() == 1) {
-                                    Intent mIntent = new Intent();
-                                    mIntent.putExtra("projectId", mProjectList.get(0).getId());
-                                    mIntent.putExtra("projectName", mProjectList.get(0).getName());
-                                    mIntent.putExtra("userId", userId);
-                                    mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
-                                    startActivity(mIntent);
-                                } else {
-                                    LogT.d("mProjectList size 大于1");
-                                    Intent mIntent = new Intent();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("_projectList", (Serializable) mProjectList);
-                                    mIntent.putExtra("projectList", bundle);
-                                    mIntent.putExtra("userId", userId);
-                                    mIntent.putExtra("isHeaderReport", true);
-                                    mIntent.setClass(getActivity(), ChooseProjectActivity.class);
-                                    startActivity(mIntent);
+                            if (listResult.isRet()) {
+                                mManagerProjectList.clear();
+                                mProjectList.clear();
+                                mManagerProjectList.addAll(listResult.getData().getList());
+                                for (int i = 0; i < mManagerProjectList.size(); i++) {
+                                    ProjectList projectList = new ProjectList();
+                                    projectList.setId(mManagerProjectList.get(i).getId());
+                                    projectList.setName(mManagerProjectList.get(i).getName());
+                                    LogT.d("原始类型 ProjectListBean "+ mManagerProjectList.get(i).toString());
+                                    LogT.d("类型转换为projectList "+projectList.toString());
+                                    mProjectList.add(projectList);
                                 }
-                            } else {
-                                ToastUtils.show("当前用户角色下无负责的项目!");
+
+                                LogT.d("超級管理員 mProjectList is " + mManagerProjectList.toString());
+                                if (mProjectList != null && mProjectList.size() != 0) {
+                                    if (mProjectList.size() == 1) {
+                                        Intent mIntent = new Intent();
+
+                                        mIntent.putExtra("projectId", mProjectList.get(0).getId());
+                                        mIntent.putExtra("projectName", mManagerProjectList.get(0).getName());
+                                        mIntent.putExtra("userId", userId);
+                                        mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
+                                        startActivity(mIntent);
+                                    } else {
+                                        LogT.d("mProjectList size 大于1");
+                                        Intent mIntent = new Intent();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                        mIntent.putExtra("projectList", bundle);
+                                        mIntent.putExtra("userId", userId);
+                                        mIntent.putExtra("isHeaderReport", true);
+                                        mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                        startActivity(mIntent);
+                                    }
+                                } else {
+                                    ToastUtils.show("当前用户角色下无负责的项目!");
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        } else {
+            ApiService.Utils.getInstance(getActivity()).getProjectList(-1, userId)
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            LogT.d("error msg" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(Result<List<ProjectList>> o) {
+                            super.onNext(o);
+                            if (o.isRet()) {
+                                mProjectList.clear();
+                                mProjectList.addAll(o.getData());
+                                LogT.d("项目组负责人 mProjectList is " + mProjectList.toString());
+                                if (mProjectList != null && mProjectList.size() != 0) {
+                                    if (mProjectList.size() == 1) {
+                                        Intent mIntent = new Intent();
+                                        mIntent.putExtra("projectId", mProjectList.get(0).getId());
+                                        mIntent.putExtra("projectName", mProjectList.get(0).getName());
+                                        mIntent.putExtra("userId", userId);
+                                        mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
+                                        startActivity(mIntent);
+                                    } else {
+                                        LogT.d("mProjectList size 大于1");
+                                        Intent mIntent = new Intent();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                        mIntent.putExtra("projectList", bundle);
+                                        mIntent.putExtra("userId", userId);
+                                        mIntent.putExtra("isHeaderReport", true);
+                                        mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                        startActivity(mIntent);
+                                    }
+                                } else {
+                                    ToastUtils.show("当前用户角色下无负责的项目!");
+                                }
+                            }
+                        }
+                    });
+        }
 
     }
 
@@ -330,7 +459,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         list.add("http://ym-moblie.oss-cn-shenzhen.aliyuncs.com//oss/71ceab6cf6254c859fa06f63175b2b8e.jpg");
         mViewDataBinding.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置图片加载器
-       // mViewDataBinding.banner.setImageLoader(new GlideImageLoader());
+        // mViewDataBinding.banner.setImageLoader(new GlideImageLoader());
         //设置图片集合
         mViewDataBinding.banner.setImages(list);
         mViewDataBinding.banner.setImageLoader(new com.youth.banner.loader.ImageLoader() {

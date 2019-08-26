@@ -121,7 +121,7 @@ public class LinChartView extends View {
         canvas.save();
         TextPaint textPaint = new TextPaint();
         textPaint.setColor(Color.GRAY);
-        textPaint.setTextSize(dip2px(getContext(), 16));
+        textPaint.setTextSize(dip2px(getContext(), 15));
         // 设置文字右对齐
         textPaint.setTextAlign(Paint.Align.LEFT);
 
