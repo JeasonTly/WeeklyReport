@@ -43,7 +43,6 @@ public class MenuPopup extends BasePopupWindow {
         mList = TimeUtil.getInstance().getHistoryWeeks();
         this.menuPopupSelectedListener = menuPopupSelectedListener;
 
-        LogT.d("aaarestart.....?");
         mAdapter = new MyArrayAdatper(getContext(), R.layout.listview_item, mList);
         mListView.setAdapter(mAdapter);
 
@@ -55,6 +54,7 @@ public class MenuPopup extends BasePopupWindow {
                 dismiss();
             }
         });
+
     }
 
     @Override

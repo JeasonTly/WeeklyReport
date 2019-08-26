@@ -50,12 +50,26 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<WeeklyReportBean, BaseV
                 break;
         }
 
+        String approvalStatus = "";
+        switch (weeklyReportBean.getApprovalState()){
+            case 1:
+                approvalStatus = "未审批";
+                break;
+            case 2:
+                approvalStatus = "已通过";
+                break;
+            case 3:
+                approvalStatus = "已驳回";
+                break;
+        }
+
         String itemworkTime = weeklyReportBean.getWorkTime() + "天";
         String percentComplete = weeklyReportBean.getPercentComplete() + "%";
         baseViewHolder.getBinding().setVariable(BR.workThings, weeklyReportBean);
         baseViewHolder.getBinding().setVariable(BR.workType, workType);
         baseViewHolder.getBinding().setVariable(BR.itemworkTime, itemworkTime);
         baseViewHolder.getBinding().setVariable(BR.percentComplete, percentComplete);
+        baseViewHolder.getBinding().setVariable(BR.approvalStatus, approvalStatus);
         baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

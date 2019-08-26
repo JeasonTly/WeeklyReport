@@ -66,7 +66,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         super.onCreate(savedInstanceState);
         sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
-        isHeader = sharedPreferences.getInt("userRole", -1) == 1; // 1为项目负责人，0为项目成员
+        isHeader = sharedPreferences.getInt("userRole", -1) != 0 ; // 1为项目负责人，0为项目成员 ,2为项目负责人
 
     }
 

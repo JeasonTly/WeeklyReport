@@ -15,6 +15,7 @@ import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
+import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectPlan;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
@@ -51,13 +52,14 @@ public class FillReportActivity extends AppCompatActivity {
     private float work_time = 1;
     private int reportId = -1;
     private boolean isEdit = false;
+    private int approvalStatus = 1;
 
     private SimpleDateFormat sdf;
     private InputMethodManager inputMethodManager;
     private SharedPreferences sp;
 
     private List<ProjectList> mProjectList = new ArrayList<>();
-    private List<ProjectPlan> mProjectPlan = new ArrayList<>();
+    private List<FillProjectPlan> mProjectPlan = new ArrayList<>();
     private List<Double> mPercentList = new ArrayList<>();
 
     private List<String> mProjectNameList = new ArrayList<>();
@@ -275,8 +277,8 @@ public class FillReportActivity extends AppCompatActivity {
             mViewDataBinding.workPlanName.setText("");
             return;
         }
-        for (ProjectPlan projectPlan : mProjectPlan) {
-            LogT.d("添加周报列表 " + projectPlan.getName());
+        for (FillProjectPlan projectPlan : mProjectPlan) {
+            LogT.d("添加周报计划列表 " + projectPlan.getName());
             mProjectPlanNameList.add(projectPlan.getName());
         }
 
@@ -389,24 +391,8 @@ public class FillReportActivity extends AppCompatActivity {
     private void initGetIntent() {
         Intent mIntent = getIntent();
         isAddPlan = mIntent.getBooleanExtra("isAddPlan", false);
-        if (isAddPlan) {
-            type = 2;
-            mViewDataBinding.planOrSummaryTxt.setText("计划完成进度");
-            //  mViewDataBinding.specificThings.setFocusable(false);
-            mViewDataBinding.specificThings.setEnabled(false);
-            mViewDataBinding.specificThings.setBackground(null);
-            mViewDataBinding.workType.setEnabled(false);
-            mViewDataBinding.workTypeDropImg.setVisibility(View.GONE);
-            mViewDataBinding.workProjectName.setEnabled(false);
-            mViewDataBinding.workProjectImg.setVisibility(View.GONE);
-            mViewDataBinding.workPlanName.setEnabled(false);
-            mViewDataBinding.workPlanImg.setVisibility(View.GONE);
-            mViewDataBinding.workPercentText.setEnabled(false);
-            mViewDataBinding.percentDropImg.setVisibility(View.GONE);
-        } else {
-            type = 1;
-            mViewDataBinding.planOrSummaryTxt.setText("实际完成情况说明");
-        }
+        weeks = mIntent.getIntExtra("weeks", -1);
+
 //        LogT.d(" m detail bean is " + ((WeeklyReportDetailBean) mIntent.getSerializableExtra("detailBean")).toString());
 
         String title = "";
@@ -430,6 +416,7 @@ public class FillReportActivity extends AppCompatActivity {
                     mSelectDateList.add(TimeUtil.getInstance().stringToCalendar(mDetailBean.getWeeklyDateModels().get(i).getWorkDate()));
                 }
             }
+            approvalStatus = mDetailBean.getApprovalState();
             switch (_workType) {
                 case 1:
                     isEdit_WorkType = "项目工作";
@@ -464,6 +451,26 @@ public class FillReportActivity extends AppCompatActivity {
             mViewDataBinding.output.setText(output);
             mViewDataBinding.showHow.setText(explain);
             mViewDataBinding.needHelp.setText(issue);
+
+            if (isAddPlan) {
+                type = 2;
+                mViewDataBinding.planOrSummaryTxt.setText("计划完成进度");
+                //  mViewDataBinding.specificThings.setFocusable(false);
+                mViewDataBinding.specificThings.setEnabled(false);
+                mViewDataBinding.specificThings.setBackground(null);
+                mViewDataBinding.workType.setEnabled(false);
+                mViewDataBinding.workTypeDropImg.setVisibility(View.GONE);
+                mViewDataBinding.workProjectName.setEnabled(false);
+                mViewDataBinding.workProjectImg.setVisibility(View.GONE);
+                mViewDataBinding.workPlanName.setEnabled(false);
+                mViewDataBinding.workPlanImg.setVisibility(View.GONE);
+                mViewDataBinding.workPercentText.setEnabled(false);
+                mViewDataBinding.percentDropImg.setVisibility(View.GONE);
+
+            } else {
+                type = 1;
+                mViewDataBinding.planOrSummaryTxt.setText("实际完成情况说明");
+            }
         }
 
     }
@@ -512,7 +519,7 @@ public class FillReportActivity extends AppCompatActivity {
         LogT.d(" project id is " + projectId + " user id is " + userId);
         ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<ProjectPlan>>>(this) {
+                .subscribe(new CustomSubscriber<Result<List<FillProjectPlan>>>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -524,7 +531,7 @@ public class FillReportActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNext(Result<List<ProjectPlan>> o) {
+                    public void onNext(Result<List<FillProjectPlan>> o) {
                         super.onNext(o);
                         if (o.isRet()) {
                             mProjectPlan.clear();
@@ -563,19 +570,29 @@ public class FillReportActivity extends AppCompatActivity {
         Gson gson = new Gson();
 
         WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
-        mUploadInfo.setApprovalState(3);//1,通过，2驳回，3未审批
+        if(approvalStatus ==2){
+            approvalStatus = 1;
+        }
+        mUploadInfo.setApprovalState(approvalStatus);//审批状态1,未审批，2,已通过，3驳回
         if (type == 2 && !isEdit) {
             weeks++;
         }
         mUploadInfo.setByWeek(weeks);//周数
-        mUploadInfo.setEndDate(end_calendar.getYear() + "-" + TimeUtil.appendZero(end_calendar.getMonth()) + "-" + TimeUtil.appendZero(end_calendar.getDay()));//结束时间
+
+        if (end_calendar != null) {
+            mUploadInfo.setEndDate(end_calendar.getYear() + "-" + TimeUtil.appendZero(end_calendar.getMonth()) + "-" + TimeUtil.appendZero(end_calendar.getDay()));//结束时间
+        }
+        if (start_calendar != null) {
+            mUploadInfo.setStartDate(start_calendar.getYear() + "-" + TimeUtil.appendZero(start_calendar.getMonth()) + "-" + TimeUtil.appendZero(start_calendar.getDay()));//开始日期
+
+        }
+
         mUploadInfo.setExplain(explain);//情况说明
         mUploadInfo.setIssue(issue);//遇到的问题
         mUploadInfo.setOutput(output);//输出物
         mUploadInfo.setPercentComplete(percent);//完成百分比
         mUploadInfo.setPlanId(planId);//计划ID
         mUploadInfo.setProjectId(projectId);//项目ID
-        mUploadInfo.setStartDate(start_calendar.getYear() + "-" + TimeUtil.appendZero(start_calendar.getMonth()) + "-" + TimeUtil.appendZero(start_calendar.getDay()));//开始日期
         mUploadInfo.setType(type);//工作类型 计划还是总结
         mUploadInfo.setUserId(userId);//用户ID
         mUploadInfo.setWorkTime(work_time);//工作时间
@@ -611,7 +628,7 @@ public class FillReportActivity extends AppCompatActivity {
                                 ToastUtils.show("添加成功");
                                 FillReportActivity.this.finish();
                             } else {
-                                ToastUtils.show("添加失败");
+                                ToastUtils.show(o.getMessage());
                             }
                         }
                     });

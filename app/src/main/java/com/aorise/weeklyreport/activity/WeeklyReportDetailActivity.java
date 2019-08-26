@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -154,7 +153,6 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         approvalText = approvalMark.getText().toString();
-
                         CommitApproveResult(pass);
                     }
                 });
@@ -162,7 +160,8 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     }
 
     private void CommitApproveResult(boolean pass) {
-        int approvestatus = pass ? 1 : 2;
+        //审批状态1,未审批，2,已通过，3,驳回
+        int approvestatus = pass ? 2 : 3;
         //approvalText = pass ? "通过" : "不通过";
         LogT.d(" param id = " + mDetailBean.getId() + " stauts is " + workStatus + " approvalText " + approvalText);
         Gson gson = new Gson();
@@ -235,7 +234,6 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                                 for (Calendar calendar : mSelectDateList) {
                                     mViewDataBinding.detailCalendar.addSchemeDate(calendar);
                                 }
-//                                mViewDataBinding.detailCalendar.onInterceptTouchEvent(new View.on);
                             }
                         }
                     }
@@ -312,25 +310,6 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
         switch (data.getApprovalState()) {
             case 1:
-                checkStatus = "已通过";
-                mViewDataBinding.auditArea.setVisibility(View.GONE);
-                mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
-                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
-                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
-                mViewDataBinding.pass.setText("已通过");
-                mViewDataBinding.pass.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                checkStatus = "已驳回";
-                mViewDataBinding.auditArea.setVisibility(View.GONE);
-
-                mViewDataBinding.pass.setText("已驳回");
-                mViewDataBinding.pass.setVisibility(View.VISIBLE);
-                mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
-                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
-                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
-                break;
-            case 3:
                 checkStatus = "未审批";
                 mViewDataBinding.pass.setVisibility(View.GONE);
                 mViewDataBinding.auditArea.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
@@ -343,6 +322,31 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                     mViewDataBinding.detailActionbar.actionMenu.setVisibility(canAudit ? View.VISIBLE : View.GONE);
                 }
                 break;
+            case 2:
+                checkStatus = "已通过";
+                mViewDataBinding.auditArea.setVisibility(View.GONE);
+                mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.GONE);
+                mViewDataBinding.detailWorkStatus.setVisibility(View.VISIBLE);
+                mViewDataBinding.pass.setText("已通过");
+                mViewDataBinding.pass.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                checkStatus = "已驳回";
+                mViewDataBinding.auditArea.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
+
+                //mViewDataBinding.pass.setText("已驳回");
+                // mViewDataBinding.pass.setVisibility(View.VISIBLE);
+                mViewDataBinding.pass.setVisibility(View.GONE);
+                mViewDataBinding.detailStatusArea.setVisibility(View.VISIBLE);
+                mViewDataBinding.detailActionbar.actionMenu.setVisibility(View.VISIBLE);
+                if (isAuditMode && canAudit) {
+                    mViewDataBinding.detailWorkStatusSpinner.setVisibility(View.VISIBLE);
+                    mViewDataBinding.detailWorkStatus.setVisibility(View.GONE);
+                }
+
+                break;
+
         }
 
         mViewDataBinding.detailWorkType.setText(workType);

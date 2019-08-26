@@ -118,10 +118,16 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
                     addPlan = false;
                     //  type = 1;
+                    if (mLastReportFragment != null) {
+                        mLastReportFragment.updateManagerList(currentWeekNumber);
+                    }
                 } else if (tab.getText().equals(TITLE_TWO)) {
                     addPlan = true;
                     // type = 2;
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
+                    if (mNextReportFragment != null) {
+                        mNextReportFragment.updateManagerList(currentWeekNumber);
+                    }
                 }
                 mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
             }
@@ -179,6 +185,15 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
     public void onPageSelected(int i) {
         addPlan = i == 1;
         //type = i + 1;
+        if(!addPlan){
+            if (mLastReportFragment != null) {
+                mLastReportFragment.updateManagerList(currentWeekNumber);
+            }
+        }else{
+            if (mNextReportFragment != null) {
+                mNextReportFragment.updateManagerList(currentWeekNumber);
+            }
+        }
         mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
         mViewDataBinding.managerTabHost.setScrollPosition(i, 0, false);
     }

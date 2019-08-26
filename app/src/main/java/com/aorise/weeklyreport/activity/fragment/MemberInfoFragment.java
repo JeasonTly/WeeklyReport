@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.AuditWeeklyReportActivity;
-import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
 import com.aorise.weeklyreport.adapter.MemberListAdapter;
 import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
@@ -123,6 +122,7 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
     }
 
     private void initMemberList() {
+        LogT.d("成员列表 projectid" + projectId + " week " + week);
         ApiService.Utils.getInstance(getContext()).getMemberList(currenIndex, pageNumber, projectId, week)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<MemberListBean>>(getActivity()) {

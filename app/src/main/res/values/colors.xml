@@ -5,5 +5,6 @@
     <color name="colorAccent">#3dd078</color>
     <color name="color_status_bar">#3dd078</color>
     <color name="color_gray">#F5F5F5</color>
+    <color name="dark_gray">#aaa</color>
     <color name="color_black">#000000</color>
 </resources>

@@ -224,6 +224,9 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     @Override
     public void refresh() {
         currentIndex = 1;
+        if(!isProjectList){
+            getMemberList(projectId);
+        }
         mViewDataBinding.memberPltChoose.finishRefresh();
     }
 

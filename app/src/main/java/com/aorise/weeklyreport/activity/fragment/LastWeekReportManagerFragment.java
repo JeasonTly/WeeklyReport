@@ -115,6 +115,7 @@ public class LastWeekReportManagerFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        LogT.d("onResume");
         updateManagerList(weeks);
     }
 

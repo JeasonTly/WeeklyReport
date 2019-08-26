@@ -35,8 +35,6 @@ public class MulityStageRecyclerAdapter extends BaseAdapter<HeaderItemBean.PlanD
 
     @Override
     public void onBindVH(BaseViewHolder baseViewHolder, final int position) {
-
-
         final HeaderItemBean.PlanDetailsListBean mBean = mList.get(position);
         baseViewHolder.getBinding().setVariable(BR.headerReport, mBean);
         String isComplete = "";

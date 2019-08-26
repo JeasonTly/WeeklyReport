@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MemberListBean;
 import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
@@ -13,6 +14,7 @@ import com.aorise.weeklyreport.bean.PersonalBean;
 import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectPlan;
+import com.aorise.weeklyreport.bean.StatisticBean;
 import com.aorise.weeklyreport.bean.UserInfoBean;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
@@ -72,7 +74,7 @@ public interface ApiService {
      * @return
      */
     @GET(NetworkURLConfig.PROJECT_PLAN)
-    Observable<Result<List<ProjectPlan>>> getProjectPlan(@Path("owner") int userid, @Query("projectId") int projectId);
+    Observable<Result<List<FillProjectPlan>>> getProjectPlan(@Path("owner") int userid, @Query("projectId") int projectId);
 
     /**
      * 获取当前项目下对应用户的计划安排
@@ -166,6 +168,15 @@ public interface ApiService {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
     Observable<Result<Integer>> putHeaderReport(@Body RequestBody model);
+
+    /**
+     * 获取项目统计信息
+     * @param projectId
+     * @return
+     */
+    @GET(NetworkURLConfig.PROJECT_STATISTIC)
+    Observable<Result<List<StatisticBean>>> getStatisticInfoByID(@Query("id") int projectId);
+
     class Utils {
 
         public static ApiService getInstance(Context context) {

@@ -89,7 +89,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
                 Intent mIntent = new Intent();
                 mIntent.putExtra("isAddPlan", addPlan);
                 mIntent.putExtra("title", currentWeeks);
-                mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
+                mIntent.putExtra("weeks", currentWeek);
                 mIntent.setClass(ReviewAndToFillReportActivity.this, FillReportActivity.class);
                 startActivity(mIntent);
             }

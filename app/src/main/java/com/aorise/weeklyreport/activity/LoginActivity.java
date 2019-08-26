@@ -126,6 +126,20 @@ public class LoginActivity extends BaseActivity {
                                     editor.putInt("userRole", 1);
                                 }
                             }
+                            for (UserInfoBean.PermissionModelListBean permission : o.getData().getPermissionModelList()) {
+                                if (permission.getId() == 1) {
+                                    editor.putBoolean("permi_projectinfo", true);
+                                }
+                                if (permission.getId() == 2) {
+                                    editor.putBoolean("permi_audit", true);
+                                }
+                                if (permission.getId() == 3) {
+                                    editor.putBoolean("permi_fill", true);
+                                }
+                                if (permission.getId() == 4) {
+                                    editor.putBoolean("permi_projectManager", true);
+                                }
+                            }
                             editor.putBoolean("autoLogin", true);
                             editor.apply();
                             SharedPreferences.Editor accountEditor = spAccount.edit();

@@ -86,7 +86,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
-                mUploadInfo.setApprovalState(3);
+                mUploadInfo.setApprovalState(1);
                 mUploadInfo.setWorkType(work_type);
                 mUploadInfo.setType(2);
                 mUploadInfo.setProjectId(projectId);
@@ -119,7 +119,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                                     ToastUtils.show("指派下周计划成功");
                                     SettingsNextWeekPlanActivity.this.finish();
                                 } else {
-                                    ToastUtils.show("指派下周计划失败");
+                                    ToastUtils.show(o.getMessage());
                                 }
                             }
                         });

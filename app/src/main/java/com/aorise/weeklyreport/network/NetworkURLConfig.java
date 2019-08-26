@@ -6,8 +6,8 @@ package com.aorise.weeklyreport.network;
  */
 public class NetworkURLConfig {
     //public static final String BASE_URL = " ";
-    //public static final String BASE_URL = "http://192.168.1.201:8089/";//沈智维
-    public static final String BASE_URL = "http://192.168.1.106:8089/";//卿燚
+    public static final String BASE_URL = "http://192.168.1.201:8089/";//沈智维
+    //public static final String BASE_URL = "http://192.168.1.106:8089/";//卿燚
     //public static final String BASE_URL = "http://account.aorisetest.com/";//YYP
 
 
@@ -27,4 +27,5 @@ public class NetworkURLConfig {
     public static final String PERSONAL_INFO = "api/user/{id}";//根据项目、人员id、周数查询周报
     public static final String HEADER_WEEKY_REPORT_GET = "api/projectWeekly/{id}";//根据项目、人员id、周数查询周报
     public static final String HEADER_WEEKY_REPORT_POST = "api/projectWeekly";//根据项目、人员id、周数查询周报
+    public static final String PROJECT_STATISTIC = "api/statistics";//根据项目id查询统计信息
 }

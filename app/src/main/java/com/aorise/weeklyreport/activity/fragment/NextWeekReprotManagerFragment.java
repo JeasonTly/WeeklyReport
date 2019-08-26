@@ -130,6 +130,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateManagerList(weeks);
+        LogT.d("onResume");
     }
 
 
