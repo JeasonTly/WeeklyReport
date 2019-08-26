@@ -58,11 +58,13 @@ public class ProjectStatisticsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM1);
-            Intent mIntent = new Intent();
-            mIntent.putExtra("projectId",projectId);
-            mIntent.setClass(getContext(), ProjectStatisticsActivity.class);
-            startActivity(mIntent);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
