@@ -27,6 +27,8 @@ import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.StatisticBean;
 
+import java.util.Date;
+
 import static android.text.Layout.Alignment.ALIGN_CENTER;
 
 /**
@@ -39,9 +41,11 @@ public class LinChartView extends View {
     private int mTextW, mChartH, mMaxV;
 
     private Paint arcPaint = null;
+    private Date date;
 
     public LinChartView(Context context) {
         super(context);
+        date = new Date();
     }
 
     public LinChartView(Context context, AttributeSet attrs) {
@@ -96,7 +100,13 @@ public class LinChartView extends View {
         canvas.drawRect(start_complete_left, start_complete_top, start_uncomplete_right, start_complete_bottom, arcPaint);
 
         // 绘制完成的
-        this.arcPaint.setColor(getResources().getColor(R.color.colorAccent));
+        Date endDate = TimeUtil.getInstance().String2Date(mData.getEndDate());
+        if(date.before(endDate)){
+            LogT.d("今天在计划结束日期之前");
+            this.arcPaint.setColor(getResources().getColor(R.color.red));
+        }else {
+            this.arcPaint.setColor(getResources().getColor(R.color.colorAccent));
+        }
         canvas.drawRect(start_complete_left, start_complete_top, start_complete_right, start_complete_bottom, arcPaint);
     }
 

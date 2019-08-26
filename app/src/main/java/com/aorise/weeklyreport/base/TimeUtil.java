@@ -116,6 +116,13 @@ public class TimeUtil {
         return diff + 1;
     }
 
+    public Date String2Date(String time){
+        Date date;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        date = simpleDateFormat.parse(time,new ParsePosition(0));
+        return date;
+    }
+
     public static String appendZero(int time) {
         if (time < 10) {
             return "0" + String.valueOf(time);

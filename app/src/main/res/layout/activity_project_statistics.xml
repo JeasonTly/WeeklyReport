@@ -56,6 +56,26 @@
                     android:text="未完成"
                     android:textSize="18sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="match_parent">
+                <Button
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:text="已逾期"
+                    android:textSize="18sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <ScrollView
