@@ -217,8 +217,8 @@ public class ChartView extends View {
 
             staticLayout.draw(canvas);
             canvas.restore();
-            LogT.d(" draw line "+ (startY - (diffDay / default_value) * i * dengfen_YAix));
-            canvas.drawLine(startX - Y_xWidth, startY - (diffDay / default_value) * (i+1) * dengfen_YAix, getWidth(), startY - (diffDay / default_value) * (i+1)  * dengfen_YAix, mAixsPaint);
+            LogT.d(" draw line " + (startY - (diffDay / default_value) * i * dengfen_YAix));
+            canvas.drawLine(startX - Y_xWidth, startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, getWidth(), startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, mAixsPaint);
         }
 
     }
@@ -291,11 +291,10 @@ public class ChartView extends View {
                         1.0F, 0.0F, false);
             }
             canvas.save();
-
             if (bottom + staticLayout.getHeight() < startY) {
                 canvas.translate(left, bottom);
+                staticLayout.draw(canvas);
             }
-            staticLayout.draw(canvas);
             canvas.restore();
             if (Build.VERSION.SDK_INT >= 23) {
                 staticLayoutEnd = StaticLayout.Builder.obtain(TimeUtil.getInstance().date2date(mBeanList.get(i).getEndDate()), 0, TimeUtil.getInstance().date2date(mBeanList.get(i).getEndDate()).length(), textPaint, mBarItemWidth)
