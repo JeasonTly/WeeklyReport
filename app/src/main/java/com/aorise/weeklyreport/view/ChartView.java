@@ -213,6 +213,7 @@ public class ChartView extends View {
                         1.0F, 0.0F, false);
             }
             canvas.save();
+            canvas.translate(margin_left, startY - (diffDay / default_value) * i * dengfen_YAix - staticLayout.getHeight() / 2);
 
             staticLayout.draw(canvas);
             canvas.restore();
@@ -290,7 +291,10 @@ public class ChartView extends View {
                         1.0F, 0.0F, false);
             }
             canvas.save();
-            canvas.translate(left, bottom);
+
+            if (bottom + staticLayout.getHeight() < startY) {
+                canvas.translate(left, bottom);
+            }
             staticLayout.draw(canvas);
             canvas.restore();
             if (Build.VERSION.SDK_INT >= 23) {
