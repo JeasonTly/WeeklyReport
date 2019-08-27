@@ -153,11 +153,11 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         weeks = position + 1;
         // if (addPlan) {
         if (mPlanFragment != null) {
-            mPlanFragment.update(position + 1);
+            mPlanFragment.update(weeks);
         } else {
             mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, true, canAudit);
             mFragmentList.add(mPlanFragment);
-            mPlanFragment.update(position + 1);
+            mPlanFragment.update(weeks);
         }
         // } else {
         if (mConclusionFragment != null) {

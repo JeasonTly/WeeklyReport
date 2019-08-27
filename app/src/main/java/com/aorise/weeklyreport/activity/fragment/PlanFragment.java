@@ -57,18 +57,19 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
 
     public PlanFragment() {
         // Required empty public constructor
-        weeks = TimeUtil.getInstance().getDayofWeek();
+
     }
+
     /**
      * 审核周报界面的初始化
      *
-     * @param projectId     项目ID
-     * @param userId        用户ID
-     * @param weeks         选择的周数
+     * @param projectId   项目ID
+     * @param userId      用户ID
+     * @param weeks       选择的周数
      * @param isAuditMode 是否为项目负责人
      * @return
      */
-    public static PlanFragment newInstance(int projectId, int userId, int weeks, boolean isAuditMode,boolean canAudit) {
+    public static PlanFragment newInstance(int projectId, int userId, int weeks, boolean isAuditMode, boolean canAudit) {
         PlanFragment fragment = new PlanFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, projectId);
@@ -89,6 +90,9 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
             weeks = getArguments().getInt(ARG_PARAM3);
             isAuditMode = getArguments().getBoolean(ARG_PARAM4);
             canAudit = getArguments().getBoolean(ARG_PARAM5);
+        }else{
+            LogT.d(" getArguments == null ");
+            weeks = TimeUtil.getInstance().getDayofWeek() + 1;
         }
     }
 
@@ -114,8 +118,8 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
     @Override
     public void onResume() {
         super.onResume();
+        LogT.d(" weeks " +weeks);
         updateList(weeks);
-
     }
 
     @Override
@@ -141,7 +145,7 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
      */
     public synchronized void updateList(int weeks) {
         this.weeks = weeks;
-        LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks + " 是否为项目负责人 " + isAuditMode);
+        LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + this.weeks + " 是否为项目负责人 " + isAuditMode);
         if (isAuditMode) {
             ApiService.Utils.getInstance(getContext()).getWeeklyReport(projectId, userId, weeks + 1, 2)
                     .compose(ApiService.Utils.schedulersTransformer())
