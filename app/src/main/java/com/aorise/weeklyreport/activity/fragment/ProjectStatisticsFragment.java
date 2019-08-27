@@ -1,10 +1,6 @@
 package com.aorise.weeklyreport.activity.fragment;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,8 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.activity.ProjectStatisticsActivity;
+import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.TimeUtil;
+import com.aorise.weeklyreport.bean.ProjectBaseInfo;
+import com.aorise.weeklyreport.bean.StatisticBean;
 import com.aorise.weeklyreport.databinding.FragmentProjectStatisticsBinding;
+import com.aorise.weeklyreport.network.ApiService;
+import com.aorise.weeklyreport.network.CustomSubscriber;
+import com.aorise.weeklyreport.network.Result;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +36,9 @@ public class ProjectStatisticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int projectId;
     private String mParam2;
+
+    private String startDate;
+    private String endDate;
 
     public ProjectStatisticsFragment() {
         // Required empty public constructor
@@ -71,24 +78,70 @@ public class ProjectStatisticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_project_statistics, container, false);
-        mViewDataBinding.intentStatisticActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent();
-                mIntent.putExtra("projectId",projectId);
-                mIntent.setClass(getContext(), ProjectStatisticsActivity.class);
-                startActivity(mIntent);
-            }
-        });
+        mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_statistics, container, false);
+//        mViewDataBinding.intentStatisticActivity.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent mIntent = new Intent();
+//                mIntent.putExtra("projectId",projectId);
+//                mIntent.setClass(getContext(), ProjectStatisticsActivity.class);
+//                startActivity(mIntent);
+//            }
+//        });
+        initProjectDetail();
         return mViewDataBinding.getRoot();
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-//        getActivity().setRequestedOrientation(//通过程序改变屏幕显示的方向
-//                hidden ? ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-//                        : ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    private void initProjectDetail() {
+        ApiService.Utils.getInstance(getActivity()).getProjectInfoById(projectId)
+                .compose(ApiService.Utils.schedulersTransformer())
+                .subscribe(new CustomSubscriber<Result<ProjectBaseInfo>>(getContext()) {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(Result<ProjectBaseInfo> data) {
+                        super.onNext(data);
+                        LogT.d("获取到的项目信息为: " + data.toString());
+                        if (data.isRet()) {
+                            startDate = TimeUtil.getInstance().date2date(data.getData().getStartDate());
+                            endDate = TimeUtil.getInstance().date2date(data.getData().getEndDate());
+                            initStatistic();
+                        }
+                    }
+                });
     }
+
+    private void initStatistic() {
+        ApiService.Utils.getInstance(getActivity()).getStatisticInfoByID(projectId)
+                .compose(ApiService.Utils.schedulersTransformer())
+                .subscribe(new CustomSubscriber<Result<List<StatisticBean>>>(getContext()) {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(Result<List<StatisticBean>> listResult) {
+                        super.onNext(listResult);
+                        LogT.d("获取到的统计信息列表为 " + listResult.toString());
+                        if (listResult.isRet()) {
+                            mViewDataBinding.mChartView.setCharInfo(startDate, endDate, listResult.getData());
+                        }
+                    }
+                });
+    }
+
 }
