@@ -101,7 +101,7 @@ public class LinChartView extends View {
 
         // 绘制完成的
         Date endDate = TimeUtil.getInstance().String2Date(mData.getEndDate());
-        if(date.before(endDate)){
+        if(date.after(endDate) && (mData.getPercentComplete()==(double) 100)){
             LogT.d("今天在计划结束日期之前");
             this.arcPaint.setColor(getResources().getColor(R.color.red));
         }else {
