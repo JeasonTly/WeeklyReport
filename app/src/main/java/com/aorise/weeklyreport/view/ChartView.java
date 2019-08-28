@@ -47,7 +47,7 @@ public class ChartView extends View {
     private TextPaint todayPaint;
     private Paint mBarPaint;
     private Paint mBarPercentPaint;
-//    private TextPaint mYTextPaint;
+    private Paint todayLinePaint;
 //    private TextPaint mYBarDescriptionPaint;//Bar上的字符
 
 
@@ -96,13 +96,13 @@ public class ChartView extends View {
         mAixsPaint.setStrokeWidth(2);
 
 
-        todayPaint = new TextPaint();
-        todayPaint.setColor(ContextCompat.getColor(context, R.color.colorAccent));
-        todayPaint.setAntiAlias(true);
-        todayPaint.setStrokeWidth(2);
+        todayLinePaint = new Paint();
+        todayLinePaint.setColor(ContextCompat.getColor(context, R.color.red));
+        todayLinePaint.setAntiAlias(true);
+        todayLinePaint.setStrokeWidth(2);
 
         todayPaint = new TextPaint();
-        todayPaint.setColor(ContextCompat.getColor(context, R.color.colorAccent));
+        todayPaint.setColor(ContextCompat.getColor(context, R.color.red));
         todayPaint.setTextSize(DensityUtil.dip2px(getContext(), 12));
 
         BlurMaskFilter PaintBGBlur = new BlurMaskFilter(
@@ -340,7 +340,7 @@ public class ChartView extends View {
             return;
         }
         int y = DateUtil.getDiffDay(today, startDate) * dengfen_YAix;
-        canvas.drawLine(startX, startY - y, getWidth(), startY - y, todayPaint);
+        canvas.drawLine(startX, startY - y, getWidth(), startY - y, todayLinePaint);
         StaticLayout staticLayout;
         if (Build.VERSION.SDK_INT >= 23) {
             staticLayout = StaticLayout.Builder.obtain(today, 0, today.length(), todayPaint, mBarItemSpace)

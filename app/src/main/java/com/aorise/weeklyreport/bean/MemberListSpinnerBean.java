@@ -10,6 +10,14 @@ import java.io.Serializable;
  */
 public class MemberListSpinnerBean extends BaseObservable implements Serializable {
 
+    @Override
+    public String toString() {
+        return "MemberListSpinnerBean{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                '}';
+    }
+
     /**
      * id : 23
      * userName : 涂立沅

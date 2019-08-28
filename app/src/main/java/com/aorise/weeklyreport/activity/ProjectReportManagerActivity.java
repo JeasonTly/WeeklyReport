@@ -53,7 +53,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_member_manager);
         WRApplication.getInstance().addActivity(this);
         totalWeeks = TimeUtil.getInstance().getDayofWeek();
-        currentWeekNumber = totalWeeks - 1;
+        currentWeekNumber = totalWeeks;
         mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + currentWeekNumber + "周");
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         mViewDataBinding.managerActionbar.actionMenu.setImageResource(R.drawable.xiafarenwu);

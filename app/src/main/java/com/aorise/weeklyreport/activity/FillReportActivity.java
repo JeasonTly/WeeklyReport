@@ -454,7 +454,7 @@ public class FillReportActivity extends AppCompatActivity {
 
             if (isAddPlan) {
                 type = 2;
-                mViewDataBinding.planOrSummaryTxt.setText("计划完成进度");
+
                 //  mViewDataBinding.specificThings.setFocusable(false);
                 mViewDataBinding.specificThings.setEnabled(false);
                 mViewDataBinding.specificThings.setBackground(null);
@@ -469,8 +469,9 @@ public class FillReportActivity extends AppCompatActivity {
 
             } else {
                 type = 1;
-                mViewDataBinding.planOrSummaryTxt.setText("实际完成情况说明");
+
             }
+            mViewDataBinding.planOrSummaryTxt.setText("实际完成情况说明");
         }
 
     }

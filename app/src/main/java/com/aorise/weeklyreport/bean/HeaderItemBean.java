@@ -119,6 +119,7 @@ public class HeaderItemBean implements Serializable {
                     ", phase='" + phase + '\'' +
                     ", stage=" + stage +
                     ", specificPhase='" + specificPhase + '\'' +
+                    ", specificItem='" + specificItem + '\'' +
                     ", percentComplete=" + percentComplete +
                     ", person='" + person + '\'' +
                     ", isComplete=" + isComplete +
@@ -137,6 +138,7 @@ public class HeaderItemBean implements Serializable {
         private String phase;
         private String stage;
         private String specificPhase;
+        private String specificItem;
         private int percentComplete;
         private String person;
         private int isComplete;
@@ -167,6 +169,14 @@ public class HeaderItemBean implements Serializable {
 
         public String getSpecificPhase() {
             return specificPhase;
+        }
+
+        public String getSpecificItem() {
+            return specificItem;
+        }
+
+        public void setSpecificItem(String specificItem) {
+            this.specificItem = specificItem;
         }
 
         public void setSpecificPhase(String specificPhase) {

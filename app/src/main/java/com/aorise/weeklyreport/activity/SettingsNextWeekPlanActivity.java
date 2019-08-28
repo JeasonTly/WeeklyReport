@@ -13,6 +13,7 @@ import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
 import com.aorise.weeklyreport.bean.ProjectPlan;
 import com.aorise.weeklyreport.bean.WeeklyReportUploadBean;
@@ -35,7 +36,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private ActivitySettingsNextWeekPlanBinding mViewDataBinding;
 
     private List<MemberListSpinnerBean> mMemberList = new ArrayList<>();
-    private List<ProjectPlan> mProjectPlan = new ArrayList<>();
+    private List<FillProjectPlan> mProjectPlan = new ArrayList<>();
     private List<Double> mPercentList = new ArrayList<>();
 
     private List<String> mMemberNameList = new ArrayList<>();
@@ -70,10 +71,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         WRApplication.getInstance().addActivity(this);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_settings_next_week_plan);
-        initActionBar();
         initGetIntent();
-        initPlanList();
         initMemberList();
+        initActionBar();
         initWorkTypePicker();
         mViewDataBinding.ownerName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +148,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private void initGetIntent() {
         Intent mIntent = getIntent();
         projectId = mIntent.getIntExtra("projectId", -1);
-        weeksNumber = mIntent.getIntExtra("weeks", -1) +1;
+        weeksNumber = mIntent.getIntExtra("weeks", -1) + 1;
         projectName = mIntent.getStringExtra("projectName");
         mViewDataBinding.workProjectName.setText(projectName);
     }
@@ -200,12 +200,13 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
      * 初始化计划滚轮
      */
     private void initPlanListPicker() {
+        LogT.d(" initPlanListPicker.... " +mProjectPlan.size());
         if (mProjectPlan.size() == 0) {
             LogT.d("当前项目没有具体工作事项列表");
             mViewDataBinding.workPlanName.setText("");
             return;
         }
-        for (ProjectPlan projectPlan : mProjectPlan) {
+        for (FillProjectPlan projectPlan : mProjectPlan) {
             LogT.d("添加周报列表 " + projectPlan.getName());
             mProjectPlanNameList.add(projectPlan.getName());
         }
@@ -236,7 +237,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                     .isCenterLabel(true)
                     .setLabels("", "", "")
                     //标题文字
-                    .setTitleText("选择具体工作事项")
+                    .setTitleText("选择工作计划")
                     .setSelectOptions(DEFAULT_PLAN_SELECTION)
                     .build();
             planOptionsView.setPicker(mProjectPlanNameList);
@@ -298,10 +299,10 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     }
 
     private void initPlanList() {
-        LogT.d(" project id is " + projectId);
-        ApiService.Utils.getInstance(this).getProjectPlan(projectId)
+        LogT.d(" project id is " + projectId +" userId is "+userId);
+        ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<ProjectPlan>>>(this) {
+                .subscribe(new CustomSubscriber<Result<List<FillProjectPlan>>>(this) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -313,7 +314,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNext(Result<List<ProjectPlan>> o) {
+                    public void onNext(Result<List<FillProjectPlan>> o) {
                         super.onNext(o);
                         if (o.isRet()) {
                             mProjectPlan.clear();
@@ -347,12 +348,14 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Result<List<MemberListSpinnerBean>> o) {
                         super.onNext(o);
-                        LogT.d("成员选择框列表为 is " + o.toString());
+                        LogT.d(" 成员选择框列表为 is " + o.toString());
                         if (o.isRet()) {
                             mMemberList.clear();
                             mMemberList.addAll(o.getData());
                             if (mMemberList != null && mMemberList.size() != 0) {
+                                userId = mMemberList.get(dialog_select_index).getId();
                                 mViewDataBinding.ownerName.setText(mMemberList.get(dialog_select_index).getUserName());
+                                initPlanList();
                             }
                         }
                     }
@@ -366,7 +369,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
             dialog_item_name[j] = mMemberList.get(j).getUserName();
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("请勾选您的工作日期");
+        builder.setTitle("请选择计划负责人");
         builder.setSingleChoiceItems(dialog_item_name, dialog_select_index, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

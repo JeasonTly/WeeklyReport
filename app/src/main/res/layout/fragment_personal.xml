@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/zhiwei"/>
             <TextView
-                android:text="职位"
+                android:text="角色"
                 android:layout_marginLeft="25dp"
                 android:layout_centerVertical="true"
                 android:textSize="18sp"

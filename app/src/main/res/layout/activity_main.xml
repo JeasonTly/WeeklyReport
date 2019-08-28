@@ -39,7 +39,7 @@
 
             <RadioButton
                 android:id="@+id/group_pesonal"
-                android:text="个人"
+                android:text="我的"
                 android:layout_width="0dp"
                 style="@style/Main_RadioButton"
                 android:drawableTop="@drawable/tab_personal"
