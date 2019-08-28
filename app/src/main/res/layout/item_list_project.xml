@@ -16,13 +16,18 @@
             android:text="@{projectbaseinfo.name}"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:layout_width="wrap_content"
+            android:gravity="start"
+            android:id="@+id/project_adapter_txt"
+            android:layout_toLeftOf="@+id/project_adapter_img"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     <ImageView
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/you"
+        android:id="@+id/project_adapter_img"
         android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>

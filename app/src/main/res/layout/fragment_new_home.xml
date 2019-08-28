@@ -25,7 +25,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!-- -->
+        <!-- 项目概况-->
         <LinearLayout
             android:layout_weight="1"
             android:background="@drawable/new_home_item_bg"
@@ -62,6 +62,7 @@
                         android:layout_marginLeft="48dp"/>
                 </LinearLayout>
         </LinearLayout>
+        <!-- 周报填写 -->
         <LinearLayout
             android:background="@drawable/new_home_item_bg"
             android:layout_weight="1"
@@ -98,6 +99,7 @@
                     android:layout_marginLeft="48dp"/>
             </LinearLayout>
         </LinearLayout>
+        <!-- 周报审核-->
         <LinearLayout
             android:layout_weight="1"
             android:background="@drawable/new_home_item_bg"
@@ -134,6 +136,7 @@
                     android:layout_marginLeft="48dp"/>
             </LinearLayout>
         </LinearLayout>
+        <!-- 项目周报-->
         <LinearLayout
             android:layout_weight="1"
             android:background="@drawable/new_home_item_bg"
@@ -170,6 +173,7 @@
                     android:layout_marginLeft="48dp"/>
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
 </layout>
