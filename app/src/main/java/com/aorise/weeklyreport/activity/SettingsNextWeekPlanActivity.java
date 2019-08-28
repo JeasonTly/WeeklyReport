@@ -75,7 +75,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         initMemberList();
         initActionBar();
         initWorkTypePicker();
-        mViewDataBinding.ownerName.setOnClickListener(new View.OnClickListener() {
+        mViewDataBinding.ownerArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showMutilDialog();
@@ -389,6 +389,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                 }
                 mViewDataBinding.ownerName.setText(userName);
                 LogT.d(" userId is " + userId);
+                initPlanList();
                 dialog.dismiss();
             }
         });
