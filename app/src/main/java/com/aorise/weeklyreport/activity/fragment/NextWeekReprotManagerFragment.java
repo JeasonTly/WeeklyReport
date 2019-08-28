@@ -48,7 +48,6 @@ public class NextWeekReprotManagerFragment extends Fragment {
     // TODO: Rename and change types of parameters
 
     private FragmentMemeberCheckBinding mViewDataBinding;
-    private int userId = -1;
     private int projectId = -1;
     private int weeks = -1;
 
@@ -71,7 +70,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, useId);
+       // args.putInt(ARG_PARAM1, useId);
         args.putInt(ARG_PARAM2, projectId);
         args.putInt(ARG_PARAM3, weeks);
         fragment.setArguments(args);
@@ -82,7 +81,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            userId = getArguments().getInt(ARG_PARAM1);
+//            userId = getArguments().getInt(ARG_PARAM1);
             projectId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
         }
@@ -93,9 +92,6 @@ public class NextWeekReprotManagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_memeber_check, container, false);
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId", 2);
 
         mViewDataBinding.nextReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MulityStageRecyclerAdapter(getActivity(), memberWeeklyModelListBeans);
@@ -136,7 +132,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
 
     public synchronized void updateManagerList(int weeks) {
         this.weeks = weeks;
-        LogT.d("project id is " + projectId + " weeks is " + weeks);
+        LogT.d(" project id is " + projectId + " weeks is " + weeks);
         ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {

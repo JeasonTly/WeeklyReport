@@ -187,14 +187,12 @@ public class ChartView extends View {
         if (TextUtils.isEmpty(startDate) && TextUtils.isEmpty(endDate)) {
             return;
         }
-//        int totalMonth = DateUtil.getDiffMonth(startDate, endDate);
-//        totalMonth = Math.max(3, totalMonth);
+
         int default_value = 4;
         int diffDay = DateUtil.getDiffDay(startDate, endDate);
         for (int i = 0; i < default_value; i++) {
 
             Log.d(TAG, " Y轴等分每天所占的天数像素值为 " + dengfen_YAix);
-//            canvas.drawText(DateUtil.getDayAfterToday(startDate, diffDay / 4 * i), margin_left, YTextPadding, paint_font2);
             TextPaint textPaint = new TextPaint();
             textPaint.setColor(Color.GRAY);
             textPaint.setTextSize(DensityUtil.dip2px(getContext(), 16));

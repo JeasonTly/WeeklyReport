@@ -17,11 +17,7 @@ import com.aorise.weeklyreport.activity.fragment.NextWeekReprotManagerFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
-import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.databinding.ActivityMemberManagerBinding;
-import com.aorise.weeklyreport.network.ApiService;
-import com.aorise.weeklyreport.network.CustomSubscriber;
-import com.aorise.weeklyreport.network.Result;
 import com.aorise.weeklyreport.view.MenuPopup;
 
 import java.util.ArrayList;
@@ -30,7 +26,7 @@ import java.util.List;
 public class ProjectReportManagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityMemberManagerBinding mViewDataBinding;
 
-    private Class mFragmentArray[] = {LastWeekReportManagerFragment.class,NextWeekReprotManagerFragment.class };
+    private Class mFragmentArray[] = {LastWeekReportManagerFragment.class, NextWeekReprotManagerFragment.class};
     private static final String TITLE_ONE = "本周周报总结";
     private static final String TITLE_TWO = "下周周报计划";
     private String mFragmentTitle[] = {TITLE_ONE, TITLE_TWO};
@@ -56,8 +52,8 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_member_manager);
         WRApplication.getInstance().addActivity(this);
-        totalWeeks = currentWeekNumber = TimeUtil.getInstance().getDayofWeek();
-
+        totalWeeks = TimeUtil.getInstance().getDayofWeek();
+        currentWeekNumber = totalWeeks - 1;
         mViewDataBinding.managerActionbar.actionBarTitle.setText("第" + currentWeekNumber + "周");
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         mViewDataBinding.managerActionbar.actionMenu.setImageResource(R.drawable.xiafarenwu);
@@ -104,7 +100,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
 
     private void initFragment() {
         mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek());
-        mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek() + 1);
+        mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek());
         mFragmentList.add(mLastReportFragment);
         mFragmentList.add(mNextReportFragment);
 
@@ -117,17 +113,10 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                 if (tab.getText().equals(TITLE_ONE)) {
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
                     addPlan = false;
-                    //  type = 1;
-//                    if (mLastReportFragment != null) {
-//                        mLastReportFragment.updateManagerList(currentWeekNumber);
-//                    }
                 } else if (tab.getText().equals(TITLE_TWO)) {
                     addPlan = true;
-                    // type = 2;
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
-//                    if (mNextReportFragment != null) {
-//                        mNextReportFragment.updateManagerList(currentWeekNumber);
-//                    }
+
                 }
                 mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
             }
@@ -151,31 +140,6 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         mViewDataBinding.managerViewpager.setCurrentItem(0);
     }
 
-//    private void initProjectDetail() {
-//        ApiService.Utils.getInstance(this).getProjectInfoById(projectId)
-//                .compose(ApiService.Utils.schedulersTransformer())
-//                .subscribe(new CustomSubscriber<Result<ProjectBaseInfo>>(this) {
-//                    @Override
-//                    public void onCompleted() {
-//                        super.onCompleted();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        super.onError(e);
-//                    }
-//
-//                    @Override
-//                    public void onNext(Result<ProjectBaseInfo> data) {
-//                        super.onNext(data);
-//                        LogT.d("获取到的项目详细信息为" + data.toString());
-//                        if (data.isRet()) {
-//
-//                        }
-//                    }
-//                });
-//    }
-
     @Override
     public void onPageScrolled(int i, float v, int i1) {
 
@@ -184,12 +148,12 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
     @Override
     public void onPageSelected(int i) {
         addPlan = i == 1;
-        //type = i + 1;
-        if(!addPlan){
+        LogT.d(" update CurrentPage");
+        if (!addPlan) {
             if (mLastReportFragment != null) {
                 mLastReportFragment.updateManagerList(currentWeekNumber);
             }
-        }else{
+        } else {
             if (mNextReportFragment != null) {
                 mNextReportFragment.updateManagerList(currentWeekNumber);
             }
@@ -208,8 +172,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         LogT.d("当前选择了。。。。" + position);
         mViewDataBinding.managerActionbar.actionBarTitle.setText(weeksList.get(totalWeeks - position - 1));
         currentWeekNumber = position + 1;
-        //currentWeeks = weeksList.get(position);
-        // if (addPlan) {
+
         if (mLastReportFragment != null) {
             mLastReportFragment.updateManagerList(currentWeekNumber);
         } else {
