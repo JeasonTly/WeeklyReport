@@ -310,7 +310,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
         switch (data.getApprovalState()) {
             case 1:
-                checkStatus = "未审批";
+                checkStatus = "待审批";
                 mViewDataBinding.pass.setVisibility(View.GONE);
                 mViewDataBinding.auditArea.setVisibility(isAuditMode && canAudit ? View.VISIBLE : View.GONE);
                 if (isAuditMode && canAudit) {

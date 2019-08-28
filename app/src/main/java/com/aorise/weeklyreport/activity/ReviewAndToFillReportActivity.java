@@ -31,7 +31,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
     private ActivityToReviewReportBinding mViewDataBinding;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private Class FragmentArray[] = {ConclusionFragment.class, PlanFragment.class,};
-    private String FragmentTitle[] = {"本周工作总结", "下周工作计划"};
+    private String FragmentTitle[] = {"本周总结", "下周计划"};
     private PlanFragment mPlanFragment;         //下周工作计划Fragment
     private ConclusionFragment mConclusionFragment; //本周工作总结Fragment
     // private Fragment mCurrentFragment;
@@ -120,12 +120,12 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
         mViewDataBinding.toreviewTabHost.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals("下周工作计划")) {
+                if (tab.getText().equals("下周计划")) {
                     mViewDataBinding.toreviewViewpager.setCurrentItem(1);
                     addPlan = true;
                     mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.GONE);
                     // mCurrentFragment = mPlanFragment;
-                } else if (tab.getText().equals("本周工作总结")) {
+                } else if (tab.getText().equals("本周总结")) {
                     addPlan = false;
                     mViewDataBinding.toreviewViewpager.setCurrentItem(0);
                     mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.VISIBLE);

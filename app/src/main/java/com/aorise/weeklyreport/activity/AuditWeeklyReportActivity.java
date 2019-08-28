@@ -27,7 +27,7 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
     private ActivityAuditWeeklyReportBinding mViewDataBinding;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private Class FragmentArray[] = {ConclusionFragment.class, PlanFragment.class};
-    private String FragmentTitle[] = {"本周工作总结", "下周工作计划"};
+    private String FragmentTitle[] = {"本周总结", "下周计划"};
     private int projectId = -1;
     private int userId = -1;
     private int weeks = -1;
@@ -94,9 +94,9 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         mViewDataBinding.auditTabHost.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals("下周工作计划")) {
+                if (tab.getText().equals("下周计划")) {
                     mViewDataBinding.viewpager.setCurrentItem(1);
-                } else if (tab.getText().equals("本周工作总结")) {
+                } else if (tab.getText().equals("本周总结")) {
                     mViewDataBinding.viewpager.setCurrentItem(0);
                 }
             }

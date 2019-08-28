@@ -27,8 +27,8 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
     private ActivityMemberManagerBinding mViewDataBinding;
 
     private Class mFragmentArray[] = {LastWeekReportManagerFragment.class, NextWeekReprotManagerFragment.class};
-    private static final String TITLE_ONE = "本周周报总结";
-    private static final String TITLE_TWO = "下周周报计划";
+    private static final String TITLE_ONE = "本周总结";
+    private static final String TITLE_TWO = "下周计划";
     private String mFragmentTitle[] = {TITLE_ONE, TITLE_TWO};
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private LastWeekReportManagerFragment mLastReportFragment;
@@ -172,22 +172,23 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         LogT.d("当前选择了。。。。" + position);
         mViewDataBinding.managerActionbar.actionBarTitle.setText(weeksList.get(totalWeeks - position - 1));
         currentWeekNumber = position + 1;
+        if (!addPlan) {
+            if (mLastReportFragment != null) {
+                mLastReportFragment.updateManagerList(currentWeekNumber);
+            } else {
+                mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, currentWeekNumber);
+                mFragmentList.add(mLastReportFragment);
+                mLastReportFragment.updateManagerList(currentWeekNumber);
+            }
 
-        if (mLastReportFragment != null) {
-            mLastReportFragment.updateManagerList(currentWeekNumber);
         } else {
-            mLastReportFragment = new LastWeekReportManagerFragment();
-            mFragmentList.add(mLastReportFragment);
-            mLastReportFragment.updateManagerList(currentWeekNumber);
+            if (mNextReportFragment != null) {
+                mNextReportFragment.updateManagerList(currentWeekNumber);
+            } else {
+                mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, currentWeekNumber);
+                mFragmentList.add(mNextReportFragment);
+                mNextReportFragment.updateManagerList(currentWeekNumber);
+            }
         }
-        //  } else {
-        if (mNextReportFragment != null) {
-            mNextReportFragment.updateManagerList(currentWeekNumber);
-        } else {
-            mNextReportFragment = new NextWeekReprotManagerFragment();
-            mFragmentList.add(mNextReportFragment);
-            mNextReportFragment.updateManagerList(currentWeekNumber);
-        }
-        // }
     }
 }

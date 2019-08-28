@@ -56,6 +56,4 @@ dependencies {
     implementation 'com.haibin:calendarview:3.6.2'
     //implementation 'cn.qqtheme.framework:WheelPicker:1.5.6'
 
-    implementation 'com.github.abel533:ECharts:3.0.0.2'
-    implementation 'com.google.code.gson:gson:2.8.1'
 }

@@ -169,6 +169,9 @@ public interface ApiService {
     @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
     Observable<Result<HeaderItemBean>> getHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
+    @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
+    Observable<Result<HeaderItemBean>> getPlanHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type")int type);
+
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
     Observable<Result<Integer>> postHeaderReport(@Body RequestBody model);

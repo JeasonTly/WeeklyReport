@@ -48,7 +48,6 @@ public class NextWeekReprotManagerFragment extends Fragment {
     private int weeks = -1;
 
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
-    private List<MulityTypeItem> mMulityTypeList = new ArrayList<>();
     private MulityStageRecyclerAdapter mAdapter;
     private HeaderItemBean mHeaderItemBean;
 
@@ -105,16 +104,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
                 startActivity(mIntent);
             }
         });
-//        mViewDataBinding.planTotal.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mHeaderItemBean == null) {
-//                    ToastUtils.show("当前无项目具体信息!");
-//                    return;
-//                }
-//
-//            }
-//        });
+
         return mViewDataBinding.getRoot();
     }
 
@@ -129,7 +119,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public synchronized void updateManagerList(final int weeks) {
         this.weeks = weeks;
         LogT.d(" project id is " + projectId + " weeks is " + weeks);
-        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)
+        ApiService.Utils.getInstance(getContext()).getPlanHeaderList(projectId, weeks + 1, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
                     @Override

@@ -134,6 +134,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         if (!isProjectList) {
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);
             mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
+            mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择");
             isProjectList = true;
         } else {
             this.finish();
@@ -179,7 +180,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                             mViewDataBinding.projectList.setVisibility(View.GONE);
                             mMemberAdatper.refreshData(o.getData().getList());
                             totalPage = o.getData().getTotalPage();
-
+                            mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("成员选择");
                             mViewDataBinding.memberPltChoose.finishLoadMore();
                             isProjectList = false;
                         }

@@ -62,7 +62,7 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, Base
         String weeklyStates = "";
         switch (mList.get(position).getWeeklyState()){
             case 1:
-                weeklyStates ="已审核";
+                weeklyStates ="已审批";
                 reportStates.setBackground(mContext.getResources().getDrawable(R.drawable.report_states_green));
                 reportStates.setTextColor(Color.rgb(61,208,120));
                 break;
