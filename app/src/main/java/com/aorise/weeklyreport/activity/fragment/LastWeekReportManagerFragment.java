@@ -141,7 +141,7 @@ public class LastWeekReportManagerFragment extends Fragment{
                     @Override
                     public void onNext(Result<HeaderItemBean> o) {
                         super.onNext(o);
-                        LogT.d(" O " + o.toString());
+                        LogT.d("项目周报 " + o.toString());
                         if (o.isRet()) {
                            // LogT.d(" o " + o.getData().getPlanDetailsList().size());
                             mHeaderItemBean = o.getData();
@@ -151,7 +151,7 @@ public class LastWeekReportManagerFragment extends Fragment{
                                 memberWeeklyModelListBeans.clear();
                                 memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
                             }
-                            // mMulityTypeList = CommonUtils.getInstance().resortStage(memberWeeklyModelListBeans);
+                            LogT.d(" 具体周报列表数为"+o.getData().getPlanDetailsList().size());
                             mViewDataBinding.setLastStage(mHeaderItemBean.getPercentComplete() +"%");
                             mViewDataBinding.setLastSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());
                             mAdapter.refreshData(o.getData().getPlanDetailsList());

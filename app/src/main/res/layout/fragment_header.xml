@@ -12,14 +12,14 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="none"
         tools:context=".activity.fragment.LastWeekReportManagerFragment">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
+
             <LinearLayout
                 android:id="@+id/last_overall"
                 android:orientation="vertical"
@@ -120,13 +120,19 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/last_Report_recycler"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/last_Report_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+             />
+            </RelativeLayout>
+
             <!-- TODO: Update blank fragment layout -->
 
         </LinearLayout>
