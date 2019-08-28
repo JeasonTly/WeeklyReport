@@ -35,6 +35,7 @@ public class UserInfoBean extends BaseObservable {
     private int id;
     private String uuid;
     private String fullName;
+    private String mobile;
     private String roleName;
     private int roleId;
     private List<PermissionModelListBean> permissionModelList;
@@ -77,6 +78,14 @@ public class UserInfoBean extends BaseObservable {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public List<PermissionModelListBean> getPermissionModelList() {

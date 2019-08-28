@@ -78,4 +78,20 @@ public class DateUtil {
         LogT.d(" 比比哪个更大" + datestr);
         return datestr;
     }
+    public static String compareSmallDate(String datestr1, String datestr2) {
+        String datestr = "";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        Date date1 = simpleDateFormat.parse(datestr1, new ParsePosition(0));
+        Date date2 = simpleDateFormat.parse(datestr2, new ParsePosition(0));
+
+        if (date1.before(date2)) {
+            date = date1;
+        } else {
+            date = date2;
+        }
+        datestr = simpleDateFormat.format(date);
+        LogT.d(" 比比哪个更大" + datestr);
+        return datestr;
+    }
 }

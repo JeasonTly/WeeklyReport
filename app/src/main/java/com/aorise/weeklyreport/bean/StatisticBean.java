@@ -41,8 +41,8 @@ public class StatisticBean extends BaseObservable {
     private String name;
     private String startDate;
     private String endDate;
-    private int workTime;
-    private int useWorkTime;
+    private float workTime;
+    private float useWorkTime;
     private double percentComplete;
     private List<PlanChildBean> planChild;
     private List<OwnerListBeanX> ownerList;
@@ -79,19 +79,19 @@ public class StatisticBean extends BaseObservable {
         this.endDate = endDate;
     }
 
-    public int getWorkTime() {
+    public float getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(int workTime) {
+    public void setWorkTime(float workTime) {
         this.workTime = workTime;
     }
 
-    public int getUseWorkTime() {
+    public float getUseWorkTime() {
         return useWorkTime;
     }
 
-    public void setUseWorkTime(int useWorkTime) {
+    public void setUseWorkTime(float useWorkTime) {
         this.useWorkTime = useWorkTime;
     }
 
@@ -139,9 +139,9 @@ public class StatisticBean extends BaseObservable {
         private int parentId;
         private String startDate;
         private String endDate;
-        private int workTime;
+        private float workTime;
         private int projectId;
-        private int useWorkTime;
+        private float useWorkTime;
         private double percentComplete;
         private List<PlanChildBean> planChild;
         private List<OwnerListBeanX> ownerList;
@@ -186,11 +186,11 @@ public class StatisticBean extends BaseObservable {
             this.endDate = endDate;
         }
 
-        public int getWorkTime() {
+        public float getWorkTime() {
             return workTime;
         }
 
-        public void setWorkTime(int workTime) {
+        public void setWorkTime(float workTime) {
             this.workTime = workTime;
         }
 
@@ -202,11 +202,11 @@ public class StatisticBean extends BaseObservable {
             this.projectId = projectId;
         }
 
-        public int getUseWorkTime() {
+        public float getUseWorkTime() {
             return useWorkTime;
         }
 
-        public void setUseWorkTime(int useWorkTime) {
+        public void setUseWorkTime(float useWorkTime) {
             this.useWorkTime = useWorkTime;
         }
 

@@ -54,7 +54,7 @@ public class ChartView extends View {
     private int width;
     private int height;
     private int margin_left = 10;
-    private int margin_top = 10;
+    private int margin_top = 20;
     private int margin_bottom = 10;
     private int padding_xz_to_xtext = 10;
     private int Y_xWidth = 20; //Y轴上多出来的指向部分宽度
@@ -190,11 +190,15 @@ public class ChartView extends View {
 
         int default_value = 4;
         int diffDay = DateUtil.getDiffDay(startDate, endDate);
+        if (diffDay < default_value) {
+            default_value = diffDay;
+        }
+        LogT.d("default_value is " + default_value);
         for (int i = 0; i < default_value; i++) {
-
-            Log.d(TAG, " Y轴等分每天所占的天数像素值为 " + dengfen_YAix);
-            LogT.d(" draw line " + (startY - (diffDay / default_value) * i * dengfen_YAix));
+            LogT.d(" diffDay / default_value " + diffDay / default_value);
+            LogT.d(" draw line " + (startY - (int) (diffDay / default_value) * i * dengfen_YAix));
             canvas.drawLine(startX - Y_xWidth, startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, getWidth(), startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, mAixsPaint);
+
         }
         for (int i = 0; i < default_value + 1; i++) {
             TextPaint textPaint = new TextPaint();
@@ -202,7 +206,10 @@ public class ChartView extends View {
             textPaint.setTextSize(DensityUtil.dip2px(getContext(), 16));
             // 设置文字右对齐
             textPaint.setTextAlign(Paint.Align.LEFT);
-            String text = DateUtil.getDayAfterToday(startDate, (diffDay / default_value) * i, endDate);
+            String text = "";
+
+            text = DateUtil.getDayAfterToday(startDate, (diffDay / default_value) * i, endDate);
+
             StaticLayout staticLayout;
             if (Build.VERSION.SDK_INT >= 23) {
                 staticLayout = StaticLayout.Builder.obtain(text, 0, text.length(), textPaint, mXTextPaintWidth)
@@ -270,7 +277,7 @@ public class ChartView extends View {
             int right = left + mBarItemWidth;
             int bottom = startY - DateUtil.getDiffDay(TimeUtil.getInstance().date2date(mBeanList.get(i).getStartDate()), startDate) * dengfen_YAix;
             rect.set(left, top, right, bottom);
-            Log.e(TAG, "drawBar left " + left + " top " + top + " right " + right + " bottom " + bottom);
+            Log.d(TAG, "drawBar left " + left + " top " + top + " right " + right + " bottom " + bottom);
             mBarPaint.setColor(Color.GRAY);
             canvas.drawRect(rect, mBarPaint);
             rectList.add(rect);
@@ -359,6 +366,7 @@ public class ChartView extends View {
         if (!TextUtils.isEmpty(startDate) && !TextUtils.isEmpty(endDate)) {
             for (StatisticBean bean : mBeanList) {
                 endDate = DateUtil.compare2Date(bean.getEndDate(), endDate);
+                startDate = DateUtil.compareSmallDate(bean.getStartDate(), startDate);
             }
             int diffDay = DateUtil.getDiffDay(startDate, endDate);
             int totalHeight = startY - margin_top;

@@ -113,6 +113,10 @@ public class ProjectStatisticsFragment extends Fragment {
                         if (data.isRet()) {
                             startDate = TimeUtil.getInstance().date2date(data.getData().getStartDate());
                             endDate = TimeUtil.getInstance().date2date(data.getData().getEndDate());
+                            mViewDataBinding.setProjectName(data.getData().getName() + "项目统计");
+                            String projectinfo = "项目时间:" + TimeUtil.getInstance().date2date(data.getData().getStartDate()) + " - "
+                                    + TimeUtil.getInstance().date2date(data.getData().getEndDate()) + "  负责人: " + data.getData().getLeaderName();
+                            mViewDataBinding.setProjectInfo(projectinfo);
                             initStatistic();
                         }
                     }
