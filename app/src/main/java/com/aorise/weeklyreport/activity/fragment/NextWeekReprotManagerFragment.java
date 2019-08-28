@@ -1,8 +1,6 @@
 package com.aorise.weeklyreport.activity.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,14 +15,12 @@ import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
-import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +66,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
-       // args.putInt(ARG_PARAM1, useId);
+        // args.putInt(ARG_PARAM1, useId);
         args.putInt(ARG_PARAM2, projectId);
         args.putInt(ARG_PARAM3, weeks);
         fragment.setArguments(args);
@@ -130,7 +126,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
     }
 
 
-    public synchronized void updateManagerList(int weeks) {
+    public synchronized void updateManagerList(final int weeks) {
         this.weeks = weeks;
         LogT.d(" project id is " + projectId + " weeks is " + weeks);
         ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)
@@ -162,7 +158,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
                                 memberWeeklyModelListBeans.clear();
                                 memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
                             }
-                            LogT.d("当前" + TimeUtil.getInstance().getDayofWeek() + ".....周的周报计划数目为" + memberWeeklyModelListBeans.size());
+                            LogT.d("当前" + (weeks + 1) + ".....周的周报计划数目为" + memberWeeklyModelListBeans.size());
 
                             mViewDataBinding.setNextStage(mHeaderItemBean.getPercentComplete() + "%");
                             mViewDataBinding.setNextSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());

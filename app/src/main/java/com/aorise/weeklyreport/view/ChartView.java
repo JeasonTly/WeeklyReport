@@ -193,6 +193,10 @@ public class ChartView extends View {
         for (int i = 0; i < default_value; i++) {
 
             Log.d(TAG, " Y轴等分每天所占的天数像素值为 " + dengfen_YAix);
+            LogT.d(" draw line " + (startY - (diffDay / default_value) * i * dengfen_YAix));
+            canvas.drawLine(startX - Y_xWidth, startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, getWidth(), startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, mAixsPaint);
+        }
+        for (int i = 0; i < default_value + 1; i++) {
             TextPaint textPaint = new TextPaint();
             textPaint.setColor(Color.GRAY);
             textPaint.setTextSize(DensityUtil.dip2px(getContext(), 16));
@@ -215,10 +219,7 @@ public class ChartView extends View {
 
             staticLayout.draw(canvas);
             canvas.restore();
-            LogT.d(" draw line " + (startY - (diffDay / default_value) * i * dengfen_YAix));
-            canvas.drawLine(startX - Y_xWidth, startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, getWidth(), startY - (diffDay / default_value) * (i + 1) * dengfen_YAix, mAixsPaint);
         }
-
     }
 
     /**
