@@ -1,5 +1,6 @@
 package com.aorise.weeklyreport.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
@@ -63,6 +65,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private int projectId = -1;
     private String projectName = "";
 
+    private InputMethodManager inputMethodManager;
     private String[] dialog_item_name;
     private int dialog_select_index = 0;
 
@@ -71,6 +74,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         WRApplication.getInstance().addActivity(this);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_settings_next_week_plan);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         initGetIntent();
         initMemberList();
         initActionBar();
@@ -188,9 +192,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.workTypeArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (inputMethodManager.isActive()) {
-//                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workTypeArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                }
+                if (inputMethodManager.isActive()) {
+                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workTypeArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 workTypeOptionsView.show();
             }
         });
@@ -245,9 +249,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.workPlanArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (inputMethodManager.isActive()) {
-//                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workPlanArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                }
+                if (inputMethodManager.isActive()) {
+                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workPlanArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 planOptionsView.show();
             }
         });
@@ -290,9 +294,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.workPercentArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (inputMethodManager.isActive()) {
-//                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workPercentArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                }
+                if (inputMethodManager.isActive()) {
+                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workPercentArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 percentOptionsView.show();
             }
         });

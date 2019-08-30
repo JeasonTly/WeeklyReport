@@ -254,8 +254,8 @@
                             android:focusable="true"
                             android:focusableInTouchMode="true"
                             android:gravity="end"
-                            android:inputType="number"
-                            android:textSize="18sp"></EditText>
+                            android:inputType="numberDecimal"
+                            android:textSize="18sp"/>
                     </RelativeLayout>
                     <!--实际完成百分比-->
                     <RelativeLayout
