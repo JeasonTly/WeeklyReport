@@ -19,6 +19,7 @@ import com.aorise.weeklyreport.activity.ChooseProjectActivity;
 import com.aorise.weeklyreport.activity.ProjectInfoActivity;
 import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
 import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
+import com.aorise.weeklyreport.activity.WorkTimeYearStatisticsActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
@@ -118,6 +119,15 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
             @Override
             public void onClick(View v) {
                 startChooseProject();
+            }
+        });
+        //工时统计周报
+        mViewDataBinding.jixiaoArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent mIntent = new Intent();
+               mIntent.setClass(getActivity(), WorkTimeYearStatisticsActivity.class);
+               startActivity(mIntent);
             }
         });
         if (!isHeader) {
@@ -332,6 +342,11 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         weeklyReportText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         weeklyReportText.setSpan(smallSpan, 0, weeklyReportText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         mViewDataBinding.weeklyReport.setText(weeklyReportText);
+
+        SpannableString jixiaoText = new SpannableString("工时统计 workTime");
+        jixiaoText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        jixiaoText.setSpan(smallSpan, 0, jixiaoText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mViewDataBinding.jixiao.setText(jixiaoText);
     }
 
 

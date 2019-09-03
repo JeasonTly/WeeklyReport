@@ -3,6 +3,7 @@ package com.aorise.weeklyreport.activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
@@ -109,13 +110,17 @@ public class OverAllSituationActivity extends AppCompatActivity {
     }
 
     private void postCommand() {
+        if (TextUtils.isEmpty(mViewDataBinding.oveallSituationSpth.getText())) {
+            ToastUtils.show("具体工作事项不能为空!");
+            return;
+        }
         Gson gson = new Gson();
         UploadManagerReport managerReport = new UploadManagerReport();
         managerReport.setProjectId(projectId);
-        if (type == 2) {
-            weeks++;
-        }
-        managerReport.setByWeek(weeks);
+//        if (type == 2) {
+//            weeks++;
+//        }
+        managerReport.setByWeek(type == 2 ? (weeks + 1) : weeks);
         managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
         managerReport.setPercentComplete(mBean.getPercentComplete());
         managerReport.setType(type);
@@ -151,6 +156,10 @@ public class OverAllSituationActivity extends AppCompatActivity {
     }
 
     private void putCommand() {
+        if (TextUtils.isEmpty(mViewDataBinding.oveallSituationSpth.getText())) {
+            ToastUtils.show("具体工作事项不能为空!");
+            return;
+        }
         Gson gson = new Gson();
         UploadManagerReport managerReport = new UploadManagerReport();
         managerReport.setProjectId(projectId);

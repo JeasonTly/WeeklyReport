@@ -173,6 +173,43 @@
                     android:layout_marginLeft="48dp"/>
             </LinearLayout>
         </LinearLayout>
+        <!-- 工时-->
+        <LinearLayout
+            android:layout_weight="1"
+            android:background="@drawable/new_home_item_bg"
+            android:orientation="horizontal"
+            android:id="@+id/jixiao_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/weekly_icon"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:textColor="#3dd078"
+                    android:text="工时统计workTime"
+                    android:textSize="32sp"
+                    android:id="@+id/jixiao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+                <TextView
+                    android:text="成员工时信息"
+                    android:textSize="12sp"
+                    android:textColor="#919191"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"/>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

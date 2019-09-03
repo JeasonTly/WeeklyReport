@@ -10,6 +10,7 @@ import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.bean.MemberListBean;
 import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
+import com.aorise.weeklyreport.bean.PersonWorkTimeBean;
 import com.aorise.weeklyreport.bean.PersonalBean;
 import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
@@ -54,7 +55,7 @@ public interface ApiService {
     //@Headers("Content-Type: application/json;charset=UTF-8")
     @FormUrlEncoded
     @POST(NetworkURLConfig.LOGIN_URL)
-    Observable<Result<UserInfoBean>> login(@Field("userName")String userName, @Field("passWord")String passWord);
+    Observable<Result<UserInfoBean>> login(@Field("userName") String userName, @Field("passWord") String passWord);
 
     @Headers("Content-Type: application/json;charset=UTF-8")
     @POST(NetworkURLConfig.LOGIN_URL_N)
@@ -67,6 +68,7 @@ public interface ApiService {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.PUT_WEEKLY_REPORT)
     Observable<Result> updateWeeklyReprot(@Body RequestBody responseBody);
+
     /**
      * 获取当前项目下对应用户的计划安排
      *
@@ -98,7 +100,7 @@ public interface ApiService {
     Observable<Result<List<WeeklyReportBean>>> getWeeklyReport(@Query("userId") int userId, @Query("byWeek") int weekCount, @Query("type") int type);
 
     @GET(NetworkURLConfig.WEEKLY_REPORT_QUERY)
-    Observable<Result<List<WeeklyReportBean>>> getWeeklyReport(@Query("projectId") int projectId,@Query("userId") int userId, @Query("byWeek") int weekCount, @Query("type") int type);
+    Observable<Result<List<WeeklyReportBean>>> getWeeklyReport(@Query("projectId") int projectId, @Query("userId") int userId, @Query("byWeek") int weekCount, @Query("type") int type);
 
     /**
      * 根据用户和项目负责人Id获取项目列表
@@ -120,11 +122,13 @@ public interface ApiService {
 
     /**
      * 根据项目ID获取项目信息
+     *
      * @param projectId
      * @return
      */
     @GET(NetworkURLConfig.PROJECT_BASE_INFO)
-    Observable<Result<ProjectBaseInfo>> getProjectInfoById(@Path("id")int projectId);
+    Observable<Result<ProjectBaseInfo>> getProjectInfoById(@Path("id") int projectId);
+
     /**
      * 获取项目组成员列表
      *
@@ -133,12 +137,13 @@ public interface ApiService {
      */
     @GET(NetworkURLConfig.LIST_MEMBER)
     Observable<Result<MemberListBean>> getMemberList(@Path("pageIndex") int pageIndex,
-                                                           @Path("pageNum") int pageNum,
-                                                           @Query("projectId") int projectId,
-                                                           @Query("byWeek") int byWeek);
+                                                     @Path("pageNum") int pageNum,
+                                                     @Query("projectId") int projectId,
+                                                     @Query("byWeek") int byWeek);
 
     @GET(NetworkURLConfig.LIST_MEMBER_SPINNER)
-    Observable<Result<List<MemberListSpinnerBean>>> getMemberList(@Path("projectId")int projectId);
+    Observable<Result<List<MemberListSpinnerBean>>> getMemberList(@Path("projectId") int projectId);
+
     /**
      * 获取个人信息
      *
@@ -159,6 +164,7 @@ public interface ApiService {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.APPROVAL_WEEKLY_REPORT)
     Observable<Result> approvalWeeklyReport(@Body RequestBody model);
+
     /**
      * 获取项目负责人的周报列表
      *
@@ -170,7 +176,7 @@ public interface ApiService {
     Observable<Result<HeaderItemBean>> getHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
     @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
-    Observable<Result<HeaderItemBean>> getPlanHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type")int type);
+    Observable<Result<HeaderItemBean>> getPlanHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
@@ -183,16 +189,34 @@ public interface ApiService {
 
     /**
      * 获取项目统计信息
+     *
      * @param projectId
      * @return
      */
     @GET(NetworkURLConfig.PROJECT_STATISTIC)
     Observable<Result<List<StatisticBean>>> getStatisticInfoByID(@Query("id") int projectId);
 
+    /**
+     * 根据当前年份获取工时
+     * @param year
+     * @return
+     */
+    @GET(NetworkURLConfig.WORKTIME_TOTALYEAR_STATISTIC)
+    Observable<Result<List<PersonWorkTimeBean>>> getTotalWorkTime(@Query("year") int year);
+
+
+    /**
+     * 根据当前年份获取工时
+     * @param year
+     * @return
+     */
+    @GET(NetworkURLConfig.WORKTIME_WEEK_STATISTIC)
+    Observable<Result<List<PersonalBean>>> getWeeklyWorkTime(@Path("year") int year,@Query("month")int month);
+
     class Utils {
 
         public static ApiService getInstance(Context context) {
-            OkHttpClient okHttpClient ;
+            OkHttpClient okHttpClient;
             OkHttpClient.Builder mOkhttpBuilder = new OkHttpClient.Builder()
                     .connectTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS)//超时时间
                     .writeTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS)
