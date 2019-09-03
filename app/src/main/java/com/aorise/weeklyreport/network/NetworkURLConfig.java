@@ -29,6 +29,7 @@ public class NetworkURLConfig {
     public static final String HEADER_WEEKY_REPORT_POST = "api/projectWeekly";//根据项目、人员id、周数查询周报
     public static final String PROJECT_STATISTIC = "api/statistics";//根据项目id查询统计信息
     public static final String WORKTIME_TOTALYEAR_STATISTIC = "/api/userWorkTime";//根据年份获取当前工时
+    public static final String DEFAULT_WORKTIME= "/api/workTime";//根据年份获取当前工时
     public static final String WORKTIME_WEEK_STATISTIC = "api/userWorkTime/year/{year}";//根据年月获取当前周的工时
 
 }

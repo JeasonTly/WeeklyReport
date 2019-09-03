@@ -12,6 +12,7 @@ import com.aorise.weeklyreport.bean.MemberListBean;
 import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
 import com.aorise.weeklyreport.bean.PersonWorkTimeBean;
 import com.aorise.weeklyreport.bean.PersonalBean;
+import com.aorise.weeklyreport.bean.PlanWorkTimeSettingBean;
 import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectListBean;
@@ -204,7 +205,22 @@ public interface ApiService {
     @GET(NetworkURLConfig.WORKTIME_TOTALYEAR_STATISTIC)
     Observable<Result<List<PersonWorkTimeBean>>> getTotalWorkTime(@Query("year") int year);
 
+    /**
+     * 根据当前年份获取工时
+     * @param year
+     * @return
+     */
+    @GET(NetworkURLConfig.DEFAULT_WORKTIME)
+    Observable<Result<PlanWorkTimeSettingBean>> getDefaultWorkTime(@Query("year") int year);
 
+    /**
+     * 根据当前年份获取工时
+     * @param requestBody
+     * @return
+     */
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @PUT(NetworkURLConfig.DEFAULT_WORKTIME)
+    Observable<Result<PlanWorkTimeSettingBean>> setWorkTime(RequestBody requestBody);
     /**
      * 根据当前年份获取工时
      * @param year

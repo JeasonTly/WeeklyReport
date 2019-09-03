@@ -15,8 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.WorkTimeYearStatisticsActivity">
-        </activity>
+        <activity android:name=".activity.WeekWorkTimeActivity"></activity>
+        <activity android:name=".activity.WorkTimeYearStatisticsActivity"></activity>
         <activity
             android:name=".activity.ProjectStatisticsActivity"
             android:screenOrientation="landscape" />
