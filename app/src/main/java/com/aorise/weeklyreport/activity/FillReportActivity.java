@@ -38,39 +38,121 @@ import java.util.List;
 
 import okhttp3.RequestBody;
 
+/**
+ * 周报填写或者审批界面
+ * 尚待优化，是否可以使用一个选择器去更新数据
+ */
 public class FillReportActivity extends AppCompatActivity {
+    /**
+     * 是否为添加计划
+     */
     private boolean isAddPlan = false;
     private ActivityAddPlanOrSummaryBinding mViewDataBinding;
+    /**
+     * 当前周数
+     */
     private int weeks;
+    /**
+     * 项目ID
+     */
     private int projectId = 1;
+    /**
+     * 用户ID
+     */
     private int userId = 2;
+    /**
+     * 类型：1添加或者修改总结，2添加或者计划
+     */
     private int type = 1;//类型：1总结，2计划
-    private int work_type = 1;//工作类型 '1-项目工作，2-部门工作，3-临时工作'
-    private int planId = 1;//计划ID
-    private double percent = 10;//百分比
-    private int status = 1;//完成状态
+    /**
+     * 工作类型 '1-项目工作，2-部门工作，3-临时工作'
+     */
+    private int work_type = 1;
+    /**
+     * 工作计划ID
+     */
+    private int planId = 1;
+    /**
+     * 百分比
+     */
+    private double percent = 10;
+    /**
+     * 工时
+     */
     private float work_time = 1;
+    /**
+     * 周报ID
+     */
     private int reportId = -1;
+    /**
+     * 是否为编辑周报
+     */
     private boolean isEdit = false;
+    /**
+     *  审批状态
+     *  审批状态1,未审批，2,已通过，3驳回
+     */
     private int approvalStatus = 1;
-
-    private SimpleDateFormat sdf;
+    /**
+     * 输入法键盘管理器
+     */
     private InputMethodManager inputMethodManager;
+    /**
+     * 本地轻量级数据库，获取userID
+     */
     private SharedPreferences sp;
 
+    /**
+     * 项目列表
+     */
     private List<ProjectList> mProjectList = new ArrayList<>();
+    /**
+     * 计划
+     */
     private List<FillProjectPlan> mProjectPlan = new ArrayList<>();
+    /**
+     *  百分比列表
+     */
     private List<Double> mPercentList = new ArrayList<>();
+    /**
+     * 工作类型选择器列表
+     */
+    private List<String> workType = new ArrayList<>();
 
+    /**
+     * 项目名称选择器列表
+     */
     private List<String> mProjectNameList = new ArrayList<>();
+
+    /**
+     * 项目计划选择器列表
+     */
     private List<String> mProjectPlanNameList = new ArrayList<>();
+
+    /**
+     * 完成百分比选择器列表
+     */
     private List<String> mPercentTextList = new ArrayList<>();
 
+    /**
+     * 工作类型选择器
+     */
     private OptionsPickerView<String> workTypeOptionsView;
+    /**
+     * 项目选择器
+     */
     private OptionsPickerView<String> projectOptionsView;
+    /**
+     * 计划选择器
+     */
     private OptionsPickerView<String> planOptionsView;
+    /**
+     * 百分比选择器
+     */
     private OptionsPickerView<String> percentOptionsView;
-
+    /**
+     * 默认值@{
+     */
     private int DEFAULT_WORKTYPE_SELECTION = 0;
     private int DEFAULT_PROJECT_SELECTION = 0;
     private int DEFAULT_PLAN_SELECTION = 0;
@@ -79,13 +161,25 @@ public class FillReportActivity extends AppCompatActivity {
     private String isEdit_projectName = "";
     private String isEdit_planName = "";
     private String isEdit_Percent = "";
+    /**
+     * 默认值@}
+     */
 
+    /**
+     * 开始和结束时间 Calendar 为第三方控件的
+     */
     private Calendar start_calendar;
     private Calendar end_calendar;
 
+    /**
+     * 已选择的时间列表
+     */
     private List<Calendar> mSelectDateList;
-    private List<String> workType = new ArrayList<>();
+
     private List<WeeklyReportUploadBean.WeeklyDateModelsBean> mUpdateDateList = new ArrayList<>();
+    /**
+     * 周报详情信息填充
+     */
     private WeeklyReportDetailBean mDetailBean;
 
     @Override
@@ -95,7 +189,6 @@ public class FillReportActivity extends AppCompatActivity {
         WRApplication.getInstance().addActivity(this);
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         LogT.d(" 是否在编辑" + isEdit);
-        sdf = new SimpleDateFormat("yyyy-MM-dd");
         mSelectDateList = new ArrayList<>();
         if (!isEdit) {
             mViewDataBinding.workTime.setText(String.valueOf(work_time));
@@ -112,29 +205,36 @@ public class FillReportActivity extends AppCompatActivity {
         initClickListener();
     }
 
+    /**
+     * 初始化日历选择器控件
+     */
     private void initCalendar() {
 
         mViewDataBinding.monthInfo.setText(mViewDataBinding.muliticalendar.getCurYear() + "年" + mViewDataBinding.muliticalendar.getCurMonth() + "月");
-        mViewDataBinding.muliticalendar.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+        mViewDataBinding.muliticalendar.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {//月份发生改变时触发
             @Override
             public void onMonthChange(int year, int month) {
                 mViewDataBinding.monthInfo.setText(year + "年" + month + "月");
             }
         });
+        /**
+         * 如果为被指定的计划，填充已选择日期
+         */
         if (mSelectDateList != null && mSelectDateList.size() != 0) {
             for (Calendar calendar : mSelectDateList) {
                 mViewDataBinding.muliticalendar.putMultiSelect(calendar);
             }
         }
+        /**
+         * 日历选择 时间选择
+         */
         mViewDataBinding.muliticalendar.setOnCalendarMultiSelectListener(new CalendarView.OnCalendarMultiSelectListener() {
             @Override
             public void onCalendarMultiSelectOutOfRange(com.haibin.calendarview.Calendar calendar) {
-
             }
 
             @Override
             public void onMultiSelectOutOfSize(com.haibin.calendarview.Calendar calendar, int maxSize) {
-
             }
 
             @Override
@@ -388,12 +488,14 @@ public class FillReportActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 初始化跳转请求
+     * 如果为编辑，则先覆盖数据到对应控件
+     */
     private void initGetIntent() {
         Intent mIntent = getIntent();
         isAddPlan = mIntent.getBooleanExtra("isAddPlan", false);
         weeks = mIntent.getIntExtra("weeks", -1);
-
-//        LogT.d(" m detail bean is " + ((WeeklyReportDetailBean) mIntent.getSerializableExtra("detailBean")).toString());
 
         String title = "";
         title = mIntent.getStringExtra("title");
@@ -476,7 +578,9 @@ public class FillReportActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * 设置actionbar返回键点击事件
+     */
     private void initClickListener() {
         mViewDataBinding.addplanActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -486,6 +590,10 @@ public class FillReportActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 网络请求 根据用户id
+     * 获取项目列表
+     */
     private void initProjectList() {
         ApiService.Utils.getInstance(this).getProjectList(userId, -1)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -516,6 +624,10 @@ public class FillReportActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 根据用户ID 和项目ID
+     * 获取对应的计划列表
+     */
     private void initPlanList() {
         LogT.d(" project id is " + projectId + " user id is " + userId);
         ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
@@ -546,7 +658,11 @@ public class FillReportActivity extends AppCompatActivity {
                 });
     }
 
-
+    /**
+     * 提交按钮点击事件
+     * 发起网络请求，提交该页面数据
+     * @param view
+     */
     public void CommitClick(View view) {
         int weeks = this.weeks;
         for (int i = 0; i < mViewDataBinding.muliticalendar.getMultiSelectCalendars().size(); i++) {

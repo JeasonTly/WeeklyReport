@@ -12,11 +12,10 @@ import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
-import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
+import com.aorise.weeklyreport.adapter.ProjectManagerReportRecclerAdapter;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
-import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
@@ -26,11 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link NextWeekReprotManagerFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 项目周报下周工作计划
+ *
  */
 
 
@@ -44,11 +40,23 @@ public class NextWeekReprotManagerFragment extends Fragment {
     // TODO: Rename and change types of parameters
 
     private FragmentMemeberCheckBinding mViewDataBinding;
+    /**
+     * 项目ID
+     */
     private int projectId = -1;
+    /**
+     * 当前周数
+     */
     private int weeks = -1;
 
+    /**
+     * 项目周报 下周计划列表
+     */
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
-    private MulityStageRecyclerAdapter mAdapter;
+    private ProjectManagerReportRecclerAdapter mAdapter;
+    /**
+     * 整体情况
+     */
     private HeaderItemBean mHeaderItemBean;
 
     public NextWeekReprotManagerFragment() {
@@ -56,16 +64,15 @@ public class NextWeekReprotManagerFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment NextWeekReprotManagerFragment.
+     * @param useId      用户ID 暂时无效
+     * @param projectId  项目ID
+     * @param weeks   当前周数
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
     public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
-        // args.putInt(ARG_PARAM1, useId);
         args.putInt(ARG_PARAM2, projectId);
         args.putInt(ARG_PARAM3, weeks);
         fragment.setArguments(args);
@@ -76,7 +83,6 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            userId = getArguments().getInt(ARG_PARAM1);
             projectId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
         }
@@ -89,7 +95,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_memeber_check, container, false);
 
         mViewDataBinding.nextReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MulityStageRecyclerAdapter(getActivity(), memberWeeklyModelListBeans);
+        mAdapter = new ProjectManagerReportRecclerAdapter(getActivity(), memberWeeklyModelListBeans);
         mViewDataBinding.nextReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
 
@@ -100,7 +106,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("weeks", weeks + 1);
                 mIntent.putExtra("type", 2);
-                mIntent.setClass(getActivity(), OverAllSituationActivity.class);
+                mIntent.setClass(getActivity(), OverAllSituationActivity.class);//整体情况
                 startActivity(mIntent);
             }
         });
@@ -115,11 +121,14 @@ public class NextWeekReprotManagerFragment extends Fragment {
         LogT.d("onResume");
     }
 
-
+    /**
+     * 根据周数更新当前项目周报计划的列表信息
+     * @param weeks
+     */
     public synchronized void updateManagerList(final int weeks) {
         this.weeks = weeks;
         LogT.d(" project id is " + projectId + " weeks is " + weeks);
-        ApiService.Utils.getInstance(getContext()).getPlanHeaderList(projectId, weeks + 1, 2)
+        ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
                     @Override
@@ -138,9 +147,9 @@ public class NextWeekReprotManagerFragment extends Fragment {
                     @Override
                     public void onNext(Result<HeaderItemBean> o) {
                         super.onNext(o);
-                        LogT.d(" O " + o.toString());
+                        LogT.d("当前项目周报 计划列表result " + o.toString());
                         if (o.isRet()) {
-                            LogT.d(" o " + o.getData().getPlanDetailsList().size());
+                            LogT.d(" 当前项目周报 计划列表长度为 " + o.getData().getPlanDetailsList().size());
                             mHeaderItemBean = o.getData();
                             if (memberWeeklyModelListBeans != null && memberWeeklyModelListBeans.size() != 0) {
                                 memberWeeklyModelListBeans = o.getData().getPlanDetailsList();

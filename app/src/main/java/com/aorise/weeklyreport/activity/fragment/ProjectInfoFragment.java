@@ -19,18 +19,15 @@ import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ProjectInfoFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 项目概况- 基本信息
  */
 public class ProjectInfoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private FragmentProjectInfoBinding mViewDataBinding ;
-    // TODO: Rename and change types of parameters
+    /**
+     * 项目ID
+     */
     private int projectId;
 
 
@@ -39,13 +36,10 @@ public class ProjectInfoFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @param projectId projectId.
-     * @return A new instance of fragment ProjectInfoFragment.
+     * @param projectId 项目ID
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
     public static ProjectInfoFragment newInstance(int projectId) {
         ProjectInfoFragment fragment = new ProjectInfoFragment();
         Bundle args = new Bundle();
@@ -67,13 +61,15 @@ public class ProjectInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mViewDataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_project_info, container, false);
+        /**
+         * 初始化WebView
+         */
         mViewDataBinding.projectInfoTxt.setBackgroundColor(0); // 设置背景色
         mViewDataBinding.projectInfoTxt.getSettings().setJavaScriptEnabled(true);
         mViewDataBinding.projectInfoTxt.getSettings().setAppCacheEnabled(true);
         mViewDataBinding.projectInfoTxt.getSettings().setDatabaseEnabled(true);
         mViewDataBinding.projectInfoTxt.getSettings().setDomStorageEnabled(true);
         mViewDataBinding.projectInfoTxt.getSettings().setLoadWithOverviewMode(true);
-       // mViewDataBinding.projectInfoTxt.addJavascriptInterface(new MJavascriptInterface(this, null), "imagelistener");
         mViewDataBinding.projectInfoTxt.setWebViewClient(new MyWebViewClient());
         return mViewDataBinding.getRoot();
     }
@@ -83,9 +79,14 @@ public class ProjectInfoFragment extends Fragment {
         super.onResume();
         initProjectInfo();
     }
+    @Deprecated
     public void updateProjectId(int projectId){
         this.projectId = projectId;
     }
+
+    /**
+     * 获取项目详细信息
+     */
     private void initProjectInfo(){
         ApiService.Utils.getInstance(getContext()).getProjectInfoById(projectId)
                 .compose(ApiService.Utils.schedulersTransformer())

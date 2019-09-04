@@ -15,12 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.WeekWorkTimeActivity"></activity>
         <activity android:name=".activity.WorkTimeYearStatisticsActivity"></activity>
         <activity android:name=".activity.WorkTimeMonthStatisticsActivity"></activity>
-        <activity
-            android:name=".activity.ProjectStatisticsActivity"
-            android:screenOrientation="landscape" />
         <activity android:name=".activity.SettingsNextWeekPlanActivity" /> <!-- 项目选择 项目组成员选择 界面 -->
         <activity android:name=".activity.ChooseProjectActivity" /> <!-- 项目概况 界面 -->
         <activity

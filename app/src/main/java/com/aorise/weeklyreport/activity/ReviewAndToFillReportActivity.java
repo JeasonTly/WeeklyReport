@@ -35,19 +35,29 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
     private PlanFragment mPlanFragment;         //下周工作计划Fragment
     private ConclusionFragment mConclusionFragment; //本周工作总结Fragment
     // private Fragment mCurrentFragment;
-    private int userId = -1;
-    private int projectId = -1;
-    private int weeks = -1;
 
-    private boolean addPlan = false; //是否为添加工作计划，
-    private String currentWeeks = ""; //当前需要设置的actionbarTitle
-    private int currentWeek = -1;//当前选择的周，比如33 为第三十三周
-    private List<String> weeksList = new ArrayList<>(); //周数选择框列表
+    /**
+     * 是否为添加工作计划，
+     */
+    private boolean addPlan = false;
+    /**
+     * 当前需要设置的actionbarTitle，
+     */
+    private String currentWeeks = "";
+    /**
+     * 当前选择的周，比如33 为第三十三周
+     */
+    private int currentWeek = -1;
+    /**
+     * 周数选择框列表
+     */
+    private List<String> weeksList = new ArrayList<>();
     private int totalweek = -1;
-    private MenuPopup menuPopup; //周数选择框
-    private boolean fromHome = true;
+    /**
+     * 周数选择框选择器
+     */
+    private MenuPopup menuPopup;
 
-    //private boolean isNormalMode = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,16 +109,10 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
 
     //初始化Fragment
     private void initFragment() {
-//        if (!fromHome) {
-//            mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, false);
-//            mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, false);
-//        } else {
         mPlanFragment = new PlanFragment();
         mConclusionFragment = new ConclusionFragment();
-//        }
         mFragmentList.add(mConclusionFragment);
         mFragmentList.add(mPlanFragment);
-        // mCurrentFragment = mPlanFragment;
     }
 
 
@@ -179,7 +183,11 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
 
     }
 
-    //actionbarTitle的那个周数选择，选择时同时更新当前fragment的数据
+
+    /**
+     * 周数选择，选择时同时更新两个fragment的数据
+     * @param position
+     */
     @Override
     public void selectPosistion(int position) {
         LogT.d("当前选择了。。。。" + position + " dddd " + weeksList.get(totalweek - position - 1));
@@ -191,26 +199,15 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
             mPlanFragment.update(currentWeek);
         } else {
             mPlanFragment = new PlanFragment();
-//            if (!fromHome) {
-//                mPlanFragment = PlanFragment.newInstance(projectId, userId, weeks, false);
-//            } else {
-            mPlanFragment = new PlanFragment();
-//            }
             mFragmentList.add(mPlanFragment);
             mPlanFragment.update(currentWeek);
         }
-        //    } else {
         if (mConclusionFragment != null) {
             mConclusionFragment.update(currentWeek);
         } else {
-//            if (!fromHome) {
-//                mConclusionFragment = ConclusionFragment.newInstance(projectId, userId, weeks, false);
-//            } else {
             mConclusionFragment = new ConclusionFragment();
-//            }
             mFragmentList.add(mConclusionFragment);
             mConclusionFragment.update(currentWeek);
         }
-        //   }
     }
 }

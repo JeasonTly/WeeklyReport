@@ -54,7 +54,6 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, Base
 
     @Override
     public void onBindVH(BaseViewHolder viewHolder, final int position) {
-
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,12 +91,12 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, Base
                 break;
         }
         reportStates.setText(weeklyStates);
-        String planTime = mFilterList.get(position).getPlanWorkTime()+"天";
-        String useTime = mFilterList.get(position).getUseWorkTime()+"天";
+        String planTime = mFilterList.get(position).getPlanWorkTime()+"天";//计划工时
+        String useTime = mFilterList.get(position).getUseWorkTime()+"天";//已使用工时
         viewHolder.getBinding().setVariable(BR.planTime, planTime);
         viewHolder.getBinding().setVariable(BR.useTime, useTime);
-        viewHolder.getBinding().setVariable(BR.startTime,TimeUtil.getInstance().date2date(mFilterList.get(position).getStartTime()));
-        viewHolder.getBinding().setVariable(BR.endTime,TimeUtil.getInstance().date2date(mFilterList.get(position).getEndTime()));
+        viewHolder.getBinding().setVariable(BR.startTime,TimeUtil.getInstance().date2date(mFilterList.get(position).getStartTime()));//开始时间
+        viewHolder.getBinding().setVariable(BR.endTime,TimeUtil.getInstance().date2date(mFilterList.get(position).getEndTime()));//结束时间
         //viewHolder.getBinding().setVariable(BR.reportStates, weeklyStates);
         viewHolder.getBinding().setVariable(BR.memberlist, mFilterList.get(position));
         viewHolder.getBinding().executePendingBindings();

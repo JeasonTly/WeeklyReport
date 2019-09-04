@@ -34,6 +34,10 @@ import java.util.List;
 
 import okhttp3.RequestBody;
 
+/**
+ * 指派下周工作计划界面，
+ * 大致与FillReport相同
+ */
 public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private ActivitySettingsNextWeekPlanBinding mViewDataBinding;
 
@@ -149,6 +153,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.NWPlanActionbar.actionBarTitle.setText("指定项目计划");
     }
 
+    /**
+     * 获取Intent传递过来的参数
+     */
     private void initGetIntent() {
         Intent mIntent = getIntent();
         projectId = mIntent.getIntExtra("projectId", -1);
@@ -302,6 +309,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 初始化计划列表
+     */
     private void initPlanList() {
         LogT.d(" project id is " + projectId +" userId is "+userId);
         ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
@@ -332,6 +342,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 初始化成员列表
+     */
     private void initMemberList() {
         ApiService.Utils.getInstance(this).getMemberList(projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -366,6 +379,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 成员列表选择对话框
+     */
     private void showMutilDialog() {
         //[1]构造对话框的实例
         dialog_item_name = new String[mMemberList.size()];

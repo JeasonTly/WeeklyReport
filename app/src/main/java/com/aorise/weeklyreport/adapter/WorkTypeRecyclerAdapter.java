@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by Tuliyuan.
  * Date: 2019/6/27.
+ *  周报详情适配器
  */
 public class WorkTypeRecyclerAdapter extends BaseAdapter<WeeklyReportBean, BaseViewHolder> {
     private ViewDataBinding mViewDataBinding;

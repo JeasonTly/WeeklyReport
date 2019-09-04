@@ -41,10 +41,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * create an instance of this fragment.
+ * 首页fragment 包括
+ *  广告推送
+ *  项目概况
+ *  周报填写
+ *  周报审批
+ *  项目周报
+ *  绩效考核 (目前为工时统计)
  */
 public class NewHomeFragment extends Fragment implements OnBannerListener {
     private FragmentNewHomeBinding mViewDataBinding;
@@ -57,10 +60,23 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * mProjectList.size() > 1，则进入列表选择界面ChooseProjectActivity;
      */
     private ArrayList<ProjectList> mProjectList = new ArrayList<>();
+    /**
+     *  超级管理员获取的项目列表信息，
+     *  将会重构为ProjectList并传递给选择项目界面或者对应的界面
+     */
     private ArrayList<ProjectListBean.ListBean> mManagerProjectList = new ArrayList<>();
-    private int userId; //用户或者项目负责人ID
-    private boolean isHeader = false; //是否为项目负责人
-    private boolean isSuperManager = false; //是否为超级管理员
+    /**
+     * 用户或者项目负责人ID
+     */
+    private int userId;
+    /**
+     * 是否为项目负责人
+     */
+    private boolean isHeader = false;
+    /**
+     * 是否为超级管理员
+     */
+    private boolean isSuperManager = false;
 
 
     public NewHomeFragment() {
@@ -378,7 +394,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
     }
 
     /**
-     * 初始化字体
+     * 初始化阵列字体
      */
     private void initSpan() {
         SpannableString projectText = new SpannableString("项目概况 Project");

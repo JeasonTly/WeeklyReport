@@ -101,14 +101,14 @@ public class CommonUtils {
 //            if (i == 0) {
 //                MulityTypeItem mulityTypeItem = new MulityTypeItem();
 //                mulityTypeItem.setData(mPlanStage);
-//                mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                mulityTypeItem.setData_type(ProjectManagerReportRecclerAdapter.TypeTAG.TYPE_TAG.ordinal());
 //                mulityTypeItem.setItem_name(mPlanStage.getPhase());
 //                mulityTypeItems.add(mulityTypeItem);
 //
 //                if (TextUtils.isEmpty(mPlanStage.getSpecificPhase())) {
 //                    MulityTypeItem mulityTypeItem_one = new MulityTypeItem();
 //                    mulityTypeItem_one.setData(mPlanStage);
-//                    mulityTypeItem_one.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYEP_NULL.ordinal());
+//                    mulityTypeItem_one.setData_type(ProjectManagerReportRecclerAdapter.TypeTAG.TYEP_NULL.ordinal());
 //                    mulityTypeItem_one.setItem_name("无数据");
 //                    mulityTypeItems.add(mulityTypeItem_one);
 //                    continue;
@@ -117,14 +117,14 @@ public class CommonUtils {
 //                if (TextUtils.isEmpty(mPlanStage.getSpecificPhase())) {
 //                    MulityTypeItem mulityTypeItem = new MulityTypeItem();
 //                    mulityTypeItem.setData(mPlanStage);
-//                    mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                    mulityTypeItem.setData_type(ProjectManagerReportRecclerAdapter.TypeTAG.TYPE_TAG.ordinal());
 //                    mulityTypeItem.setItem_name(mPlanStage.getPhase());
 //                    mulityTypeItems.add(mulityTypeItem);
 //
 //
 //                    MulityTypeItem mulityTypeItem_one = new MulityTypeItem();
 //                    mulityTypeItem_one.setData(mPlanStage);
-//                    mulityTypeItem_one.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYEP_NULL.ordinal());
+//                    mulityTypeItem_one.setData_type(ProjectManagerReportRecclerAdapter.TypeTAG.TYEP_NULL.ordinal());
 //                    mulityTypeItem_one.setItem_name("无数据");
 //                    mulityTypeItems.add(mulityTypeItem_one);
 //                    continue;
@@ -133,7 +133,7 @@ public class CommonUtils {
 //                    if (!lastPlanStage.getPhase().equals(listBeans.get(i).getPhase())) {
 //                        MulityTypeItem mulityTypeItem = new MulityTypeItem();
 //                        mulityTypeItem.setData(mPlanStage);
-//                        mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_TAG.ordinal());
+//                        mulityTypeItem.setData_type(ProjectManagerReportRecclerAdapter.TypeTAG.TYPE_TAG.ordinal());
 //                        mulityTypeItem.setItem_name(mPlanStage.getPhase());
 //                        mulityTypeItems.add(mulityTypeItem);
 //                    }
@@ -144,7 +144,7 @@ public class CommonUtils {
 //
 //            MulityTypeItem mulityTypeItem = new MulityTypeItem();
 //            mulityTypeItem.setData(mPlanStage);
-//            mulityTypeItem.setData_type(MulityStageRecyclerAdapter.TypeTAG.TYPE_CONTENT.ordinal());
+//            mulityTypeItem.setData_type(ProjectManagerReportRecclerAdapter.TypeTAG.TYPE_CONTENT.ordinal());
 //            mulityTypeItem.setItem_name(mPlanStage.getSpecificPhase());
 //            mulityTypeItems.add(mulityTypeItem);
 //

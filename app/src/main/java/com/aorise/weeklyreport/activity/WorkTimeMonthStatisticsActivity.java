@@ -23,18 +23,36 @@ import sysu.zyb.panellistlibrary.AbstractPanelListWithOutPlanAdapter;
 
 public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
     private ActivityWorkTimeMonthStatisticsBinding mViewDataBinding;
+    /**
+     * 当前年、月，用于网络请求
+     */
     private int currentYear = 2019;
     private int currentMonth = 8;
+    /**
+     * 当前月的Str类型，用于设置actionbar标题
+     */
     private String currentMonthStr = "";
-
+    /**
+     * 纵轴上的：角色名称
+     */
     private List<String> columnData = new ArrayList<>();
+    /**
+     * 是项目工时数据，
+     */
     private List<List<String>> contentList = new ArrayList<>();
+    /**
+     * 单个数据的宽度
+     */
     private List<Integer> itemWidthList = new ArrayList<>();
+    /**
+     *  横轴上的数据 月份
+     */
     private List<String> rowDataList = new ArrayList<>();
-    private List<String> planDataList = new ArrayList<>();
 
+    /**
+     * 没有计划工时的适配器
+     */
     private AbstractPanelListWithOutPlanAdapter mAdapter;
-    private String set_workTime_str = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +107,9 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
         initWorkTimeData();
     }
 
+    /**
+     * 初始化横轴数据，即，当月周数
+     */
     private void initRowDataList() {
         rowDataList.add("第一周");
         rowDataList.add("第二周");
@@ -98,12 +119,19 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
         rowDataList.add("总计");
     }
 
+    /**
+     * 根据周数确定单列的宽度是多少
+     */
     private void initItemWidthList() {
         for (int i = 0; i < rowDataList.size(); i++) {
             itemWidthList.add(100);
         }
     }
 
+    /**
+     * 初始化工时数据。
+     * 网络请求使用的参数为intent传递过来的年，intent传递过来的当前月，
+     */
     private void initWorkTimeData() {
         LogT.d(" current year " + currentYear + " current month " + currentMonth);
         ApiService.Utils.getInstance(this).getMonthWorkTime(currentYear, currentMonth)
@@ -134,7 +162,8 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
 
     /**
      * 计算获取全部人员的工时信息
-     *
+     * 给纵轴添加数据(人) rowDataList
+     * 给横轴添加对应人的工时信息 contentList
      * @param list
      */
     private void caculateStatisticData(List<WeeklyWorkTimeBean> list) {

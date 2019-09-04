@@ -35,15 +35,42 @@ import java.util.List;
 
 import okhttp3.RequestBody;
 
+/**
+ * 周报详情页
+ */
 public class WeeklyReportDetailActivity extends AppCompatActivity {
     private ActivityWeeklyReportDetailBinding mViewDataBinding;
+    /**
+     * 周报ID
+     */
     private int id = -1;
+    /**
+     * 周报信息bean
+     */
     private WeeklyReportDetailBean mDetailBean;
+    /**
+     *  审批内容
+     */
     private String approvalText = "";
+    /**
+     *  是否可以审批
+     */
     private boolean isAuditMode = false;
-    private boolean canAudit = false; //是否可以审批
+    /**
+     * 是否可以编辑
+     */
+    private boolean canAudit = false;
+    /**
+     * 工作状态
+     */
     private int workStatus = 1;
+    /**
+     *  审批状态。完成程度
+     */
     private int reamarkStatus = 1;
+    /**
+     *  指定计划的日期范围
+     */
     private List<Calendar> mSelectDateList;
 
     @Override
@@ -202,6 +229,9 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 初始化详情界面
+     */
     private void initDetailInfo() {
         LogT.d("id is " + id);
         ApiService.Utils.getInstance(this).getWeeklyReportDetail(id)
@@ -240,6 +270,9 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 初始化日历控件
+     */
     private void initCalendar() {
 
         mViewDataBinding.monthInfo.setText(mViewDataBinding.detailCalendar.getCurYear() + "年" + mViewDataBinding.detailCalendar.getCurMonth() + "月");
@@ -274,6 +307,10 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 填充通过网络请求获取到的数据
+     * @param data
+     */
     private void initData(WeeklyReportDetailBean data) {
         LogT.d(" data is " + data);
         String workType = "";
@@ -364,6 +401,5 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mViewDataBinding.detailShowHow.setText(data.getExplain());
         mViewDataBinding.detailWorkStatus.setText(workState);
         mViewDataBinding.detailNeedHelp.setText(data.getIssue());
-        //mViewDataBinding.detailCheckStatus.setText(checkStatus);
     }
 }

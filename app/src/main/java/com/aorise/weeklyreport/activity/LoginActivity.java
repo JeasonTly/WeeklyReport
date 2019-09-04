@@ -24,6 +24,9 @@ import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
 import com.hjq.toast.ToastUtils;
 
+/**
+ * 登录界面
+ */
 public class LoginActivity extends BaseActivity {
     private ActivityLoginBinding mViewDataBinding;
     private SharedPreferences sp, spAccount;
@@ -83,13 +86,6 @@ public class LoginActivity extends BaseActivity {
             ToastUtils.show("密码为空，请输入！");
             return;
         }
-//        Gson gson = new Gson();
-//        Map<String, Object> requestParam = new HashMap<>();
-//        requestParam.put("username", "tuliyuan");
-//        requestParam.put("password", "password");
-//        String json = gson.toJson(requestParam);
-//        LogT.d(" json " + json);
-//        RequestBody requestBody = CommonUtils.getRequestBody(json);
         String userName = mViewDataBinding.userName.getText().toString();
         String pwd = mViewDataBinding.pwd.getText().toString();
 

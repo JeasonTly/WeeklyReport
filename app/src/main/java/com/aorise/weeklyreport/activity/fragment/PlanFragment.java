@@ -29,11 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link PlanFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 这个是为下周计划使用的fragment，查看成员周报和审批成员周报时有使用此fragment
  */
 public class PlanFragment extends Fragment implements BaseRefreshListener, RecyclerListClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -45,19 +41,37 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
     private static final String ARG_PARAM5 = "param5";
 
     // TODO: Rename and change types of parameters
+    /**
+     * 用户ID 审批周报时 或者其他成员查看周报时 使用
+     */
     private int userId = -1;
+    /**
+     *  个人用户ID 查看周报时使用
+     */
     private int selfId = -1;
+    /**
+     * 项目ID
+     */
     private int projectId = -1;
+    /**
+     * 选择的周数
+     */
     private int weeks = -1;
     private FragmentPlanBinding mViewDataBinding;
+    /**
+     *  周报计划列表
+     */
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
     private WorkTypeRecyclerAdapter mAdapter;
     private boolean isAuditMode = false;
+    /**
+     * 其他成员查看周报时 不可修改
+     * 为true是才可以修改
+     */
     private boolean canAudit = true;
 
     public PlanFragment() {
         // Required empty public constructor
-
     }
 
     /**
@@ -133,7 +147,10 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
 
     }
 
-
+    /**
+     * 根据周数更新 计划列表
+     * @param weeks
+     */
     public synchronized void update(int weeks) {
         updateList(weeks);
     }
@@ -201,7 +218,10 @@ public class PlanFragment extends Fragment implements BaseRefreshListener, Recyc
         }
     }
 
-
+    /**
+     * Recycleview点击 周报计划时 跳转到详情页
+     * @param position
+     */
     @Override
     public void onClick(int position) {
         LogT.d("detail id is " + mPlanWeeklyReport.get(position).getId());

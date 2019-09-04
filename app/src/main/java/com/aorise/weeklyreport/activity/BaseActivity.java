@@ -11,6 +11,7 @@ import com.aorise.weeklyreport.base.StatusBarUtil;
  * Created by Tuliyuan.
  * Date: 2019/7/9.
  */
+@Deprecated
 public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

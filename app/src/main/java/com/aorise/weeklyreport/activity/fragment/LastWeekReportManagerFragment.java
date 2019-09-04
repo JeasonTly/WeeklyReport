@@ -1,8 +1,6 @@
 package com.aorise.weeklyreport.activity.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,26 +12,20 @@ import android.view.ViewGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
-import com.aorise.weeklyreport.adapter.MulityStageRecyclerAdapter;
+import com.aorise.weeklyreport.adapter.ProjectManagerReportRecclerAdapter;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
-import com.aorise.weeklyreport.bean.MulityTypeItem;
 import com.aorise.weeklyreport.databinding.FragmentHeaderBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
-import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link LastWeekReportManagerFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 周报管理系统的项目周报总结
  */
 public class LastWeekReportManagerFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
@@ -46,11 +38,27 @@ public class LastWeekReportManagerFragment extends Fragment{
 
     private FragmentHeaderBinding mViewDataBinding;
     private int userId = -1;
+    /**
+     * 项目ID
+     */
     private int projectId = -1;
+    /**
+     * 当前周数
+     */
     private int weeks = -1;
-
+    /**
+     * 项目周报列表信息
+     */
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
-    private MulityStageRecyclerAdapter mAdapter;
+    /**
+     *  项目列表适配器
+     */
+    private ProjectManagerReportRecclerAdapter mAdapter;
+    /**
+     *  项目整体情况信息
+     *  整体情况和项目周报列表分开。
+     *  未使用复合型适配器
+     */
     private HeaderItemBean mHeaderItemBean;
 
     public LastWeekReportManagerFragment() {
@@ -58,10 +66,10 @@ public class LastWeekReportManagerFragment extends Fragment{
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment LastWeekReportManagerFragment.
+     * 初始化此fragment .
+     * @param useId 用户ID
+     * @param projectId 项目ID
+     * @param weeks  默认周数
      */
     // TODO: Rename and change types and number of parameters
     public static LastWeekReportManagerFragment newInstance(int useId, int projectId, int weeks) {
@@ -90,14 +98,13 @@ public class LastWeekReportManagerFragment extends Fragment{
         // Inflate the layout for this fragment
 
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_header, container, false);
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        userId = sharedPreferences.getInt("userId", 2);
-
         mViewDataBinding.lastReportRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MulityStageRecyclerAdapter(getActivity(), memberWeeklyModelListBeans);
+        mAdapter = new ProjectManagerReportRecclerAdapter(getActivity(), memberWeeklyModelListBeans);
         mViewDataBinding.lastReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
+        /**
+         * 项目周报整体情况总结
+         */
         mViewDataBinding.lastOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +126,10 @@ public class LastWeekReportManagerFragment extends Fragment{
         updateManagerList(weeks);
     }
 
+    /**
+     * 根据周数获取最新的项目周报内容
+     * @param weeks
+     */
     public synchronized void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);

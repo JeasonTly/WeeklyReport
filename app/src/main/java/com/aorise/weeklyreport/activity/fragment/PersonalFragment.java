@@ -18,11 +18,7 @@ import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * interface
- * to handle interaction events.
- * create an instance of this fragment.
+ * 个人首页
  */
 public class PersonalFragment extends Fragment {
 
@@ -46,7 +42,10 @@ public class PersonalFragment extends Fragment {
         initPersonalInfo();
     }
 
-
+    /**
+     * 获取个人信息接口，
+     * 参数为userId
+     */
     private void initPersonalInfo() {
         ApiService.Utils.getInstance(getContext()).getPersonalInfo(userId)
                 .compose(ApiService.Utils.schedulersTransformer())

@@ -43,24 +43,70 @@ import java.util.List;
  */
 public class ChartView extends View {
     private static final String TAG = "ChartView";
+    /**
+     * 绘制X轴 Y轴用的画笔
+     */
     private Paint mAixsPaint;
+    /**
+     * 绘制 今日的文字画笔
+     */
     private TextPaint todayPaint;
+    /**
+     * 绘制 柱状图总体的画笔
+     */
     private Paint mBarPaint;
+    /**
+     * 绘制 柱状图占总体的百分比的画笔
+     */
     private Paint mBarPercentPaint;
+    /**
+     * 绘制 今日线画笔
+     */
     private Paint todayLinePaint;
-//    private TextPaint mYBarDescriptionPaint;//Bar上的字符
 
-
+    /**
+     * view宽度
+     */
     private int width;
+    /**
+     * view高
+     */
     private int height;
+    /**
+     * 左边距
+     */
     private int margin_left = 10;
+    /**
+     *  上边距
+     */
     private int margin_top = 20;
+    /**
+     *  底边距
+     */
     private int margin_bottom = 10;
+    /**
+     *  X轴到X轴迪比文字的间距
+     */
     private int padding_xz_to_xtext = 10;
-    private int Y_xWidth = 20; //Y轴上多出来的指向部分宽度
-    private int mBarItemWidth = 180;// 为柱的宽度，也为X轴text的宽度
-    private int mBarItemSpace = 100;// 为柱之间的间距
-    private int mXTextPaintWidth = 120;//Y轴坐标文字描述宽度 日期描述
+    /**
+     *  Y轴上多出来的指向文字部分的宽度
+     */
+    private int Y_xWidth = 20;
+
+    /**
+     *   为柱的宽度，也为X轴text的宽度
+     */
+    private int mBarItemWidth = 180;
+
+    /**
+     *   为柱之间的间距
+     */
+    private int mBarItemSpace = 100;
+
+    /**
+     *  Y轴坐标文字描述宽度 日期描述
+     */
+    private int mXTextPaintWidth = 120;//
 
 
     private int startX; // 指的是X轴的起始位置，应该为mXTextPaintWidth+ Y_xWidth + 左边距
@@ -68,11 +114,26 @@ public class ChartView extends View {
 
 
     private List<StatisticBean> mBeanList = new ArrayList<>();
+    /**
+     * 最大开始时间。如果计划开始时间超出项目时间则使用最大的计划开始时间
+     */
     private String startDate = "";
+    /**
+     * 最大截止时间。如果计划截止时间超出项目时间则使用最大的计划截止时间
+     */
     private String endDate = "";
-    private int dengfen_YAix;//每天占的像素值
+    /**
+     * 每一天在X轴上所占据的像素值
+     */
+    private int dengfen_YAix;
 
+    /**
+     * 柱状图的信息，用与判断触摸事件
+     */
     private List<Rect> rectList = new ArrayList<>();
+    /**
+     * 当前选择的柱状图上的信息
+     */
     private StatisticBean mData;
 
     public ChartView(Context context) {
@@ -125,10 +186,6 @@ public class ChartView extends View {
         this.startDate = startDate;
         this.endDate = endDate;
         this.mBeanList = mBeanList;
-//        width = mXTextPaintWidth + 2 * margin_left + mBeanList.size() * mBarItemWidth + (mBeanList.size() + 1) * mBarItemSpace;
-//        LogT.e(" afterMeasue height is " + height + " width is " + width);
-//        measureParams(width, height);
-//        setMeasuredDimension(width, height);
         requestLayout();
         invalidate();
     }

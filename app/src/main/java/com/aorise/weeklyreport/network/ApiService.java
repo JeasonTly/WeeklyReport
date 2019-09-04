@@ -55,6 +55,13 @@ import rx.schedulers.Schedulers;
 public interface ApiService {
 
     //@Headers("Content-Type: application/json;charset=UTF-8")
+
+    /**
+     * 登录接口
+     * @param userName
+     * @param passWord
+     * @return
+     */
     @FormUrlEncoded
     @POST(NetworkURLConfig.LOGIN_URL)
     Observable<Result<UserInfoBean>> login(@Field("userName") String userName, @Field("passWord") String passWord);
@@ -63,10 +70,20 @@ public interface ApiService {
     @POST(NetworkURLConfig.LOGIN_URL_N)
     Observable<Result<String>> login(@Body RequestBody requestBody);
 
+    /**
+     * 填写周报
+     * @param responseBody
+     * @return
+     */
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.POST_WEEKLY_REPORT)
     Observable<Result> fillInWeeklyReprot(@Body RequestBody responseBody);
 
+    /**
+     * 修改
+     * @param responseBody
+     * @return
+     */
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.PUT_WEEKLY_REPORT)
     Observable<Result> updateWeeklyReprot(@Body RequestBody responseBody);
@@ -143,6 +160,11 @@ public interface ApiService {
                                                      @Query("projectId") int projectId,
                                                      @Query("byWeek") int byWeek);
 
+    /**
+     * 获取成员列表 不分页
+     * @param projectId
+     * @return
+     */
     @GET(NetworkURLConfig.LIST_MEMBER_SPINNER)
     Observable<Result<List<MemberListSpinnerBean>>> getMemberList(@Path("projectId") int projectId);
 
@@ -177,14 +199,24 @@ public interface ApiService {
     @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
     Observable<Result<HeaderItemBean>> getHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
-    @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
-    Observable<Result<HeaderItemBean>> getPlanHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
+//
+//    @GET(NetworkURLConfig.HEADER_WEEKY_REPORT_GET)
+//    Observable<Result<HeaderItemBean>> getPlanHeaderList(@Path("id") int projectId, @Query("byWeek") int weeks, @Query("type") int type);
 
+    /**
+     * 新增项目整体情况
+     * @param model
+     * @return
+     */
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
     Observable<Result<Integer>> postHeaderReport(@Body RequestBody model);
 
-
+    /**
+     * 修改项目整体情况
+     * @param model
+     * @return
+     */
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
     Observable<Result<Integer>> putHeaderReport(@Body RequestBody model);
@@ -261,12 +293,6 @@ public interface ApiService {
             return retrofit.create(ApiService.class);
         }
 
-//        public static OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                .connectTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS)//超时时间
-//                .writeTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS)
-//                .readTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS)
-//                .addInterceptor(new ReceivedCookiesInterceptor(mContext))
-//                .build();
 
         public static Observable.Transformer schedulersTransformer() {
             return new Observable.Transformer() {

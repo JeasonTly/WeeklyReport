@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 
@@ -30,21 +29,63 @@ import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 项目选择和成员选择界面
+ * 尚可优化项目选择时 也进行分页
+ */
 public class ChooseProjectActivity extends AppCompatActivity implements RecyclerListClickListener, BaseRefreshListener {
-    private ArrayList<ProjectList> mProjectList = new ArrayList<>();
-    private List<MemberListBean.ListBean> mMemberList = new ArrayList<>();
-    private ActivityChooseProjectBinding mViewDataBinding;
-    private ProjectListAdapter mAdapter;
-    private MemberListAdapter mMemberAdatper;
-    private boolean isProjectList = true;
-    private int currentIndex = 1;
-    private int everPage = 10;
-    private int totalPage = 1;
 
+    private ActivityChooseProjectBinding mViewDataBinding;
+
+    /**
+     * 项目列表
+     */
+    private ArrayList<ProjectList> mProjectList = new ArrayList<>();
+    private ProjectListAdapter mAdapter;
+    /**
+     * 成员内容@{
+     */
+    private List<MemberListBean.ListBean> mMemberList = new ArrayList<>();
+    /**
+     * 当前页
+     */
+    private int currentIndex = 1;
+    /**
+     * 一页多少数据
+     */
+    private int everPage = 10;
+    /**
+     * 总页数
+     */
+    private int totalPage = 1;
+    private MemberListAdapter mMemberAdatper;
+    /**
+     * 成员列表@}
+     */
+
+    /**
+     * 当前列表是否为项目列表
+     */
+    private boolean isProjectList = true;
+    /**
+     * 项目ID
+     */
     private int projectId = -1;
+    /**
+     * 项目名称
+     */
     private String projectName = "";
-    private boolean isReview = false;//是否为审核周报  true为审核周报界面    false则为项目概况界面
-    private boolean isHeaderReport = false; //是则为选择项目对应的项目周报 否则为负责人选择项目对应的成员周报
+    /**
+     * 是否为审核周报  true为审核周报界面    false则为项目概况界面
+     */
+    private boolean isReview = false;
+    /**
+     * 是则为选择项目对应的项目周报 ，否则为负责人选择项目对应的成员周报
+     */
+    private boolean isHeaderReport = false;
+    /**
+     * 用户ID
+     */
     private int userId = -1;
 
     @Override
@@ -71,9 +112,9 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //m.getFilter().filter(sequence.toString());
-                if(isProjectList){
+                if (isProjectList) {
                     mAdapter.getFilter().filter(s.toString());
-                }else {
+                } else {
                     mMemberAdatper.getFilter().filter(s.toString());
                 }
             }
@@ -97,10 +138,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                     mIntent.putExtra("userName", mMemberList.get(position).getUserName());
                     mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
                     startActivity(mIntent);
-                } else {
-
                 }
-
             }
 
             @Override
@@ -151,7 +189,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
         LogT.d(" 项目和成员选择界面 onBackPressed ");
         if (mProjectList.size() == 1 && mMemberList.size() > 1) {
-           // super.onBackPressed();
+            // super.onBackPressed();
             this.finish();
         }
         if (!isProjectList) {
@@ -174,6 +212,10 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         }
     }
 
+    /**
+     * 根据项目ID获取成员列表，分页
+     * @param projectId
+     */
     private void getMemberList(int projectId) {
         LogT.d("project id is " + projectId);
         ApiService.Utils.getInstance(this).getMemberList(currentIndex, everPage, projectId, TimeUtil.getInstance().getDayofWeek())
@@ -211,6 +253,10 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                 });
     }
 
+    /**
+     * 项目列表项点击事件
+     * @param position
+     */
     @Override
     public void onClick(int position) {
         LogT.d("当前选择的projectInfo为" + mProjectList.get(position));
@@ -232,8 +278,6 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                 startActivity(mIntent);
             }
         } else {
-//            mViewDataBinding.projectList.swapAdapter(mMemberAdatper, true);
-
             mViewDataBinding.projectList.setVisibility(View.GONE);
             getMemberList(projectId);
         }
@@ -248,7 +292,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     @Override
     public void refresh() {
         currentIndex = 1;
-        if(!isProjectList){
+        if (!isProjectList) {
             getMemberList(projectId);
         }
         mViewDataBinding.memberPltChoose.finishRefresh();

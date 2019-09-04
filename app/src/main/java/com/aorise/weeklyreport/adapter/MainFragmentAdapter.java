@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Created by Tuliyuan.
  * Date: 2019/6/26.
+ * 多fragment选择的适配器
  */
 public class MainFragmentAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList;

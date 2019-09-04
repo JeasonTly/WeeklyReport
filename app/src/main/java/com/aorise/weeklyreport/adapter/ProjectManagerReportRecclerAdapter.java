@@ -16,12 +16,13 @@ import java.util.List;
 /**
  * Created by Tuliyuan.
  * Date: 2019/6/27.
+ * 项目周报适配器
  */
-public class MulityStageRecyclerAdapter extends BaseAdapter<HeaderItemBean.PlanDetailsListBean, BaseViewHolder> {
+public class ProjectManagerReportRecclerAdapter extends BaseAdapter<HeaderItemBean.PlanDetailsListBean, BaseViewHolder> {
     private ViewDataBinding mViewDataBinding;
     private RecyclerListClickListener mClickListener;
 
-    public MulityStageRecyclerAdapter(Context context, List<HeaderItemBean.PlanDetailsListBean> typeItems) {
+    public ProjectManagerReportRecclerAdapter(Context context, List<HeaderItemBean.PlanDetailsListBean> typeItems) {
         super(context);
         this.mList = typeItems;
     }

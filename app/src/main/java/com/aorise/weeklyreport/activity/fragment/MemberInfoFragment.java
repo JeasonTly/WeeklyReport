@@ -28,9 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MemberInfoFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 项目概况-成员信息列表fragment
  */
 public class MemberInfoFragment extends Fragment implements BaseRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -39,14 +37,34 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private FragmentMemberInfoBinding mViewDataBinding;
+    /**
+     * 当前页
+     */
     private int currenIndex = 1;
+    /**
+     * 一页包含多少数据
+     */
     private int pageNumber = 10;
+    /**
+     *  总页数
+     */
     private int totalPage = 1;
+    /**
+     * 是否为审核
+     */
     private boolean isReview = false;
+    /**
+     * 成员列表适配器
+     */
     private MemberListAdapter mAdapter;
     private List<MemberListBean.ListBean> mList = new ArrayList<>();
-    // TODO: Rename and change types of parameters
+    /**
+     * 项目ID
+     */
     private int projectId = -1;
+    /**
+     * 当前周数
+     */
     private int week = -1;
 
     public MemberInfoFragment() {
@@ -54,13 +72,12 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @param projectId Parameter 1.
-     * @return A new instance of fragment MemberInfoFragment.
+     * @param projectId 项目id
+     * @param weeks  当前周数
+     * @param isReview   是否为可以审核周报
+     * @return MemberInfoFragment实例
      */
-    // TODO: Rename and change types and number of parameters
     public static MemberInfoFragment newInstance(int projectId, int weeks, boolean isReview) {
         MemberInfoFragment fragment = new MemberInfoFragment();
         Bundle args = new Bundle();
@@ -81,6 +98,11 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
         }
     }
 
+    /**
+     * 更换项目
+     * @param projectId
+     */
+    @Deprecated
     public void updateProjectId(int projectId) {
         this.projectId = projectId;
     }
@@ -121,6 +143,9 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
         initMemberList();
     }
 
+    /**
+     * 初始化项目成员列表
+     */
     private void initMemberList() {
         LogT.d("成员列表 projectid" + projectId + " week " + week);
         ApiService.Utils.getInstance(getContext()).getMemberList(currenIndex, pageNumber, projectId, week)
@@ -154,12 +179,18 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
                 });
     }
 
+    /**
+     * 下拉刷新
+     */
     @Override
     public void refresh() {
         currenIndex = 1;
         initMemberList();
     }
 
+    /**
+     * 加载更多
+     */
     @Override
     public void loadMore() {
         currenIndex++;
@@ -171,6 +202,12 @@ public class MemberInfoFragment extends Fragment implements BaseRefreshListener 
         }
     }
 
+    /**
+     * 更新周数对应的weeks
+     * 当前已经废弃
+     * @param weeks
+     */
+    @Deprecated
     public void updateWeeks(int weeks) {
         this.week = weeks;
         initMemberList();

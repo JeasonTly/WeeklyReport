@@ -40,7 +40,6 @@ public class OverAllSituationActivity extends AppCompatActivity {
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_over_all_situation);
         WRApplication.getInstance().addActivity(this);
 
-
         projectId = getIntent().getIntExtra("projectId", -1);
         weeks = getIntent().getIntExtra("weeks", -1);
         type = getIntent().getIntExtra("type", 1);
@@ -108,7 +107,9 @@ public class OverAllSituationActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    /**
+     * 提交新的项目周报整体情况
+     */
     private void postCommand() {
         if (TextUtils.isEmpty(mViewDataBinding.oveallSituationSpth.getText())) {
             ToastUtils.show("具体工作事项不能为空!");
@@ -155,6 +156,9 @@ public class OverAllSituationActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 更新项目周报整体情况
+     */
     private void putCommand() {
         if (TextUtils.isEmpty(mViewDataBinding.oveallSituationSpth.getText())) {
             ToastUtils.show("具体工作事项不能为空!");

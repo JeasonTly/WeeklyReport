@@ -21,24 +21,37 @@ import com.aorise.weeklyreport.view.MenuPopup;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 项目概况界面
+ */
 public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityProjectInfoBinding mViewDataBinding;
-    private int projectId = -1;//当前项目的项目ID 来源为getIntent()传递的projectInfo;
+    /**
+     * 当前项目的项目ID 来源为getIntent()传递的projectInfo;
+     */
+    private int projectId = -1;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private Class FragmentArray[] = {ProjectInfoFragment.class, MemberInfoFragment.class, ProjectStatisticsFragment.class};
     private String FragmentTitle[] = {"基本信息", "成员信息", "项目统计"};
+
     private ProjectInfoFragment mProjectInfoFragment;//基本信息所对应的Fragment
     private MemberInfoFragment mMemberInfoFragment;//成员信息所对应的Fragment
     private ProjectStatisticsFragment mProjectStatisticsFragment;//成员信息所对应的Fragment
+
+
     private boolean isReview = false;
     /**
      * 当前周数
      */
     private int currentWeeks = -1;
+    /**
+     * 总周数
+     */
     private int totalweek = -1;
-    private List<String> weeksList = new ArrayList<>();
-    private String currentWeeksTitle = "";
-    private MenuPopup menuPopup;
+
+//    private List<String> weeksList = new ArrayList<>();
+//    private String currentWeeksTitle = "";
+//    private MenuPopup menuPopup;
 
 
     @Override
@@ -46,7 +59,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_project_info);
         totalweek = currentWeeks = TimeUtil.getInstance().getDayofWeek();
-        weeksList = TimeUtil.getInstance().getHistoryWeeks();
+//        weeksList = TimeUtil.getInstance().getHistoryWeeks();
 //        currentWeeksTitle = "第" + currentWeeks + "周";
 //        menuPopup = new MenuPopup(this, 0, this);
 //        menuPopup.setPopupGravity(Gravity.BOTTOM);
@@ -152,12 +165,10 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
     public void onPageScrollStateChanged(int i) {
 
     }
-
+    @Deprecated
     @Override
     public void selectPosistion(int position) {
         currentWeeks = totalweek - position - 1;
-//        currentWeeksTitle = weeksList.get(totalweek - position - 1);
-//        mViewDataBinding.infoActionbar.actionBarTitle.setText("项目概况" + currentWeeksTitle);
         if (mMemberInfoFragment != null) {
             mMemberInfoFragment.updateWeeks(currentWeeks);
         } else {

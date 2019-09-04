@@ -29,11 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ConclusionFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 这个是为总结使用的fragment，查看成员周报和审批成员周报时有使用此fragment
  */
 public class ConclusionFragment extends Fragment implements BaseRefreshListener, RecyclerListClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -47,13 +43,38 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     private FragmentConclusionBinding mViewDataBinding;
     // TODO: Rename and change types of parameters
 //    private OnFragmentInteractionListener mListener;
+    /**
+     * 用户ID。如果初始化方式为newInstance 则为某个成员ID
+     * 反之则为本人ID 通过sharedPreference获取
+     */
     private int userId = -1;
+    /**
+     * 项目ID
+     * 如果初始化方式为newInstance 则为某个项目的ID
+     */
     private int projectId = -1;
+    /**
+     * 选择的周数，可通过审批或者查看周报的Activity进行update
+     */
     private int weeks = -1;
-    private boolean isAuditMode = false;//这个判断来源是否为项目负责人查看周报
+    /**
+     * 判断是否为项目负责人查看周报
+     */
+    private boolean isAuditMode = false;
+    /**
+     * 是否可以进行周报编辑，存在情况:
+     * 其他成员查看未审核周报时，不可以修改周报内容
+     */
+    private boolean canAudit = true;
+    /**
+     * 周报信息
+     */
     private List<WeeklyReportBean> mPlanWeeklyReport = new ArrayList<>();
+    /**
+     * recyclerview的适配器
+     */
     private WorkTypeRecyclerAdapter mAdapter;
-    private boolean canAudit = true; //是否可以审批
+
 
     public ConclusionFragment() {
         // Required empty public constructor
@@ -101,6 +122,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_conclusion, container, false);
         mViewDataBinding.summaryPlt.setRefreshListener(this);
         mViewDataBinding.summaryPlt.setCanLoadMore(false);
+        //为查看周报所初始化的本fragment
         if(!isAuditMode) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
             userId = sharedPreferences.getInt("userId", 2);
@@ -118,7 +140,6 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     public void onResume() {
         super.onResume();
         updateList(weeks);
-
     }
 
     @Override
@@ -132,11 +153,20 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
 
     }
 
-
+    /**
+     * 审批界面或者周报查看界面在点击Actionbar的Title时，
+     * 重新发起网络请求获取对应周数的周报信息
+     * @param weeks
+     */
     public synchronized void update(int weeks) {
         updateList(weeks);
     }
 
+    /**
+     * 审批界面或者周报查看界面在点击Actionbar的Title时，
+     * 重新发起网络请求获取对应周数的周报信息
+     * @param weeks
+     */
     public synchronized void updateList(int weeks) {
         this.weeks = weeks;
         LogT.d("projectId is " + projectId + " userId is " + userId + " weeks is " + weeks + " 是否为项目负责人 " + isAuditMode);
@@ -195,6 +225,10 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
         }
     }
 
+    /**
+     * RecycleView 即周报列表的点击事件
+     * @param position
+     */
     @Override
     public void onClick(int position) {
         Intent mIntent = new Intent();

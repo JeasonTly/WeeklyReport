@@ -23,9 +23,14 @@ import com.aorise.weeklyreport.view.MenuPopup;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 项目周报 查看界面
+ */
 public class ProjectReportManagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityMemberManagerBinding mViewDataBinding;
-
+    /**
+     * 两个fragment 一个总结LastWeekReportManagerFragment  一个计划NextWeekReprotManagerFragment
+     */
     private Class mFragmentArray[] = {LastWeekReportManagerFragment.class, NextWeekReprotManagerFragment.class};
     private static final String TITLE_ONE = "本周总结";
     private static final String TITLE_TWO = "下周计划";
@@ -34,17 +39,40 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
     private LastWeekReportManagerFragment mLastReportFragment;
     private NextWeekReprotManagerFragment mNextReportFragment;
 
+    /**
+     * 周数选择器
+     */
     private MenuPopup menuPopup;
+    /**
+     * 总周数
+     */
     private int totalWeeks = -1;
+    /**
+     * 周数列表
+     */
     private List<String> weeksList = new ArrayList<>();
+    /**
+     * 当前周
+     */
     private int currentWeekNumber = -1;
 
+    /**
+     * 是否为添加计划
+     */
     private boolean addPlan = false;
     // private int type = -1;
     //private boolean isProjectLeader = false;
-
+    /**
+     * 用户ID
+     */
     private int userId = 1;
+    /**
+     * 项目ID
+     */
     private int projectId = -1;
+    /**
+     * 项目名称
+     */
     private String projectName = "";
 
     @Override
@@ -60,7 +88,6 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
         menuPopup = new MenuPopup(this, 0, this,null);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
-        // menuPopup.setOffsetY(34);
         mViewDataBinding.managerActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +117,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         initViewPager();
     }
 
+    /**
+     * 获取默认Intent 跳转携带的参数信息
+     */
     private void getDefaultIntent() {
         Intent mIntent = getIntent();
         userId = mIntent.getIntExtra("userId", 1);
@@ -167,6 +197,11 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
 
     }
 
+    /**
+     * 周数选择器
+     * 更新总结和计划的信息
+     * @param position
+     */
     @Override
     public void selectPosistion(int position) {
         LogT.d("当前选择了。。。。" + position);

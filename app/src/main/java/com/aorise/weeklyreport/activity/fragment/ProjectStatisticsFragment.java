@@ -20,11 +20,7 @@ import com.aorise.weeklyreport.network.Result;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ProjectStatisticsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 项目概况-项目统计
  */
 public class ProjectStatisticsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -41,21 +37,17 @@ public class ProjectStatisticsFragment extends Fragment {
     private String endDate;
 
     public ProjectStatisticsFragment() {
-        // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment ProjectStatisticsFragment.
+     * @param projectId 项目ID
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
-    public static ProjectStatisticsFragment newInstance(int param1) {
+    public static ProjectStatisticsFragment newInstance(int projectId) {
         ProjectStatisticsFragment fragment = new ProjectStatisticsFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, projectId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,19 +71,13 @@ public class ProjectStatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_statistics, container, false);
-//        mViewDataBinding.intentStatisticActivity.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent mIntent = new Intent();
-//                mIntent.putExtra("projectId",projectId);
-//                mIntent.setClass(getContext(), ProjectStatisticsActivity.class);
-//                startActivity(mIntent);
-//            }
-//        });
         initProjectDetail();
         return mViewDataBinding.getRoot();
     }
 
+    /**
+     * 获取项目详情
+     */
     private void initProjectDetail() {
         ApiService.Utils.getInstance(getActivity()).getProjectInfoById(projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -123,6 +109,9 @@ public class ProjectStatisticsFragment extends Fragment {
                 });
     }
 
+    /**
+     * 初始化统计数据
+     */
     private void initStatistic() {
         ApiService.Utils.getInstance(getActivity()).getStatisticInfoByID(projectId)
                 .compose(ApiService.Utils.schedulersTransformer())

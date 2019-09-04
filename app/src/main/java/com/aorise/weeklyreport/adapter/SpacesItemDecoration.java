@@ -7,6 +7,7 @@ import android.view.View;
 /**
  * Created by Tuliyuan.
  * Date: 2019/2/20.
+ * recycleview Item 间距
  */
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
