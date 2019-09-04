@@ -51,7 +51,7 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
         //mViewDataBinding.auditActionbar.actionBarTitle.setText(userName + "的个人周报");
         totalweek = TimeUtil.getInstance().getDayofWeek();
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
-        menuPopup = new MenuPopup(this, 0, this);
+        menuPopup = new MenuPopup(this, 0, this,null);
         mViewDataBinding.auditActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
         mViewDataBinding.auditActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         mViewDataBinding.auditActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {

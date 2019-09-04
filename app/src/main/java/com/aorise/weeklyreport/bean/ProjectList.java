@@ -7,22 +7,24 @@ import java.io.Serializable;
  * Date: 2019/7/3.
  */
 public class ProjectList implements Serializable {
-
     @Override
     public String toString() {
         return "ProjectList{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", property=" + property +
                 '}';
     }
 
     /**
-     * id : 2
-     * name : 无双剑姬
+     * id : 42
+     * name : 工作信息管理系统
+     * property : 1
      */
 
     private int id;
     private String name;
+    private int property;
 
     public int getId() {
         return id;
@@ -38,5 +40,13 @@ public class ProjectList implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getProperty() {
+        return property;
+    }
+
+    public void setProperty(int property) {
+        this.property = property;
     }
 }

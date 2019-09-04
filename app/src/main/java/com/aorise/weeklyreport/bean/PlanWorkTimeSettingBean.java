@@ -47,7 +47,7 @@ public class PlanWorkTimeSettingBean extends BaseObservable implements Serializa
      */
 
     private float id;
-    private float year;
+    private int year;
     private float january;
     private float february;
     private float march;
@@ -73,7 +73,7 @@ public class PlanWorkTimeSettingBean extends BaseObservable implements Serializa
         return year;
     }
 
-    public void setYear(float year) {
+    public void setYear(int year) {
         this.year = year;
     }
 

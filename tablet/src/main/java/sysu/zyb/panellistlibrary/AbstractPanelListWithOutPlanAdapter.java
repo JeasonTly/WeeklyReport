@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sysu.zyb.panellistlibrary.defaultcontent.DefaultContentAdapter;
+import sysu.zyb.panellistlibrary.defaultcontent.DefaultNoPlanContentAdapter;
 
 /**
  * <pre>
@@ -38,7 +39,7 @@ import sysu.zyb.panellistlibrary.defaultcontent.DefaultContentAdapter;
  * @author zyb
  */
 
-public abstract class AbstractPanelListWithOutPlanAdapter {
+public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelListAdapter{
 
     private static final String TAG = "ybz";
 
@@ -115,13 +116,15 @@ public abstract class AbstractPanelListWithOutPlanAdapter {
     /**
      * constructor
      *
-     * @param lv_content 内容的ListView
+     * @param context
+     * @param pl_root
+     * @param lv_content                内容的ListView
      */
-    public AbstractPanelListWithOutPlanAdapter(Context context, PanelListLayout pl_root, ListView lv_content, WorkTimePlanClickListener workTimePlanClickListener) {
+    public AbstractPanelListWithOutPlanAdapter(Context context, PanelListLayout pl_root, ListView lv_content) {
+        super(context, pl_root, lv_content, null);
         this.context = context;
         this.pl_root = pl_root;
         this.lv_content = lv_content;
-        this.workTimePlanClickListener = workTimePlanClickListener;
     }
 
 
@@ -133,7 +136,6 @@ public abstract class AbstractPanelListWithOutPlanAdapter {
 
     public void setContentDataList(List<List<String>> contentDataList) {
         this.contentDataList = contentDataList;
-        //contentAdapter.notifyDataSetChanged();
     }
 
     public void setItemWidthList(List<Integer> itemWidthList) {
@@ -341,8 +343,8 @@ public abstract class AbstractPanelListWithOutPlanAdapter {
         contentAdapter = getContentAdapter();
         columnAdapter = getColumnAdapter();
         if (contentAdapter == null) {
-//            contentAdapter = new DefaultContentAdapter(context, R.layout.defaultcontentitem,
-//                    contentDataList, itemWidthList, itemHeight, lv_content);
+            contentAdapter = new DefaultNoPlanContentAdapter(context, R.layout.defaultcontentitem,
+                    contentDataList, itemWidthList, itemHeight, lv_content);
         }
 
         reorganizeViewGroup();
@@ -363,27 +365,15 @@ public abstract class AbstractPanelListWithOutPlanAdapter {
      */
     public void notifyDataSetChanged() {
         // 先刷新lv_content的数据，然后根据判断决定是否要刷新表头的数据
-        Log.d(TAG, " notifyDataSetChanged columnDataList size " + (columnDataList.size()) + " defaultColumn " + defaultColumn);
-
+        Log.d(TAG, " notifyDataSetChanged columnDataList size " + (columnDataList.size()) + " contentdata size " + contentDataList.size());
         contentAdapter.notifyDataSetChanged();
-        if (defaultColumn) {
-            // 最好是让columnList跟着contentList变，不要new对象
-            // 所以要获得contentList的新长度,即要获得contentList对象
-            int newLength = contentAdapter.getCount();
-            if (newLength < columnDataList.size()) {
-                //删除了部分数据
-                //从尾部开始删除元素，直到长度和contentList相同
-                while (columnDataList.size() != newLength) {
-                    columnDataList.remove(columnDataList.size() - 1);
-                }
-            } else {
-                //增加了部分数据
-                while (columnDataList.size() != newLength) {
-                    columnDataList.add(String.valueOf(columnDataList.size() + 1));
-                }
-            }
-            columnAdapter.notifyDataSetChanged();
-        }
+        ll_contentItem = (LinearLayout) lv_content.getChildAt(0);//获得content的第一个可见item
+        initColumnLayout();
+        initRowLayout();
+        // 当ListView绘制完成后设置初始位置，否则ll_contentItem会报空指针
+        lv_content.setSelection(initPosition);
+        lv_column.setSelection(initPosition);
+
 
     }
 

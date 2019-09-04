@@ -183,7 +183,7 @@
             android:layout_height="0dp">
             <ImageView
                 android:layout_gravity="center"
-                android:src="@drawable/weekly_icon"
+                android:src="@drawable/performance_icon"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_width="wrap_content"

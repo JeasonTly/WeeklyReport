@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".activity.WeekWorkTimeActivity"></activity>
         <activity android:name=".activity.WorkTimeYearStatisticsActivity"></activity>
+        <activity android:name=".activity.WorkTimeMonthStatisticsActivity"></activity>
         <activity
             android:name=".activity.ProjectStatisticsActivity"
             android:screenOrientation="landscape" />

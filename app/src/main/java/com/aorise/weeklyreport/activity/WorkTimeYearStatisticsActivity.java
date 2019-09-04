@@ -2,6 +2,7 @@ package com.aorise.weeklyreport.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.base.CommonUtils;
@@ -22,7 +22,9 @@ import com.aorise.weeklyreport.databinding.ActivityWorkTimeYearStatisticsBinding
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.aorise.weeklyreport.view.MenuPopup;
 import com.google.gson.Gson;
+import com.hjq.toast.ToastUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,9 +35,10 @@ import okhttp3.RequestBody;
 import sysu.zyb.panellistlibrary.AbstractPanelListAdapter;
 import sysu.zyb.panellistlibrary.WorkTimePlanClickListener;
 
-public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements WorkTimePlanClickListener {
+public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements WorkTimePlanClickListener, MenuPopup.MenuPopupSelectedListener {
     private ActivityWorkTimeYearStatisticsBinding mViewDataBinding;
     private int currentYear = 2019;
+    private int defaultYear = 2019;
 
     private List<String> columnData = new ArrayList<>();
     private List<List<String>> contentList = new ArrayList<>();
@@ -45,13 +48,24 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
 
     private AbstractPanelListAdapter mAdapter;
     private String set_workTime_str = "";
+    private MenuPopup menuPopup;
+    private List<String> mYearList = new ArrayList<>();
 
+    private PlanWorkTimeSettingBean planWorkTimeSettingBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_work_time_year_statistics);
         initRowDataList();
         initItemWidthList();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        defaultYear = Integer.valueOf(simpleDateFormat.format(date));
+        LogT.d(" currentYear " + defaultYear);
+        for (int i = 0; i < 5; i++) {
+            mYearList.add(String.valueOf(defaultYear - i) + "年");
+        }
         mViewDataBinding.worktimeYearActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,14 +73,22 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
             }
         });
 
+        menuPopup = new MenuPopup(this, 0, this, mYearList);
+        mViewDataBinding.worktimeYearActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
+        mViewDataBinding.worktimeYearActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuPopup.showPopupWindow(mViewDataBinding.worktimeYearActionbar.actionBarTitleArea);
+            }
+        });
         mViewDataBinding.idLvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(WorkTimeYearStatisticsActivity.this, "你选中的position为：" + position, Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(WorkTimeYearStatisticsActivity.this, "你选中的position为：" + position, Toast.LENGTH_SHORT).show();
             }
         });
         initAdapter();
-        mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计");
+        mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + defaultYear);
         mViewDataBinding.idPlRoot.setAdapter(mAdapter);
     }
 
@@ -85,7 +107,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         mAdapter.setItemWidthList(itemWidthList);// must have
         mAdapter.setColumnDataList(columnData);
         mAdapter.setRowDataList(rowDataList);// must have
-        mAdapter.setRowDataList(planDataList);// must have
+        mAdapter.setPlanDataList(planDataList);// must have
         mAdapter.setItemHeight(40);// optional, dp
     }
 
@@ -120,10 +142,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
     }
 
     private void initDefaultWorkTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        Date date = new Date();
-        currentYear = Integer.valueOf(simpleDateFormat.format(date));
-        LogT.d(" currentYear " + currentYear);
+
 
         ApiService.Utils.getInstance(this).getDefaultWorkTime(currentYear)
                 .compose(ApiService.Utils.schedulersTransformer())
@@ -143,6 +162,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                         super.onNext(listResult);
                         LogT.d(" 获取到的预设工时统计信息为 " + listResult.toString());
                         if (listResult.isRet()) {
+                            planWorkTimeSettingBean = listResult.getData();
                             caculateDefaultWorkTime(listResult.getData());
                         }
                     }
@@ -184,7 +204,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
      * @param workTimeBean
      */
     private void caculateDefaultWorkTime(PlanWorkTimeSettingBean workTimeBean) {
-
+        planDataList.clear();
         planDataList.add(String.valueOf(workTimeBean.getJanuary()));
         planDataList.add(String.valueOf(workTimeBean.getFebruary()));
         planDataList.add(String.valueOf(workTimeBean.getMarch()));
@@ -209,7 +229,9 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 + workTimeBean.getOctober()
                 + workTimeBean.getNovember()
                 + workTimeBean.getDecember()));
+
         mAdapter.setPlanDataList(planDataList);
+
     }
 
     /**
@@ -285,6 +307,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         mAdapter.setItemWidthList(itemWidthList);// must have
         mAdapter.setColumnDataList(columnData);
         mAdapter.setRowDataList(rowDataList);// must have
+        //mAdapter.setPlanDataList(planDataList);// must have
         mAdapter.notifyDataSetChanged();
     }
 
@@ -330,7 +353,16 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 break;
 
         }
-        LogT.d(" 你点击了" + string);
+//        LogT.d(" 你点击了" + string);
+        if (position == 12) {
+            return;
+        }
+        Intent mIntent = new Intent();
+        mIntent.putExtra("year", currentYear);
+        mIntent.putExtra("month", position + 1);
+        mIntent.putExtra("monthStr", string);
+        mIntent.setClass(this, WorkTimeMonthStatisticsActivity.class);
+        startActivity(mIntent);
     }
 
     @Override
@@ -376,14 +408,18 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 break;
 
         }
-        showAlertDialog(position,string);
+        if(position == 12){
+            return;
+        }
+        showAlertDialog(position, string);
     }
 
-    private void showAlertDialog(final int position,final String month) {
+    private void showAlertDialog(final int position, final String month) {
         View inputView = LayoutInflater.from(this).inflate(R.layout.dialog_input_worktime, null);
         final EditText approvalMark = (EditText) inputView.findViewById(R.id.set_month_worktime);
+        approvalMark.setText(planDataList.get(position));
         final TextView currentMonth = (TextView) inputView.findViewById(R.id.current_month);
-        currentMonth.setText(month+"的计划天数");
+        currentMonth.setText(month + "的计划天数");
         AlertDialog.Builder mDialog = new AlertDialog.Builder(this)
                 .setView(inputView)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -396,7 +432,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                     public void onClick(final DialogInterface dialog, int which) {
                         set_workTime_str = approvalMark.getText().toString();
                         LogT.d(" 设置的时间是" + set_workTime_str);
-                        //setMonthWorkTime(position);
+                        setMonthWorkTime(position);
                         dialog.dismiss();
                     }
                 });
@@ -404,9 +440,9 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
     }
 
 
-    private void setMonthWorkTime(int position) {
+    private void setMonthWorkTime(final int position) {
         Gson gson = new Gson();
-        PlanWorkTimeSettingBean planWorkTimeSettingBean = new PlanWorkTimeSettingBean();
+//        final PlanWorkTimeSettingBean planWorkTimeSettingBean = new PlanWorkTimeSettingBean();
         switch (position) {
             case 0:
                 planWorkTimeSettingBean.setJanuary(Float.valueOf(set_workTime_str));
@@ -446,6 +482,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 break;
 
         }
+        planWorkTimeSettingBean.setYear(currentYear);
         String json = gson.toJson(planWorkTimeSettingBean);
         RequestBody requestBody = CommonUtils.getRequestBody(json);
         ApiService.Utils.getInstance(this).setWorkTime(requestBody)
@@ -464,7 +501,35 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                     @Override
                     public void onNext(Result result) {
                         super.onNext(result);
+                        LogT.d(" 设置工时" + result);
+                        if (result.isRet()) {
+                            ToastUtils.show("设置工时成功!");
+                            planDataList.set(position,set_workTime_str);
+                            planDataList.set(planDataList.size() -1,String.valueOf(planWorkTimeSettingBean.getJanuary()
+                                    + planWorkTimeSettingBean.getFebruary()
+                                    + planWorkTimeSettingBean.getMarch()
+                                    + planWorkTimeSettingBean.getApril()
+                                    + planWorkTimeSettingBean.getMay()
+                                    + planWorkTimeSettingBean.getJune()
+                                    + planWorkTimeSettingBean.getJuly()
+                                    + planWorkTimeSettingBean.getAugust()
+                                    + planWorkTimeSettingBean.getSeptember()
+                                    + planWorkTimeSettingBean.getOctober()
+                                    + planWorkTimeSettingBean.getNovember()
+                                    + planWorkTimeSettingBean.getDecember()));
+                            //WorkTimeYearStatisticsActivity.this.onResume();
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
+    }
+
+    @Override
+    public void selectPosistion(int position) {
+        currentYear = defaultYear - (mYearList.size() - position - 1);
+        LogT.d(" select year is " + currentYear);
+        mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear);
+        initDefaultWorkTime();
+        initWorkTimeData();
     }
 }

@@ -57,7 +57,7 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
 
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
         totalweek = currentWeek = TimeUtil.getInstance().getDayofWeek();
-        menuPopup = new MenuPopup(ReviewAndToFillReportActivity.this, 0, this);
+        menuPopup = new MenuPopup(ReviewAndToFillReportActivity.this, 0, this,null);
         mViewDataBinding.toreviewActionbar.actionBarTitle.setText("第" + TimeUtil.getInstance().getDayofWeek() + "周");
         currentWeeks = "第" + TimeUtil.getInstance().getDayofWeek() + "周";
         mViewDataBinding.toreviewActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {

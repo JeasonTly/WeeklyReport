@@ -6,6 +6,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
@@ -59,7 +62,27 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         LogT.d(" show projectList size is " + mProjectList.size());
         mAdapter = new ProjectListAdapter(this, mProjectList);
         mAdapter.setClickListener(this);
+        mViewDataBinding.chooseSearch.fpClidQuery.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //m.getFilter().filter(sequence.toString());
+                if(isProjectList){
+                    mAdapter.getFilter().filter(s.toString());
+                }else {
+                    mMemberAdatper.getFilter().filter(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         mMemberAdatper = new MemberListAdapter(this, mMemberList);
         mMemberAdatper.setClickListener(new RecyclerListClickListener() {

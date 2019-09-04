@@ -58,7 +58,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         mViewDataBinding.managerActionbar.actionMenu.setImageResource(R.drawable.xiafarenwu);
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
-        menuPopup = new MenuPopup(this, 0, this);
+        menuPopup = new MenuPopup(this, 0, this,null);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
         // menuPopup.setOffsetY(34);
         mViewDataBinding.managerActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<!-- 搜索界面 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fp_clid_searchview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/personal_board">
+
+    <EditText
+        android:id="@+id/fp_clid_query"
+        android:layout_width="344dp"
+        android:layout_height="34dp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        android:hint="请输入要查询的数据"
+        android:imeOptions="actionSearch"
+        android:paddingLeft="19dp"
+        android:singleLine="true"
+        android:textCursorDrawable="@color/color_ffffff"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/fp_result_query_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/icon_search" />
+</RelativeLayout>
+</layout>

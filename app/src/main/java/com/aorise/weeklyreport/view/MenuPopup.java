@@ -34,13 +34,18 @@ public class MenuPopup extends BasePopupWindow {
     private int defaultSelected = -1;
     private MenuPopupSelectedListener menuPopupSelectedListener;
 
-    public MenuPopup(Context context, int defaultPosition, MenuPopupSelectedListener menuPopupSelectedListener) {
+    public MenuPopup(Context context, int defaultPosition, MenuPopupSelectedListener menuPopupSelectedListener,List<String> list) {
         super(context);
         setAlignBackground(false);
         setPopupGravity(Gravity.BOTTOM);
         defaultSelected = defaultPosition;
         mListView = (ListView) findViewById(R.id.list_item);
+
         mList = TimeUtil.getInstance().getHistoryWeeks();
+        if(list !=null){
+            mList.clear();
+            mList = list;
+        }
         this.menuPopupSelectedListener = menuPopupSelectedListener;
 
         mAdapter = new MyArrayAdatper(getContext(), R.layout.listview_item, mList);

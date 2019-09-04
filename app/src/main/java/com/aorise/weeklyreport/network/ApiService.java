@@ -21,6 +21,7 @@ import com.aorise.weeklyreport.bean.StatisticBean;
 import com.aorise.weeklyreport.bean.UserInfoBean;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
+import com.aorise.weeklyreport.bean.WeeklyWorkTimeBean;
 
 import java.io.IOException;
 import java.util.List;
@@ -205,13 +206,22 @@ public interface ApiService {
     @GET(NetworkURLConfig.WORKTIME_TOTALYEAR_STATISTIC)
     Observable<Result<List<PersonWorkTimeBean>>> getTotalWorkTime(@Query("year") int year);
 
+
     /**
      * 根据当前年份获取工时
      * @param year
      * @return
      */
+    @GET(NetworkURLConfig.WORKTIME_TOTALMONTH_STATISTIC)
+    Observable<Result<List<WeeklyWorkTimeBean>>> getMonthWorkTime(@Path("year") int year,@Query("month")int month);
+    /**
+     * 根据当前年份获取月份的计划工时
+     * @param year
+     * @return
+     */
     @GET(NetworkURLConfig.DEFAULT_WORKTIME)
     Observable<Result<PlanWorkTimeSettingBean>> getDefaultWorkTime(@Query("year") int year);
+
 
     /**
      * 根据当前年份获取工时
@@ -220,14 +230,8 @@ public interface ApiService {
      */
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.DEFAULT_WORKTIME)
-    Observable<Result<PlanWorkTimeSettingBean>> setWorkTime(RequestBody requestBody);
-    /**
-     * 根据当前年份获取工时
-     * @param year
-     * @return
-     */
-    @GET(NetworkURLConfig.WORKTIME_WEEK_STATISTIC)
-    Observable<Result<List<PersonalBean>>> getWeeklyWorkTime(@Path("year") int year,@Query("month")int month);
+    Observable<Result> setWorkTime(@Body RequestBody requestBody);
+
 
     class Utils {
 

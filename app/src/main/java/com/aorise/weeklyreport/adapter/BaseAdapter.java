@@ -21,6 +21,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public Context mContext;
     public List<T> mList; // 数据源
     public LayoutInflater inflater;
+
     public BaseAdapter(Context context) {
         this.mContext = context;
         this.mList = new ArrayList<>();
@@ -29,7 +30,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     @Override
     public int getItemCount() {
-        LogT.d("now my listSize is "+mList.size());
+        LogT.d("now my listSize is " + mList.size());
         return mList.size();
     }
 
@@ -76,6 +77,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         mList = data;
         notifyDataSetChanged();
     }
+
     /**
      * 加载更多
      *
