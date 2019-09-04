@@ -23,7 +23,9 @@ import java.util.List;
 /**
  * Created by Tuliyuan.
  * Date: 2019/8/26.
+ * 暂时未使用
  */
+@Deprecated
 public class LinChartLayout extends LinearLayout {
 
     private static final String TAG = "LinChartLayout";

@@ -34,7 +34,10 @@ import static android.text.Layout.Alignment.ALIGN_CENTER;
 /**
  * Created by Tuliyuan.
  * Date: 2019/8/26.
+ * 暂时未使用
  */
+
+@Deprecated
 public class LinChartView extends View {
     private static final String TAG = "LinChartView";
     private StatisticBean mData;

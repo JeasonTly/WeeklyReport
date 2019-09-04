@@ -6,6 +6,9 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ScrollView;
 
+/**
+ * 解决srcollview和recycleview滑动冲突
+ */
 public class MyScrollview extends ScrollView {
     private int downX;
     private int downY;
