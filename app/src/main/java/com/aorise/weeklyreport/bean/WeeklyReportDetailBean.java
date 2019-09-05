@@ -324,6 +324,7 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
             return "WeeklyDateModelsBean{" +
                     "weeklyId=" + weeklyId +
                     ", workDate='" + workDate + '\'' +
+                    ", dayState='" + dayState + '\'' +
                     '}';
         }
 
@@ -334,6 +335,7 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
 
         private int weeklyId;
         private String workDate;
+        private int dayState;
 
         public int getWeeklyId() {
             return weeklyId;
@@ -349,6 +351,14 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
 
         public void setWorkDate(String workDate) {
             this.workDate = workDate;
+        }
+
+        public int getDayState() {
+            return dayState;
+        }
+
+        public void setDayState(int dayState) {
+            this.dayState = dayState;
         }
     }
 }

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
-    <com.aorise.weeklyreport.view.MyScrollview xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <data>
+        <variable
+            name="currentMonth"
+            type="String"></variable>
+    </data>
+    <com.aorise.weeklyreport.view.MyScrollview
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -190,44 +194,20 @@
                             android:textSize="18sp"></TextView>
                     </RelativeLayout>
                     <!--日期选择器 -->
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="@{currentMonth}"
+                        android:textSize="18sp" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/time_picker"
                         android:layout_marginTop="15dp"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/base_line"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/month_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:gravity="center"
-                            android:textSize="18sp" />
-
-                        <com.haibin.calendarview.CalendarView
-                            android:id="@+id/muliticalendar"
-                            android:layout_width="match_parent"
-                            android:layout_height="320dp"
-                            android:layout_marginTop="5dp"
-                            app:current_day_lunar_text_color="#FF4444"
-                            app:current_day_text_color="#FF4444"
-                            app:min_year="2019"
-                            app:min_year_day="10"
-                            app:min_year_month="5"
-                            app:month_view="com.aorise.weeklyreport.view.CustomMultiMonthView"
-                            app:month_view_show_mode="mode_only_current"
-                            app:scheme_lunar_text_color="@android:color/holo_green_dark"
-                            app:scheme_text="起止时间"
-                            app:scheme_text_color="@android:color/holo_red_light"
-                            app:scheme_theme_color="@android:color/holo_purple"
-                            app:select_mode="multi_mode"
-                            app:selected_theme_color="#3DD078"
-                            app:week_view="com.haibin.calendarview.DefaultWeekView" />
-                    </LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </android.support.v7.widget.RecyclerView>
 
                     <!--工时-->
                     <RelativeLayout

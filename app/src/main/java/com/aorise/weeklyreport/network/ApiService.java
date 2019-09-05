@@ -378,12 +378,14 @@ public interface ApiService {
                     final StringBuffer cookieBuffer = new StringBuffer();
                     //最近在学习RxJava,这里用了RxJava的相关API大家可以忽略,用自己逻辑实现即可.大家可以用别的方法保存cookie数据
                     //解析Cookie
+
                     for (String header : originalResponse.headers("Set-Cookie")) {
                         LogT.d(" header " + header);
                         cookieBuffer.append(header);
                     }
 
-                    LogT.d(" now cookiebuffer content is " + String.valueOf(cookieBuffer));
+                    LogT.d(" now cookie buffer content is " + String.valueOf(cookieBuffer));
+
                     SharedPreferences sharedPreferences = context.getSharedPreferences("cookie", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("cookie", cookieBuffer.toString());

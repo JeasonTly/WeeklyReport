@@ -10,7 +10,6 @@ import java.util.List;
  * Date: 2019/7/5.
  */
 public class WeeklyReportUploadBean extends BaseObservable implements Serializable {
-
     @Override
     public String toString() {
         return "WeeklyReportUploadBean{" +
@@ -53,7 +52,7 @@ public class WeeklyReportUploadBean extends BaseObservable implements Serializab
      * state : 0
      * type : 0
      * userId : 0
-     * weeklyDateModels : [{"workDate":"string"}]
+     * weeklyDateModels : [{"dayState":0,"workDate":"string"}]
      * workTime : 0
      * workType : 0
      */
@@ -230,20 +229,35 @@ public class WeeklyReportUploadBean extends BaseObservable implements Serializab
         this.weeklyDateModels = weeklyDateModels;
     }
 
-
-    public static class WeeklyDateModelsBean implements Serializable {
+    public static class WeeklyDateModelsBean {
         @Override
         public String toString() {
             return "WeeklyDateModelsBean{" +
-                    "workDate='" + workDate + '\'' +
+                    "dayState=" + dayState +
+                    ", workDate='" + workDate + '\'' +
                     '}';
         }
 
         /**
+         * dayState : 0
          * workDate : string
          */
 
+        private int dayState;
         private String workDate;
+
+        public int getDayState() {
+            return dayState;
+        }
+
+        /**
+         * 1 上午 2 下午 3全天
+         *
+         * @param dayState
+         */
+        public void setDayState(int dayState) {
+            this.dayState = dayState;
+        }
 
         public String getWorkDate() {
             return workDate;

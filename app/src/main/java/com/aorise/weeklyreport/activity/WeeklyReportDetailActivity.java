@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +17,19 @@ import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
+import com.aorise.weeklyreport.adapter.TimeSelectAdatper;
+import com.aorise.weeklyreport.adapter.TimeSelectListener;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.AuditReportBean;
+import com.aorise.weeklyreport.bean.TimePickerBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.databinding.ActivityWeeklyReportDetailBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
 import com.google.gson.Gson;
-import com.haibin.calendarview.Calendar;
-import com.haibin.calendarview.CalendarView;
 import com.hjq.toast.ToastUtils;
 
 import java.util.ArrayList;
@@ -49,11 +51,11 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
      */
     private WeeklyReportDetailBean mDetailBean;
     /**
-     *  审批内容
+     * 审批内容
      */
     private String approvalText = "";
     /**
-     *  是否可以审批
+     * 是否可以审批
      */
     private boolean isAuditMode = false;
     /**
@@ -65,20 +67,23 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
      */
     private int workStatus = 1;
     /**
-     *  审批状态。完成程度
+     * 审批状态。完成程度
      */
     private int reamarkStatus = 1;
     /**
-     *  指定计划的日期范围
+     * 指定计划的日期范围
      */
-    private List<Calendar> mSelectDateList;
+    private List<TimePickerBean> currentWeekDateList = new ArrayList<>();
+    /**
+     * 时间选择适配器
+     */
+    private TimeSelectAdatper mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_weekly_report_detail);
         WRApplication.getInstance().addActivity(this);
-        mSelectDateList = new ArrayList<>();
 
         id = getIntent().getIntExtra("reportId", -1);
         isAuditMode = getIntent().getBooleanExtra("isAuditMode", false);
@@ -118,7 +123,6 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
 
             }
         });
-        //mViewDataBinding.pass.setVisibility(isAuditMode ? View.VISIBLE : View.GONE);
 
         mViewDataBinding.detailActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +137,8 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        currentWeekDateList.clear();
         initDetailInfo();
-
     }
 
     public void AllowClick(View view) {
@@ -253,19 +257,20 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
                         if (o.isRet()) {
                             initData(o.getData());
                             mDetailBean = o.getData();
+
                             LogT.d(" mDetailData is " + mDetailBean.toString());
                             if (mDetailBean.getWeeklyDateModels() != null && mDetailBean.getWeeklyDateModels().size() != 0) {
                                 for (int i = 0; i < mDetailBean.getWeeklyDateModels().size(); i++) {
-                                    mSelectDateList.add(TimeUtil.getInstance().stringToCalendar(mDetailBean.getWeeklyDateModels().get(i).getWorkDate()));
+                                    currentWeekDateList.add(TimeUtil.getInstance().weeklyBean2TimePicker(mDetailBean.getWeeklyDateModels().get(i)));
                                 }
+                                mViewDataBinding.setCurrentMonth(TimeUtil.getInstance().endate2monthName(mDetailBean.getWeeklyDateModels().get(0).getWorkDate()));
+                                mViewDataBinding.startToEndTxt.setText(TimeUtil.getInstance().cn2enDate(currentWeekDateList.get(0).getDateName())
+                                        + "----" + TimeUtil.getInstance().cn2enDate(currentWeekDateList.get(currentWeekDateList.size() - 1).getDateName()));
+                                mAdapter.updateData(currentWeekDateList);
                             }
-                            LogT.d(" mDetailBean.getWeeklyDateModels() size " + mDetailBean.getWeeklyDateModels() + "\n mSelectDateSize " + mSelectDateList.size());
-                            if (mSelectDateList != null && mSelectDateList.size() != 0) {
-                                for (Calendar calendar : mSelectDateList) {
-                                    mViewDataBinding.detailCalendar.addSchemeDate(calendar);
-                                }
-                            }
+
                         }
+
                     }
                 });
     }
@@ -274,41 +279,16 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
      * 初始化日历控件
      */
     private void initCalendar() {
-
-        mViewDataBinding.monthInfo.setText(mViewDataBinding.detailCalendar.getCurYear() + "年" + mViewDataBinding.detailCalendar.getCurMonth() + "月");
-        mViewDataBinding.detailCalendar.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
-            @Override
-            public void onMonthChange(int year, int month) {
-                mViewDataBinding.monthInfo.setText(year + "年" + month + "月");
-            }
-        });
-        if (mSelectDateList != null && mSelectDateList.size() != 0) {
-            for (Calendar calendar : mSelectDateList) {
-                mViewDataBinding.detailCalendar.putMultiSelect(calendar);
-            }
-        }
-        mViewDataBinding.detailCalendar.setSelected(false);
-        mViewDataBinding.detailCalendar.setOnCalendarMultiSelectListener(new CalendarView.OnCalendarMultiSelectListener() {
-            @Override
-            public void onCalendarMultiSelectOutOfRange(Calendar calendar) {
-
-            }
-
-            @Override
-            public void onMultiSelectOutOfSize(Calendar calendar, int maxSize) {
-
-            }
-
-            @Override
-            public void onCalendarMultiSelect(Calendar calendar, int curSize, int maxSize) {
-
-            }
-        });
-
+        mAdapter = new TimeSelectAdatper(this, currentWeekDateList, null);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mViewDataBinding.timePicker.setLayoutManager(manager);
+        mViewDataBinding.timePicker.setAdapter(mAdapter);
     }
 
     /**
      * 填充通过网络请求获取到的数据
+     *
      * @param data
      */
     private void initData(WeeklyReportDetailBean data) {
@@ -402,4 +382,5 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mViewDataBinding.detailWorkStatus.setText(workState);
         mViewDataBinding.detailNeedHelp.setText(data.getIssue());
     }
+
 }

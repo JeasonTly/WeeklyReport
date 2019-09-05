@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout >
 
     <data>
-
+        <variable
+            name="currentMonth"
+            type="String"></variable>
         <variable
             name="mondayDate"
             type="String"></variable>
@@ -16,7 +18,7 @@
             type="String"></variable>
 
         <variable
-            name="fourthdayDate"
+            name="thursdayDate"
             type="String"></variable>
 
         <variable
@@ -43,12 +45,13 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="请设置您的工作日期"
+            android:text="@{currentMonth}"
             android:textSize="18sp" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <!-- 周一 -->
             <LinearLayout
                 android:layout_width="0dp"
@@ -69,7 +72,25 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/monday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/monday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
+
             <!-- 周二 -->
             <LinearLayout
                 android:layout_width="0dp"
@@ -90,6 +111,23 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/tuesday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/tuesday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
             <!-- 周三 -->
             <LinearLayout
@@ -111,6 +149,24 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/wensday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/wensday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
             <!-- 周四 -->
             <LinearLayout
@@ -127,11 +183,28 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
-                    android:text="@{fourthdayDate}"
+                    android:text="@{thursdayDate}"
                     android:textSize="18sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/thursday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/thursday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
             <!-- 周五 -->
             <LinearLayout
@@ -153,6 +226,23 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/friday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:id="@+id/friday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
             <!-- 周六 -->
             <LinearLayout
@@ -174,6 +264,23 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:id="@+id/saturday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:id="@+id/satureday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
             <!-- 周日 -->
             <LinearLayout
@@ -195,6 +302,23 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:id="@+id/sunday_am"
+                    style="@style/morningCheckBox"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:id="@+id/sunday_pm"
+                    style="@style/afternoonCheckBox"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
