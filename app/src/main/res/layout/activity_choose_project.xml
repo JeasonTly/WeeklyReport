@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"></android.support.v7.widget.RecyclerView>
+            android:layout_marginRight="10dp"/>
 
         <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
             android:id="@+id/member_plt_choose"

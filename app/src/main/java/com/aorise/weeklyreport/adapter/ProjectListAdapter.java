@@ -43,7 +43,7 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
 
     @Override
     public void onBindVH(BaseViewHolder viewHolder, final int position) {
-        LogT.d(" mFilter...aaaaa.list is " + mFilterList.toString() +"  mList.get(position) " + mFilterList.get(position).toString());
+       // LogT.d(" mFilter...aaaaa.list is " + mFilterList.toString() +"  mList.get(position) " + mFilterList.get(position).toString());
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +73,7 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
     @Override
     public Filter getFilter() {
         return new Filter() {
+
             //执行过滤操作
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
@@ -91,6 +92,10 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
 
                     }
                     mFilterList = filteredList;
+
+                } else if (charSequence.equals("全部工作")) {
+                    LogT.d("添加全部工作... " + mSourceList.toString());
+                    mFilterList = mSourceList;
 
                 } else if (charSequence.equals("部门工作")) {
                     List<ProjectList> filteredList = new ArrayList<>();

@@ -2,9 +2,12 @@ package com.aorise.weeklyreport.network;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.aorise.weeklyreport.activity.LoginActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
@@ -22,15 +25,23 @@ import com.aorise.weeklyreport.bean.UserInfoBean;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
 import com.aorise.weeklyreport.bean.WeeklyReportDetailBean;
 import com.aorise.weeklyreport.bean.WeeklyWorkTimeBean;
+import com.hjq.toast.ToastUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -267,7 +278,50 @@ public interface ApiService {
 
     class Utils {
 
-        public static ApiService getInstance(Context context) {
+        public static ApiService getInstance(final Context context) {
+            Interceptor interceptor = new Interceptor() {//拦截错误码
+                @Override
+                public Response intercept(@NonNull Chain chain) throws IOException {
+                    Request request = chain.request();
+                    Response response = chain.proceed(request);
+                    ResponseBody responseBody = response.body();
+                    BufferedSource source = null;
+                    if (responseBody != null) {
+                        source = responseBody.source();
+                        source.request(Long.MAX_VALUE);
+                        String respString = source.buffer().clone().readString(Charset.defaultCharset());
+                        System.out.println("data:" + respString);
+                        JSONObject j = null;
+                        try {
+                            j = new JSONObject(respString);
+                            int code = j.optInt("code");
+                            String msg = j.optString("message");
+                            LogT.d(" code is "+code  + " message is " +msg);
+                            boolean isRet = j.optBoolean("ret");
+//                            String simpleName = "";
+//                            if (context instanceof Activity) {
+//                                simpleName = ((Activity) context).getClass().getSimpleName();
+//                                LogT.d(" simpleName is "+simpleName);
+//                            }
+                            if(!isRet ){
+                                ToastUtils.show("登陆失败!");
+                            }
+                            switch (code) {
+                                case -3:
+                                    ToastUtils.show(msg);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return response;
+                }
+            };
+
             OkHttpClient okHttpClient;
             OkHttpClient.Builder mOkhttpBuilder = new OkHttpClient.Builder()
                     .connectTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS)//超时时间
@@ -275,12 +329,14 @@ public interface ApiService {
                     .readTimeout(NetworkTimeBuildConfig.CONNECT_TIME, TimeUnit.SECONDS);
             String simpleName = "";
 
+
             if (context instanceof AppCompatActivity) {
                 LogT.d("这是登录界面");
                 simpleName = ((Activity) context).getClass().getSimpleName();
                 LogT.d(" context instanceof AppCompatActivity simpleName is " + simpleName);
                 if (simpleName.equals("LoginActivity")) {
-                    mOkhttpBuilder.addInterceptor(new ReceivedCookiesInterceptor(context));
+                    //mOkhttpBuilder.addInterceptor(new ReceivedCookiesInterceptor(context));
+                    mOkhttpBuilder.addInterceptor(interceptor);
                 }
             }
             okHttpClient = mOkhttpBuilder.build();
@@ -322,7 +378,6 @@ public interface ApiService {
                     final StringBuffer cookieBuffer = new StringBuffer();
                     //最近在学习RxJava,这里用了RxJava的相关API大家可以忽略,用自己逻辑实现即可.大家可以用别的方法保存cookie数据
                     //解析Cookie
-
                     for (String header : originalResponse.headers("Set-Cookie")) {
                         LogT.d(" header " + header);
                         cookieBuffer.append(header);

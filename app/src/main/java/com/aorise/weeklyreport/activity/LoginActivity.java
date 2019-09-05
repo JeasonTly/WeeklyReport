@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        ToastUtils.show("登录失败");
+                       // ToastUtils.show("登录失败");
                     }
 
                     @Override
@@ -108,11 +108,12 @@ public class LoginActivity extends BaseActivity {
                         super.onNext(o);
                         LogT.d(" 11111111 o is " + o.toString());
                         if (o.isRet()) {
+
                             editor = sp.edit();
                             editor.putInt("userId", o.getData().getId());
-                            //editor.putInt("userId",2);
                             editor.putString("fullName", o.getData().getFullName());
                             editor.putString("uuid", o.getData().getUuid());
+
                             if (!TextUtils.isEmpty(o.getData().getRoleName())) {
                                 if (o.getData().getRoleName().equals("普通成员")) {
                                     editor.putInt("userRole", 0);
@@ -124,15 +125,15 @@ public class LoginActivity extends BaseActivity {
                             }
                             for (UserInfoBean.PermissionModelListBean permission : o.getData().getPermissionModelList()) {
                                 if (permission.getId() == 1) {
-                                    editor.putBoolean("permi_projectinfo", true);
+                                    editor.putBoolean("permi_projectinfo", true);//项目概况
                                 }
-                                if (permission.getId() == 2) {
+                                if (permission.getId() == 2) {//项目审批
                                     editor.putBoolean("permi_audit", true);
                                 }
-                                if (permission.getId() == 3) {
+                                if (permission.getId() == 3) {//项目填写
                                     editor.putBoolean("permi_fill", true);
                                 }
-                                if (permission.getId() == 4) {
+                                if (permission.getId() == 4) {//项目周报
                                     editor.putBoolean("permi_projectManager", true);
                                 }
                             }
@@ -146,6 +147,9 @@ public class LoginActivity extends BaseActivity {
                             Intent mIntent = new Intent();
                             mIntent.setClass(LoginActivity.this, MainActivity.class);
                             startActivity(mIntent);
+                        }else{
+
+                            ToastUtils.show(o.getMessage());
                         }
                     }
                 });

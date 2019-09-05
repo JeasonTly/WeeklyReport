@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 
 import com.aorise.weeklyreport.R;
@@ -23,6 +24,7 @@ import com.aorise.weeklyreport.databinding.ActivityChooseProjectBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.aorise.weeklyreport.view.MenuPopup;
 import com.hjq.toast.ToastUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
@@ -31,9 +33,10 @@ import java.util.List;
 
 /**
  * 项目选择和成员选择界面
+ * 可以拆分为项目选择 和 成员选择
  * 尚可优化项目选择时 也进行分页
  */
-public class ChooseProjectActivity extends AppCompatActivity implements RecyclerListClickListener, BaseRefreshListener {
+public class ChooseProjectActivity extends AppCompatActivity implements RecyclerListClickListener, BaseRefreshListener, MenuPopup.MenuPopupSelectedListener {
 
     private ActivityChooseProjectBinding mViewDataBinding;
 
@@ -88,6 +91,12 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
      */
     private int userId = -1;
 
+    /**
+     * 筛选部门工作项目 和 项目工作项目
+     */
+    private List<String> filterList = new ArrayList<>();
+    private MenuPopup menuPopup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,8 +108,18 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         isHeaderReport = getIntent().getBooleanExtra("isHeaderReport", false);
         isProjectList = mProjectList.size() != 1;
         mViewDataBinding.chooseProjectActionbar.actionMenu.setVisibility(View.GONE);
-        mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择");
+
         LogT.d(" show projectList size is " + mProjectList.size());
+        /**
+         * 初始化MenuPopu选择分类
+         */
+        filterList.add("项目工作");
+        filterList.add("部门工作");
+        filterList.add("全部工作");
+        menuPopup = new MenuPopup(this, filterList.size() - 1, this, filterList);
+
+        menuPopup.setPopupGravity(Gravity.BOTTOM);
+
         mAdapter = new ProjectListAdapter(this, mProjectList);
         mAdapter.setClickListener(this);
         mViewDataBinding.chooseSearch.fpClidQuery.addTextChangedListener(new TextWatcher() {
@@ -150,12 +169,24 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         if (isProjectList) { //如果当前是审核周报选择，且该用户的项目列表不为1 则显示项目列表，隐藏项目成员列表
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);
             mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
+            mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择 - " + filterList.get(filterList.size() - 1));
+            mViewDataBinding.chooseProjectActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         } else { //如果当前是审核周报选择，且该用户的项目列表不为1 则，隐藏项目列表 显示项目成员列表
             mViewDataBinding.memberPltChoose.setVisibility(View.VISIBLE);
             mViewDataBinding.projectList.setVisibility(View.GONE);
             mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("成员选择");
+            mViewDataBinding.chooseProjectActionbar.actionBarDropdown.setVisibility(View.GONE);
         }
 
+        mViewDataBinding.chooseProjectActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isProjectList) {
+                    return;
+                }
+                menuPopup.showPopupWindow(mViewDataBinding.chooseProjectActionbar.actionBarTitleArea);
+            }
+        });
         mViewDataBinding.chooseProjectActionbar.actionbarBack.setVisibility(View.VISIBLE);
         mViewDataBinding.chooseProjectActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +197,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                     mViewDataBinding.projectList.setVisibility(View.VISIBLE);
                     mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
                     mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择");
+                    mViewDataBinding.chooseProjectActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
                     isProjectList = true;
                 }
             }
@@ -196,6 +228,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);
             mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
             mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择");
+            mViewDataBinding.chooseProjectActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
             isProjectList = true;
         } else {
             this.finish();
@@ -214,6 +247,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
     /**
      * 根据项目ID获取成员列表，分页
+     *
      * @param projectId
      */
     private void getMemberList(int projectId) {
@@ -246,6 +280,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                             mMemberAdatper.refreshData(o.getData().getList());
                             totalPage = o.getData().getTotalPage();
                             mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("成员选择");
+                            mViewDataBinding.chooseProjectActionbar.actionBarDropdown.setVisibility(View.GONE);
                             mViewDataBinding.memberPltChoose.finishLoadMore();
                             isProjectList = false;
                         }
@@ -255,6 +290,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
     /**
      * 项目列表项点击事件
+     *
      * @param position
      */
     @Override
@@ -310,5 +346,11 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
             mViewDataBinding.memberPltChoose.finishLoadMore();
         }
 
+    }
+
+    @Override
+    public void selectPosistion(int position) {
+        mAdapter.getFilter().filter(filterList.get(filterList.size() - 1 - position));
+        mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择 - " + filterList.get(filterList.size() - 1 - position));
     }
 }

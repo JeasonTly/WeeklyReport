@@ -24,6 +24,7 @@ public class TimeUtil {
     }
 
     public int getDayofWeek() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
         cal.setFirstDayOfWeek(Calendar.MONDAY); // 设置每周的第一天为星期一
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);// 每周从周一开始
@@ -32,8 +33,24 @@ public class TimeUtil {
 
         int weeks = cal.get(Calendar.WEEK_OF_YEAR) + 1;
         //   LogT.d("现在是第" + weeks + "周");
+        LogT.d(" df format "+df.format(cal.getTime()));
         return weeks;
     }
+    public String getMonDayofWeek() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+        cal.setFirstDayOfWeek(Calendar.MONDAY); // 设置每周的第一天为星期一
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);// 每周从周一开始
+        cal.setMinimalDaysInFirstWeek(7); // 设置每周最少为7天
+        cal.setTime(new Date());
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);//周一
+        //   LogT.d("现在是第" + weeks + "周");
+        String monday = df.format(cal.getTime());
+        LogT.d(" df format "+df.format(cal.getTime()));
+        return monday;
+    }
+
 
     public List<String> getHistoryWeeks() {
         List<String> weeklist = new ArrayList<>();
@@ -85,19 +102,27 @@ public class TimeUtil {
         int day = c.get(Calendar.DATE);
         c.set(Calendar.DATE, day + appendCount);
 
-        String dayAfter = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+        String dayAfter = new SimpleDateFormat("dd").format(c.getTime());
         return dayAfter;
     }
 
-    public List<String> getWorkDateList(String startDate, String endDate) {
+    public List<String> getWorkDateList() {
         List<String> workDateList = new ArrayList<>();
-        Date _startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate, new ParsePosition(0));
-        Date _endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDate, new ParsePosition(0));
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        Calendar mondayCal = Calendar.getInstance(TimeZone.getDefault());//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+        mondayCal.setFirstDayOfWeek(Calendar.MONDAY); // 设置每周的第一天为星期一
+        mondayCal.setMinimalDaysInFirstWeek(7); // 设置每周最少为7天
+        mondayCal.setTime(new Date());
+        mondayCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);//周一
 
-        for (int i = 0; i < caclulateDiffByDate(_startDate, _endDate); i++) {
-//            WeeklyReportUploadBean.WeeklyDateModelsBean modelsBean = new WeeklyReportUploadBean.WeeklyDateModelsBean();
-//            modelsBean.setWorkDate(getSpecifiedDayAfter(startDate, i));
-            workDateList.add(getSpecifiedDayAfter(startDate, i));
+        Calendar sundayCal = Calendar.getInstance(TimeZone.getDefault());//这一句必须要设置，否则美国认为第一天是周日，而我国认为是周一，对计算当期日期是第几周会有错误
+        sundayCal.setFirstDayOfWeek(Calendar.MONDAY); // 设置每周的第一天为星期一
+        sundayCal.setMinimalDaysInFirstWeek(7); // 设置每周最少为7天
+        sundayCal.setTime(new Date());
+        sundayCal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);// 每周从周一开始
+
+        for (int i = 0; i < caclulateDiffByDate(mondayCal.getTime(), sundayCal.getTime()); i++) {
+            workDateList.add(getSpecifiedDayAfter(df.format(mondayCal.getTime()), i));
         }
         LogT.d("workDateList " + workDateList.toString());
         return workDateList;

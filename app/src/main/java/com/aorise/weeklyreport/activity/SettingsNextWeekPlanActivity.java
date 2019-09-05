@@ -93,6 +93,10 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.commitPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(TextUtils.isEmpty(mViewDataBinding.specificThings.getText().toString())){
+                    ToastUtils.show("具体工作事项未填写!");
+                    return;
+                }
                 WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
                 mUploadInfo.setApprovalState(1);
                 mUploadInfo.setWorkType(work_type);

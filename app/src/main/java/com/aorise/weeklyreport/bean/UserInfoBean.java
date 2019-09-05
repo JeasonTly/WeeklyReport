@@ -2,13 +2,14 @@ package com.aorise.weeklyreport.bean;
 
 import android.databinding.BaseObservable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Tuliyuan.
  * Date: 2019/7/15.
  */
-public class UserInfoBean extends BaseObservable {
+public class UserInfoBean extends BaseObservable implements Serializable {
 
 
     @Override

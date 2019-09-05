@@ -15,6 +15,7 @@ import java.util.List;
  * Created by Tuliyuan.
  * Date: 2019/7/2.
  */
+
 public class WRApplication extends Application {
     private List<Activity> activityList = new LinkedList<Activity>();
     private static WRApplication instance;
@@ -45,13 +46,6 @@ public class WRApplication extends Application {
     }
 
     public void LoginExit(Context context) {
-//        for(Activity activity:activityList) {
-//            if(activity instanceof LoginActivity){
-//                continue;
-//            }
-//            activityList.remove(activity);
-//            activity.finish();
-//        }
         Intent mIntent = new Intent();
         mIntent.setClass(context,LoginActivity.class);
         context.startActivity(mIntent);

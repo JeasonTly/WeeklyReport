@@ -13,6 +13,7 @@ import com.aorise.weeklyreport.activity.fragment.MemberInfoFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectInfoFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectStatisticsFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
+import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.ActivityProjectInfoBinding;
@@ -59,6 +60,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_project_info);
         totalweek = currentWeeks = TimeUtil.getInstance().getDayofWeek();
+        LogT.d("nw110"+TimeUtil.getInstance().getWorkDateList());
 //        weeksList = TimeUtil.getInstance().getHistoryWeeks();
 //        currentWeeksTitle = "第" + currentWeeks + "周";
 //        menuPopup = new MenuPopup(this, 0, this);
