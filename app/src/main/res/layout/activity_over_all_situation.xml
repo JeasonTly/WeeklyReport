@@ -37,7 +37,7 @@
                 android:paddingBottom="10dp"
                 android:text="整体完成百分比"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/oveall_situation_percent"
@@ -46,7 +46,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
-                android:textSize="18sp"></TextView>
+                android:textSize="15sp"></TextView>
         </RelativeLayout>
         <!--是否完成-->
         <RelativeLayout
@@ -64,7 +64,7 @@
                 android:paddingBottom="10dp"
                 android:text="具体工作事项"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
@@ -84,7 +84,7 @@
             android:textCursorDrawable="@drawable/cusor"
             android:background="@drawable/bg_edittext"
             android:paddingBottom="10dp"
-            android:textSize="18sp"></EditText>
+            android:textSize="15sp"></EditText>
     </LinearLayout>
     <Button
         android:id="@+id/overall_situation_btn"
@@ -93,7 +93,7 @@
         android:background="@drawable/login_btn_background_green"
         android:text="提交"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="40dp"

@@ -398,7 +398,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      */
     private void initSpan() {
         SpannableString projectText = new SpannableString("项目概况 Project");
-        RelativeSizeSpan largeSpan = new RelativeSizeSpan(2.0f);
+        RelativeSizeSpan largeSpan = new RelativeSizeSpan(1.8f);
         RelativeSizeSpan smallSpan = new RelativeSizeSpan(0.4f);
         projectText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         projectText.setSpan(smallSpan, 0, projectText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/manager_viewpager"

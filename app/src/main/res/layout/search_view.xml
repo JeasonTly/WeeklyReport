@@ -22,7 +22,7 @@
         android:paddingLeft="19dp"
         android:singleLine="true"
         android:textCursorDrawable="@color/color_ffffff"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
     <ImageButton
         android:id="@+id/fp_result_query_btn"

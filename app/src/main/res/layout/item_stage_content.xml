@@ -43,7 +43,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="工作阶段"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                 android:text="@{headerReport.phase}"
                 android:textAlignment="textEnd"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -75,7 +75,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="阶段完成"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                 android:text="@{Stage}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
         <LinearLayout
@@ -107,7 +107,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="工作计划"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                 android:text="@{headerReport.specificPhase}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -140,7 +140,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="具体事项"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -154,7 +154,7 @@
                 android:text="@{headerReport.specificItem}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -172,7 +172,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="责任人"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                 android:text="@{headerReport.person}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -204,7 +204,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="完成百分比"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -218,7 +218,7 @@
                 android:text="@{PercentComplete}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -236,7 +236,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="是否完成"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -250,7 +250,7 @@
                 android:text="@{isComplete}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
     </LinearLayout>

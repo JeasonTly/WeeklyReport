@@ -49,7 +49,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="工作阶段"
                         android:textColor="#ffffff"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="整体情况"
                         android:textColor="#ffffff"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </RelativeLayout>
 
@@ -79,7 +79,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:text="阶段完成"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="@{next_stage}"
                         android:textColor="#C5C5C5"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </RelativeLayout>
 
@@ -109,7 +109,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:text="具体工作事项"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="@{next_specificThings}"
                         android:textColor="#C5C5C5"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </RelativeLayout>
             </LinearLayout>

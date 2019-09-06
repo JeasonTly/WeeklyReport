@@ -42,12 +42,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="姓名"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="end"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="@{memberlist.userName}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
@@ -71,12 +71,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="岗位"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="end"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="@{memberlist.post}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
@@ -100,12 +100,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="开始时间"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="end"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="@{startTime}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
@@ -129,12 +129,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="结束时间"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="end"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="@{endTime}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
@@ -158,12 +158,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="计划工时"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="end"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="@{planTime}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
@@ -187,12 +187,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="已使用工时"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="end"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="@{useTime}"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
@@ -218,12 +218,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:text="周报状态"
                 android:layout_height="wrap_content" />
             <TextView
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:id="@+id/reportStates_txt"
                 android:layout_marginLeft="15dp"
                 android:layout_width="0dp"

@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="工作类型"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:id="@+id/work_type_area"
@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:gravity="start"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/workType_drop_img"
@@ -54,7 +54,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="5dp"
                         android:src="@drawable/dropdown"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="工作安排"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <RelativeLayout
                     android:id="@+id/work_project_area"
@@ -91,7 +91,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_toLeftOf="@id/work_project_img"
                         android:gravity="end"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <!--<ImageView-->
                     <!--android:visibility="gone"-->
@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="责任人"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <RelativeLayout
                     android:id="@+id/owner_area"
@@ -138,7 +138,7 @@
                         android:layout_toLeftOf="@+id/owner_img"
                         android:gravity="end"
                         android:text="请选择责任人"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/owner_img"
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="项目计划"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <RelativeLayout
                     android:id="@+id/work_plan_area"
@@ -186,7 +186,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_toLeftOf="@+id/work_plan_img"
                         android:gravity="end"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/work_plan_img"
@@ -214,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="完成百分比"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:id="@+id/work_percent_area"
@@ -230,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:gravity="start"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/percent_drop_img"
@@ -258,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="具体工作事项"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/specific_things"
@@ -275,7 +275,7 @@
                     android:gravity="top|left"
                     android:inputType="textMultiLine"
                     android:textCursorDrawable="@drawable/cusor"
-                    android:textSize="18sp"></EditText>
+                    android:textSize="15sp"></EditText>
             </LinearLayout>
 
             <Button

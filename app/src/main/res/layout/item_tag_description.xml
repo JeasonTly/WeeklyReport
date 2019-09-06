@@ -18,7 +18,7 @@
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content" />-->
     <TextView
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:text="工作类型"
         android:layout_alignParentLeft="true"
         android:textColor="#FFFFFF"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/item_tag_name_txt"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:text="项目工作"
         android:textColor="#FFFFFF"
         android:layout_alignParentRight="true"

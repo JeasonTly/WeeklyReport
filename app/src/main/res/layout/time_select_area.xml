@@ -46,7 +46,7 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:text="@{currentMonth}"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -61,14 +61,14 @@
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="周一"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{mondayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -100,14 +100,14 @@
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="周二"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{tuesdayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -138,14 +138,14 @@
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="周三"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{wensdayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -177,14 +177,14 @@
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="周四"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{thursdayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -215,14 +215,14 @@
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="周五"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{fridayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -254,13 +254,13 @@
                     android:layout_gravity="center_horizontal"
                     android:text="周六"
                     android:gravity="center"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{saturdayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -292,13 +292,13 @@
                     android:layout_gravity="center_horizontal"
                     android:text="周日"
                     android:gravity="center"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:layout_gravity="center_horizontal"
                     android:text="@{sundayDate}"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

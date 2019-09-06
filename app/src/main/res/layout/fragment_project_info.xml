@@ -44,7 +44,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="@{codeName}"
                     android:textColor="#B4B4B4"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="项目负责人"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/project_header_name"
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="end"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -88,7 +88,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="项目介绍"
                     android:gravity="start|center_vertical"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <WebView
                     android:id="@+id/project_info_txt"
@@ -99,7 +99,7 @@
                     android:background="@drawable/personal_board"
                     android:layout_gravity="center_vertical"
                     android:layout_marginBottom="5dp"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
     <!--</ScrollView>-->

@@ -44,7 +44,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="工作类型"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:text="@{workType}"
                 android:textAlignment="textEnd"
                 android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -77,7 +77,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="工作安排"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 android:text="@{workThings.projectName}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -110,7 +110,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="工作计划"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -124,7 +124,7 @@
                 android:text="@{workThings.planName}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -142,7 +142,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="工时 (天)"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -156,7 +156,7 @@
                 android:text="@{itemworkTime}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -174,7 +174,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="完成百分比"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -188,7 +188,7 @@
                 android:text="@{percentComplete}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
         <LinearLayout
@@ -205,7 +205,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="审批状态"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -219,7 +219,7 @@
                 android:text="@{approvalStatus}"
                 android:textAlignment="textEnd"
                 android:textColor="#C5C5C5"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
     </LinearLayout>

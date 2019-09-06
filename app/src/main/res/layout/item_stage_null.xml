@@ -20,7 +20,7 @@
             android:gravity="center"
             android:layout_gravity="center_vertical"
             android:text="@{stagenull.item_name}"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
 </layout>

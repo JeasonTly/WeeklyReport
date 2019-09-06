@@ -46,7 +46,7 @@
             <TextView
                 android:text="姓名"
                 android:layout_marginLeft="25dp"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -57,7 +57,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -76,7 +76,7 @@
                 android:src="@drawable/bum"/>
             <TextView
                 android:text="部门"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginLeft="25dp"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -107,7 +107,7 @@
                 android:text="角色"
                 android:layout_marginLeft="25dp"
                 android:layout_centerVertical="true"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -118,7 +118,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_centerVertical="true"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -126,7 +126,7 @@
     </LinearLayout>
     <Button
         android:text="退出登录"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textColor="@color/colorAccent"
         android:background="@drawable/exit_login_bg"
         android:layout_marginTop="20dp"

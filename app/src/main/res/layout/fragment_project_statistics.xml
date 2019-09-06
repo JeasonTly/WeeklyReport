@@ -20,7 +20,7 @@
             android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_horizontal"
             android:text="@{projectName}"
             android:layout_height="wrap_content" />

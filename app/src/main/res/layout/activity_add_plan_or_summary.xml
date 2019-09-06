@@ -46,7 +46,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="工作类型"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <LinearLayout
                             android:id="@+id/work_type_area"
@@ -62,7 +62,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="start"
-                                android:textSize="18sp" />
+                                android:textSize="15sp" />
 
                             <ImageView
                                 android:id="@+id/workType_drop_img"
@@ -71,7 +71,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="5dp"
                                 android:src="@drawable/dropdown"
-                                android:textSize="18sp" />
+                                android:textSize="15sp" />
 
                         </LinearLayout>
                     </RelativeLayout>
@@ -90,7 +90,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="工作安排"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <RelativeLayout
                             android:id="@+id/work_project_area"
@@ -107,7 +107,7 @@
                                 android:layout_marginLeft="15dp"
                                 android:layout_toLeftOf="@id/work_project_img"
                                 android:gravity="end"
-                                android:textSize="18sp" />
+                                android:textSize="15sp" />
 
                             <ImageView
                                 android:id="@+id/work_project_img"
@@ -135,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="项目计划"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <RelativeLayout
                             android:id="@+id/work_plan_area"
@@ -153,7 +153,7 @@
                                 android:layout_marginLeft="15dp"
                                 android:layout_toLeftOf="@+id/work_plan_img"
                                 android:gravity="end"
-                                android:textSize="18sp" />
+                                android:textSize="15sp" />
 
                             <ImageView
                                 android:id="@+id/work_plan_img"
@@ -181,7 +181,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="起止时间"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/start_to_end_txt"
@@ -191,7 +191,7 @@
                             android:layout_centerVertical="true"
                             android:gravity="end"
                             android:text="尚未设置起止时间"
-                            android:textSize="18sp"></TextView>
+                            android:textSize="15sp"></TextView>
                     </RelativeLayout>
                     <!--日期选择器 -->
                     <TextView
@@ -201,7 +201,7 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
                         android:text="@{currentMonth}"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/time_picker"
                         android:layout_marginTop="15dp"
@@ -223,7 +223,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="工时 (单位:天)"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <EditText
                             android:id="@+id/work_time"
@@ -235,7 +235,7 @@
                             android:focusableInTouchMode="true"
                             android:gravity="end"
                             android:inputType="numberDecimal"
-                            android:textSize="18sp"/>
+                            android:textSize="15sp"/>
                     </RelativeLayout>
                     <!--实际完成百分比-->
                     <RelativeLayout
@@ -251,7 +251,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="完成百分比"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <LinearLayout
                             android:id="@+id/work_percent_area"
@@ -267,7 +267,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="start"
-                                android:textSize="18sp" />
+                                android:textSize="15sp" />
 
                             <ImageView
                                 android:id="@+id/percent_drop_img"
@@ -318,7 +318,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginBottom="10dp"
                             android:text="具体工作事项"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <EditText
                             android:id="@+id/specific_things"
@@ -332,7 +332,7 @@
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
                             android:textCursorDrawable="@drawable/cusor"
-                            android:textSize="18sp"></EditText>
+                            android:textSize="15sp"></EditText>
                     </LinearLayout>
                     <!--输出物 -->
                     <LinearLayout
@@ -349,7 +349,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginBottom="10dp"
                             android:text="输出物"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <EditText
                             android:id="@+id/output"
@@ -364,7 +364,7 @@
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
                             android:textCursorDrawable="@drawable/cusor"
-                            android:textSize="18sp"></EditText>
+                            android:textSize="15sp"></EditText>
                     </LinearLayout>
                     <!--实际完成情况说明/计划完成进度 -->
                     <LinearLayout
@@ -382,7 +382,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginBottom="10dp"
                             android:text="实际完成情况说明"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <EditText
                             android:id="@+id/show_how"
@@ -397,7 +397,7 @@
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
                             android:textCursorDrawable="@drawable/cusor"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
                     </LinearLayout>
 
                     <!--问题和需要配合的事项-->
@@ -415,7 +415,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginBottom="18dp"
                             android:text="问题和需要配合的事项"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <EditText
                             android:id="@+id/need_help"
@@ -430,7 +430,7 @@
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
                             android:textCursorDrawable="@drawable/cusor"
-                            android:textSize="18sp"></EditText>
+                            android:textSize="15sp"></EditText>
                     </LinearLayout>
                     <!--验收人-->
                     <RelativeLayout

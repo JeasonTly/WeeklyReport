@@ -18,7 +18,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="1.描述完整详细、客观、真实"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <RadioButton
             android:id="@+id/remark_middle"
@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="2.描述一般，相对客观，基本属实"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <RadioButton
             android:id="@+id/remark_low"
@@ -34,7 +34,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="3.描述不清楚，不客观，不属实"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
     </RadioGroup>
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="审批理由"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
     <EditText
         android:id="@+id/approval_mark"
@@ -57,5 +57,5 @@
         android:paddingTop="5dp"
         android:paddingBottom="10dp"
         android:textCursorDrawable="@drawable/cusor"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 </LinearLayout>

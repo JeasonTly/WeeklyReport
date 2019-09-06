@@ -34,7 +34,7 @@
                 android:paddingBottom="10dp"
                 android:text="阶段完成"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/detail_stage_to_complete"
@@ -43,7 +43,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
-                android:textSize="18sp"></TextView>
+                android:textSize="15sp"></TextView>
 
         </RelativeLayout>
         <!--具体工作事项-->
@@ -62,7 +62,7 @@
                 android:paddingBottom="10dp"
                 android:text="具体工作事项"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/detail_specific_th"
@@ -72,7 +72,7 @@
                 android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
                 android:text="@{detailInfo.specificPhase}"
-                android:textSize="18sp"></TextView>
+                android:textSize="15sp"></TextView>
         </RelativeLayout>
         <!--工作完成百分比-->
         <RelativeLayout
@@ -90,7 +90,7 @@
                 android:paddingBottom="10dp"
                 android:text="工作完成百分比"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/detail_work_total_percent"
@@ -99,7 +99,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
-                android:textSize="18sp"></TextView>
+                android:textSize="15sp"></TextView>
         </RelativeLayout>
         <!--责任人-->
         <RelativeLayout
@@ -117,7 +117,7 @@
                 android:paddingBottom="10dp"
                 android:text="责任人"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/detail_duty_name"
@@ -127,7 +127,7 @@
                 android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
                 android:text="@{detailInfo.person}"
-                android:textSize="18sp"></TextView>
+                android:textSize="15sp"></TextView>
         </RelativeLayout>
         <!--是否完成-->
         <RelativeLayout
@@ -145,7 +145,7 @@
                 android:paddingBottom="10dp"
                 android:text="是否完成"
                 android:textColor="#A8A8A8"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/detail_is_completed"
@@ -154,7 +154,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingBottom="10dp"
-                android:textSize="18sp"></TextView>
+                android:textSize="15sp"></TextView>
         </RelativeLayout>
     </LinearLayout>
 </layout>
