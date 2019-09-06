@@ -122,6 +122,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 return null;
             }
         };
+
         mAdapter.setInitPosition(0);
         mAdapter.setSwipeRefreshEnabled(false);
         mAdapter.setTitle("姓名");// optional
