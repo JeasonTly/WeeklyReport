@@ -75,7 +75,8 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         WRApplication.getInstance().addActivity(this);
         initRowDataList();
         initItemWidthList();
-        // 获取默认年份 tuliyuan add start@{
+
+        // 获取默认年份 tuliyuan add start @{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
         Date date = new Date();
         defaultYear = Integer.valueOf(simpleDateFormat.format(date));
@@ -83,7 +84,8 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         for (int i = 0; i < 5; i++) {
             mYearList.add(String.valueOf(defaultYear - i) + "年");
         }
-        // 获取默认年份 tuliyuan add start@}
+        // 获取默认年份 tuliyuan add end @}
+
 
         /**
          * 初始化点击年份原则的弹出框
@@ -106,7 +108,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         mViewDataBinding.idLvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //   Toast.makeText(WorkTimeYearStatisticsActivity.this, "你选中的position为：" + position, Toast.LENGTH_SHORT).show();
+
             }
         });
         initAdapter();
@@ -135,7 +137,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         mAdapter.setPlanDataList(planDataList);// must have
         mAdapter.setItemHeight(40);// optional, dp
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
-        mAdapter.setInitDefaultMonthPosition(Integer.valueOf(simpleDateFormat.format(new Date()))- 1);
+        mAdapter.setInitDefaultMonthPosition(Integer.valueOf(simpleDateFormat.format(new Date())) - 1);
     }
 
 
