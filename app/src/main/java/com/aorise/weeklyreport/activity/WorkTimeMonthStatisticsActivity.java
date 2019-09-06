@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.WeeklyWorkTimeBean;
 import com.aorise.weeklyreport.databinding.ActivityWorkTimeMonthStatisticsBinding;
@@ -58,6 +59,7 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_work_time_month_statistics);
+        WRApplication.getInstance().addActivity(this);
         initRowDataList();
         initItemWidthList();
         currentMonth = getIntent().getIntExtra("month", -1);

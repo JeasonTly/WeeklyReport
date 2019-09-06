@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ChooseMemeberActivity"></activity><!-- 成员选择 界面 暂时没有使用 -->
+        <activity android:name=".activity.ChooseMemeberActivity"/><!-- 成员选择 界面 暂时没有使用 -->
         <activity android:name=".activity.WorkTimeYearStatisticsActivity" /><!-- 按年份统计工时 -->
         <activity android:name=".activity.WorkTimeMonthStatisticsActivity" /><!-- 按月份统计工时 -->
         <activity android:name=".activity.SettingsNextWeekPlanActivity" /> <!-- 指定下周工作计划界面 -->

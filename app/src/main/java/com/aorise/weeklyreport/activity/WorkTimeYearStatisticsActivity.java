@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.aorise.weeklyreport.R;
+import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.PersonWorkTimeBean;
@@ -71,6 +72,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_work_time_year_statistics);
+        WRApplication.getInstance().addActivity(this);
         initRowDataList();
         initItemWidthList();
         // 获取默认年份 tuliyuan add start@{
