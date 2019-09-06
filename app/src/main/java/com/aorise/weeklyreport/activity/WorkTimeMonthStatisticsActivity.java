@@ -89,7 +89,7 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
                 return null;
             }
         };
-        mAdapter.setInitPosition(10);
+        mAdapter.setInitPosition(0);
         mAdapter.setSwipeRefreshEnabled(false);
         mAdapter.setTitle("姓名");// optional
         // mAdapter.setOnRefreshListener(new CustomRefreshListener());// optional

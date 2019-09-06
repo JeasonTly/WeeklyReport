@@ -44,19 +44,19 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
      */
     private List<String> columnData = new ArrayList<>();
     /**
-     *  工时统计信息，外层List为人的工时信息，内层为各个月份的工时信息
+     * 工时统计信息，外层List为人的工时信息，内层为各个月份的工时信息
      */
     private List<List<String>> contentList = new ArrayList<>();
     /**
-     *  单列宽度
+     * 单列宽度
      */
     private List<Integer> itemWidthList = new ArrayList<>();
     /**
-     *  分多少列，最大值为13，内容为月份
+     * 分多少列，最大值为13，内容为月份
      */
     private List<String> rowDataList = new ArrayList<>();
     /**
-     *  计划工时 ，内容为各个月份的计划工时
+     * 计划工时 ，内容为各个月份的计划工时
      */
     private List<String> planDataList = new ArrayList<>();
 
@@ -66,6 +66,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
     private List<String> mYearList = new ArrayList<>();
 
     private PlanWorkTimeSettingBean planWorkTimeSettingBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +122,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 return null;
             }
         };
-        mAdapter.setInitPosition(10);
+        mAdapter.setInitPosition(0);
         mAdapter.setSwipeRefreshEnabled(false);
         mAdapter.setTitle("姓名");// optional
         mAdapter.setContentDataList(contentList);// must have
@@ -130,6 +131,8 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
         mAdapter.setRowDataList(rowDataList);// must have
         mAdapter.setPlanDataList(planDataList);// must have
         mAdapter.setItemHeight(40);// optional, dp
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
+        mAdapter.setInitDefaultMonthPosition(Integer.valueOf(simpleDateFormat.format(new Date()))- 1);
     }
 
 
@@ -346,6 +349,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
      * 月份点击事件
      * Intent跳转到WorkTimeMonthStatisticsActivity.class
      * 根据月份展示当前月份下周的统计数据
+     *
      * @param position
      */
     @Override
@@ -404,6 +408,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
 
     /**
      * 当前计划工时行 点击事件
+     *
      * @param position
      */
     @Override
@@ -449,7 +454,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                 break;
 
         }
-        if(position == 12){
+        if (position == 12) {
             return;
         }
         showAlertDialog(position, string);
@@ -457,8 +462,9 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
 
     /**
      * 弹出设置当前月总工时的对话框
+     *
      * @param position 当前月份在X轴对应的position
-     * @param month 当前月份String
+     * @param month    当前月份String
      */
     private void showAlertDialog(final int position, final String month) {
         View inputView = LayoutInflater.from(this).inflate(R.layout.dialog_input_worktime, null);
@@ -488,6 +494,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
     /**
      * 设置选中月份的工时
      * 总计不可设置
+     *
      * @param position
      */
     private void setMonthWorkTime(final int position) {
@@ -557,8 +564,8 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
                             /**
                              * 重新更新修改后的信息并刷新
                              */
-                            planDataList.set(position,set_workTime_str);
-                            planDataList.set(planDataList.size() -1,String.valueOf(planWorkTimeSettingBean.getJanuary()
+                            planDataList.set(position, set_workTime_str);
+                            planDataList.set(planDataList.size() - 1, String.valueOf(planWorkTimeSettingBean.getJanuary()
                                     + planWorkTimeSettingBean.getFebruary()
                                     + planWorkTimeSettingBean.getMarch()
                                     + planWorkTimeSettingBean.getApril()
@@ -579,6 +586,7 @@ public class WorkTimeYearStatisticsActivity extends AppCompatActivity implements
 
     /**
      * 月份选择器，选择的月份内容；倒序
+     *
      * @param position
      */
     @Override

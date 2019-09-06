@@ -113,10 +113,10 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         /**
          * 初始化MenuPopu选择分类
          */
+        filterList.add("全部工作");
         filterList.add("项目工作");
         filterList.add("部门工作");
-        filterList.add("全部工作");
-        menuPopup = new MenuPopup(this, filterList.size() - 1, this, filterList);
+        menuPopup = new MenuPopup(this, 0, this, filterList);
 
         menuPopup.setPopupGravity(Gravity.BOTTOM);
 
@@ -169,7 +169,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         if (isProjectList) { //如果当前是审核周报选择，且该用户的项目列表不为1 则显示项目列表，隐藏项目成员列表
             mViewDataBinding.projectList.setVisibility(View.VISIBLE);
             mViewDataBinding.memberPltChoose.setVisibility(View.GONE);
-            mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择 - " + filterList.get(filterList.size() - 1));
+            mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择 - " + filterList.get(0));
             mViewDataBinding.chooseProjectActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         } else { //如果当前是审核周报选择，且该用户的项目列表不为1 则，隐藏项目列表 显示项目成员列表
             mViewDataBinding.memberPltChoose.setVisibility(View.VISIBLE);
