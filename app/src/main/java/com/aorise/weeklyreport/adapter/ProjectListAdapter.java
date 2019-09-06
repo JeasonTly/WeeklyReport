@@ -137,4 +137,10 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
             }
         };
     }
+    public List<ProjectList> getmFilterList(){
+        if(mFilterList == null){
+            mFilterList = new ArrayList<>();
+        }
+        return mFilterList;
+    }
 }

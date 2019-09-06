@@ -146,5 +146,10 @@ public class MemberListAdapter extends BaseAdapter<MemberListBean.ListBean, Base
             }
         };
     }
-
+    public List<MemberListBean.ListBean> getmFilterList(){
+        if(mFilterList == null){
+            mFilterList = new ArrayList<>();
+        }
+        return mFilterList;
+    }
 }

@@ -148,13 +148,13 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         mMemberAdatper.setClickListener(new RecyclerListClickListener() {
             @Override
             public void onClick(int position) {
-                LogT.d("点击查看此人的项目详情咯");
+                LogT.d("点击查看此人的项目详情咯 "+ mMemberAdatper.getmFilterList().get(position).getUserName());
                 if (isReview) {
                     Intent mIntent = new Intent();
                     mIntent.setClass(ChooseProjectActivity.this, AuditWeeklyReportActivity.class);
                     mIntent.putExtra("projectId", projectId);
-                    mIntent.putExtra("userId", mMemberList.get(position).getUserId());
-                    mIntent.putExtra("userName", mMemberList.get(position).getUserName());
+                    mIntent.putExtra("userId", mMemberAdatper.getmFilterList().get(position).getUserId());
+                    mIntent.putExtra("userName", mMemberAdatper.getmFilterList().get(position).getUserName());
                     mIntent.putExtra("weeks", TimeUtil.getInstance().getDayofWeek());
                     startActivity(mIntent);
                 }
@@ -295,13 +295,13 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
      */
     @Override
     public void onClick(int position) {
-        LogT.d("当前选择的projectInfo为" + mProjectList.get(position));
+        LogT.d("当前选择的projectInfo为" + mAdapter.getmFilterList().get(position));
         projectId = mProjectList.get(position).getId();
         projectName = mProjectList.get(position).getName();
         if (!isReview) {//非周报审核
             if (!isHeaderReport) {//非项目周报,为项目概况
                 Intent mIntent = new Intent();
-                mIntent.putExtra("project_info", mProjectList.get(position));
+                mIntent.putExtra("project_info", mAdapter.getmFilterList().get(position));
                 mIntent.putExtra("isReview", isReview);
                 mIntent.setClass(this, ProjectInfoActivity.class);
                 startActivity(mIntent);
