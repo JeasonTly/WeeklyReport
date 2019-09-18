@@ -38,7 +38,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     private LastWeekReportManagerFragment mLastReportFragment;
     private NextWeekReprotManagerFragment mNextReportFragment;
-
+    private int where = 0;
     /**
      * 周数选择器
      */
@@ -86,7 +86,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         mViewDataBinding.managerActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
         mViewDataBinding.managerActionbar.actionMenu.setImageResource(R.drawable.xiafarenwu);
         weeksList = TimeUtil.getInstance().getHistoryWeeks();
-        menuPopup = new MenuPopup(this, 0, this,null);
+        menuPopup = new MenuPopup(this, 0, this, null);
         menuPopup.setPopupGravity(Gravity.BOTTOM);
         mViewDataBinding.managerActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,12 +125,13 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         userId = mIntent.getIntExtra("userId", 1);
         projectId = mIntent.getIntExtra("projectId", 1);
         projectName = mIntent.getStringExtra("projectName");
+        where = mIntent.getIntExtra("where", 0);
         LogT.d(" getDefaultIntent userId is " + userId + " projectId is  " + projectId);
     }
 
     private void initFragment() {
-        mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek());
-        mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek());
+        mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek(),where);
+        mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, TimeUtil.getInstance().getDayofWeek(),where);
         mFragmentList.add(mLastReportFragment);
         mFragmentList.add(mNextReportFragment);
 
@@ -140,15 +141,20 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         mViewDataBinding.managerTabHost.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 if (tab.getText().equals(TITLE_ONE)) {
                     mViewDataBinding.managerViewpager.setCurrentItem(0);
                     addPlan = false;
                 } else if (tab.getText().equals(TITLE_TWO)) {
-                    addPlan = true;
+                    System.out.println("where" + where);
+                    if (where != 1) {
+                        addPlan = true;
+                    }
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
 
                 }
                 mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
+
             }
 
             @Override
@@ -177,7 +183,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
 
     @Override
     public void onPageSelected(int i) {
-        addPlan = i == 1;
+        if (where != 1) {
+            addPlan = i == 1;
+        }
         LogT.d(" update CurrentPage");
         if (!addPlan) {
             if (mLastReportFragment != null) {
@@ -200,6 +208,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
     /**
      * 周数选择器
      * 更新总结和计划的信息
+     *
      * @param position
      */
     @Override
@@ -211,7 +220,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
             if (mLastReportFragment != null) {
                 mLastReportFragment.updateManagerList(currentWeekNumber);
             } else {
-                mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, currentWeekNumber);
+                mLastReportFragment = LastWeekReportManagerFragment.newInstance(userId, projectId, currentWeekNumber,where);
                 mFragmentList.add(mLastReportFragment);
                 mLastReportFragment.updateManagerList(currentWeekNumber);
             }
@@ -220,7 +229,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
             if (mNextReportFragment != null) {
                 mNextReportFragment.updateManagerList(currentWeekNumber);
             } else {
-                mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, currentWeekNumber);
+                mNextReportFragment = NextWeekReprotManagerFragment.newInstance(userId, projectId, currentWeekNumber,where);
                 mFragmentList.add(mNextReportFragment);
                 mNextReportFragment.updateManagerList(currentWeekNumber);
             }

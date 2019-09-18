@@ -21,6 +21,15 @@ public class AuditReportBean extends BaseObservable {
     private int remarkState;
     private int statue;
     private int weeklyId;
+    private int weeklyType;
+
+    public int getWeeklyType() {
+        return weeklyType;
+    }
+
+    public void setWeeklyType(int weeklyType) {
+        this.weeklyType = weeklyType;
+    }
 
     public int getPlanStatus() {
         return planStatus;

@@ -12,8 +12,8 @@ import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.fragment.MemberInfoFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectInfoFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectStatisticsFragment;
+import com.aorise.weeklyreport.activity.fragment.ProjectWorkHoursFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
-import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.ActivityProjectInfoBinding;
@@ -32,13 +32,13 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
      */
     private int projectId = -1;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
-    private Class FragmentArray[] = {ProjectInfoFragment.class, MemberInfoFragment.class, ProjectStatisticsFragment.class};
-    private String FragmentTitle[] = {"基本信息", "成员信息", "项目统计"};
+    private Class FragmentArray[] = { ProjectStatisticsFragment.class,ProjectWorkHoursFragment.class,ProjectInfoFragment.class, MemberInfoFragment.class};
+    private String FragmentTitle[] = { "项目统计","项目工时","基本信息", "成员信息"};
 
     private ProjectInfoFragment mProjectInfoFragment;//基本信息所对应的Fragment
     private MemberInfoFragment mMemberInfoFragment;//成员信息所对应的Fragment
     private ProjectStatisticsFragment mProjectStatisticsFragment;//成员信息所对应的Fragment
-
+    private ProjectWorkHoursFragment projectWorkHoursFragment;//项目工时Fragment
 
     private boolean isReview = false;
     /**
@@ -101,7 +101,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
                 mProjectInfoFragment.updateProjectId(projectId);
             }
             if (mMemberInfoFragment != null) {
-                mMemberInfoFragment.updateProjectId(projectId);
+                mMemberInfoFragment.updateProjectId(projectId);//meifuren
             }
         }
     }
@@ -110,9 +110,12 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         mProjectInfoFragment = ProjectInfoFragment.newInstance(projectId);
         mMemberInfoFragment = MemberInfoFragment.newInstance(projectId, currentWeeks, isReview);
         mProjectStatisticsFragment = ProjectStatisticsFragment.newInstance(projectId);
+        projectWorkHoursFragment = ProjectWorkHoursFragment.newInstance(projectId);
+        mFragmentList.add(mProjectStatisticsFragment);
+        mFragmentList.add(projectWorkHoursFragment);
         mFragmentList.add(mProjectInfoFragment);
         mFragmentList.add(mMemberInfoFragment);
-        mFragmentList.add(mProjectStatisticsFragment);
+
         // mCurrentFragment = mPlanFragment;
     }
 
@@ -123,12 +126,14 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         mViewDataBinding.infoTabHost.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals("成员信息")) {
+                if (tab.getText().equals("项目统计")) {
+                    mViewDataBinding.infoViewpager.setCurrentItem(0);
+                } else if (tab.getText().equals("项目工时")) {
                     mViewDataBinding.infoViewpager.setCurrentItem(1);
                 } else if (tab.getText().equals("基本信息")) {
-                    mViewDataBinding.infoViewpager.setCurrentItem(0);
-                } else if (tab.getText().equals("项目统计")) {
                     mViewDataBinding.infoViewpager.setCurrentItem(2);
+                } else if (tab.getText().equals("成员信息")) {
+                    mViewDataBinding.infoViewpager.setCurrentItem(3);
                 }
 
             }

@@ -20,6 +20,7 @@ import com.aorise.weeklyreport.activity.ProjectInfoActivity;
 import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
 import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
 import com.aorise.weeklyreport.activity.WorkTimeYearStatisticsActivity;
+import com.aorise.weeklyreport.activity.projectweekly.ProjectweeklyCheckActivity;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
@@ -77,7 +78,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * 是否为超级管理员
      */
     private boolean isSuperManager = false;
-
+    private int userType;//用户身份
 
     public NewHomeFragment() {
     }
@@ -89,6 +90,8 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         userId = sharedPreferences.getInt("userId", -1);
         isHeader = sharedPreferences.getInt("userRole", -1) != 0; // 1为项目负责人，0为项目成员 ,2为超级管理员
         isSuperManager = sharedPreferences.getInt("userRole", -1) == 2;
+        userType = sharedPreferences.getInt("userRole",-1) ;
+
     }
 
     @Override
@@ -113,6 +116,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
 
             }
         });
+
         //周报填写Intent跳转
         mViewDataBinding.reportFillArea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,14 +134,14 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                 queryProjectInfoAsHeaderList(true);
             }
         });
-        //项目负责人周报
+        //项目周报
         mViewDataBinding.projectReportArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startChooseProject();
             }
         });
-        //工时统计周报
+        //工时统计
         mViewDataBinding.jixiaoArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,11 +150,24 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                startActivity(mIntent);
             }
         });
+        mViewDataBinding.llProjectWeekly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (userType == 3||userType ==2) {
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(getActivity(), ProjectweeklyCheckActivity.class);
+                    startActivity(mIntent);
+                }
+            }
+        });
         if (!isHeader) {
             mViewDataBinding.projectReportArea.setVisibility(View.GONE);
             mViewDataBinding.reportReviewArea.setVisibility(View.GONE);
             mViewDataBinding.jixiaoArea.setVisibility(View.GONE);
+            mViewDataBinding.llProjectWeekly.setVisibility(View.GONE);
         }
+
         initBanner();
         return mViewDataBinding.getRoot();
     }

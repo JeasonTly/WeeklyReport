@@ -117,9 +117,11 @@ public class LoginActivity extends BaseActivity {
                             if (!TextUtils.isEmpty(o.getData().getRoleName())) {
                                 if (o.getData().getRoleName().equals("普通成员")) {
                                     editor.putInt("userRole", 0);
-                                } else if (o.getData().getRoleName().equals("超级管理员")) {
+                                } else if (o.getData().getRoleName().equals("超级管理员")) {//项目周报审核权限
                                     editor.putInt("userRole", 2);
-                                } else {
+                                }  else if (o.getData().getRoleName().equals("经理办")) {//项目周报审核权限
+                                    editor.putInt("userRole", 3);
+                                }  else {
                                     editor.putInt("userRole", 1);
                                 }
                             }

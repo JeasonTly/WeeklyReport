@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import com.aorise.weeklyreport.activity.LoginActivity;
+import com.aorise.weeklyreport.activity.projectweekly.ProjectInfo;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
@@ -274,7 +275,10 @@ public interface ApiService {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.DEFAULT_WORKTIME)
     Observable<Result> setWorkTime(@Body RequestBody requestBody);
-
+/*项目周报审核，获取周报列表*/
+    @GET("api/project/pageIndex/{pageIndex}/pageNum/{pageNum}")
+    Observable<ProjectInfo> getProjectList01(@Path("pageIndex") String pageIndex,
+                                           @Path("pageNum") String pageNum);
 
     class Utils {
 

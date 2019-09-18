@@ -15,21 +15,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ChooseMemeberActivity"/><!-- 成员选择 界面 暂时没有使用 -->
-        <activity android:name=".activity.WorkTimeYearStatisticsActivity" /><!-- 按年份统计工时 -->
-        <activity android:name=".activity.WorkTimeMonthStatisticsActivity" /><!-- 按月份统计工时 -->
+        <activity android:name=".activity.projectweekly.ProjectweeklyCheckActivity" />
+        <activity android:name=".activity.ChooseMemeberActivity" /> <!-- 成员选择 界面 暂时没有使用 -->
+        <activity android:name=".activity.WorkTimeYearStatisticsActivity" /> <!-- 按年份统计工时 -->
+        <activity android:name=".activity.WorkTimeMonthStatisticsActivity" /> <!-- 按月份统计工时 -->
         <activity android:name=".activity.SettingsNextWeekPlanActivity" /> <!-- 指定下周工作计划界面 -->
         <activity android:name=".activity.ChooseProjectActivity" /> <!-- 项目选择 项目组成员选择 界面 -->
-        <activity android:name=".activity.ProjectInfoActivity" /> <!--项目概况 界面 包含项目描述，成员列表 和 统计分析 -->
+        <activity android:name=".activity.ProjectInfoActivity" /> <!-- 项目概况 界面 包含项目描述，成员列表 和 统计分析 -->
         <activity android:name=".activity.ReviewAndToFillReportActivity" /> <!-- 普通成员登录后查看和填写周报界面 -->
         <activity android:name=".activity.OverAllSituationActivity" /> <!-- 项目周报 整体情况查看界面 -->
         <activity android:name=".activity.ProjectReportManagerActivity" /> <!-- 项目周报详情界面 -->
         <activity android:name=".activity.WeeklyReportDetailActivity" /> <!-- 周报详情页面 -->
         <activity android:name=".activity.AuditWeeklyReportActivity" /> <!-- 审批周报界面 -->
-        <activity android:name=".activity.FillReportActivity" /><!-- 新增或者编辑周报界面 -->
-        <activity android:name=".activity.LoginActivity"><!-- 登录界面 -->
+        <activity android:name=".activity.FillReportActivity" /> <!-- 新增或者编辑周报界面 -->
+        <activity android:name=".activity.LoginActivity"> <!-- 登录界面 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

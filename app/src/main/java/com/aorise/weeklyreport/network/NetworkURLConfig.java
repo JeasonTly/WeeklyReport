@@ -6,8 +6,8 @@ package com.aorise.weeklyreport.network;
  */
 public class NetworkURLConfig {
     //public static final String BASE_URL = " ";
-     //public static final String BASE_URL = "http://192.168.1.201:8089/";//沈智维
-    //public static final String BASE_URL = "http://192.168.1.106:8089/";//卿燚
+    //public static final String BASE_URL = "http://192.168.1.201:8089/";//沈智维
+//    public static final String BASE_URL = "http://192.168.1.106:8089/";//卿燚
     public static final String BASE_URL = "http://week.console.umxwe.com/api/";
 
     public static final String LOGIN_URL = "api/user/login";
@@ -30,6 +30,7 @@ public class NetworkURLConfig {
     public static final String PROJECT_STATISTIC = "api/statistics";//根据项目id查询统计信息
     public static final String WORKTIME_TOTALYEAR_STATISTIC = "api/userWorkTime";//根据年份获取当前工时
     public static final String WORKTIME_TOTALMONTH_STATISTIC = "api/userWorkTime/year/{year}";//根据年 月获取当前工时
-    public static final String DEFAULT_WORKTIME= "api/workTime";//根据年份获取当前工时
+    public static final String DEFAULT_WORKTIME = "api/workTime";//根据年份获取当前工时
+    //public static final String PROJECT_WORK_TIME = ""
 
 }

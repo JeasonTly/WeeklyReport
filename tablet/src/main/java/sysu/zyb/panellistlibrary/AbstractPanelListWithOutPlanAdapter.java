@@ -538,13 +538,14 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
             rowItem.setTextColor(Color.WHITE);
             rowItem.setGravity(Gravity.CENTER);
             final int position = i;
+
+            ll_row.addView(rowItem);
             rowItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     workTimePlanClickListener.monthClick(position);
                 }
             });
-            ll_row.addView(rowItem);
         }
 
     }

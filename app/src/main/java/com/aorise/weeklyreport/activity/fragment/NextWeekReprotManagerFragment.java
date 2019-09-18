@@ -1,5 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,20 +11,29 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.ProjectManagerReportRecclerAdapter;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
+import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.bean.AuditReportBean;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
 import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.google.gson.Gson;
+import com.hjq.toast.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.RequestBody;
 
 /**
  * 项目周报下周工作计划
@@ -36,9 +47,12 @@ public class NextWeekReprotManagerFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
-
+    private static final String ARG_PARAM4 = "param4";
     // TODO: Rename and change types of parameters
-
+    /**
+     * 审批状态。完成程度
+     */
+    private int reamarkStatus = 1;
     private FragmentMemeberCheckBinding mViewDataBinding;
     /**
      * 项目ID
@@ -48,7 +62,8 @@ public class NextWeekReprotManagerFragment extends Fragment {
      * 当前周数
      */
     private int weeks = -1;
-
+    private int where = 0;
+    private String approvalText;
     /**
      * 项目周报 下周计划列表
      */
@@ -70,11 +85,12 @@ public class NextWeekReprotManagerFragment extends Fragment {
      * @param weeks   当前周数
      * @return
      */
-    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks) {
+    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks,int where) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM2, projectId);
         args.putInt(ARG_PARAM3, weeks);
+        args.putInt(ARG_PARAM4,where);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,6 +101,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
+            where = getArguments().getInt(ARG_PARAM4);
         }
     }
 
@@ -110,7 +127,22 @@ public class NextWeekReprotManagerFragment extends Fragment {
                 startActivity(mIntent);
             }
         });
-
+        if (where==1) {
+            mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
+            mViewDataBinding.nextOverall.setClickable(false);
+        }
+        mViewDataBinding.allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showApproveDialog(true);
+            }
+        });
+        mViewDataBinding.notAllow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showApproveDialog(true);
+            }
+        });
         return mViewDataBinding.getRoot();
     }
 
@@ -166,5 +198,87 @@ public class NextWeekReprotManagerFragment extends Fragment {
                     }
                 });
     }
+    private void showApproveDialog(final boolean pass) {
+        View inputView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_input_contentview, null);
+        final EditText approvalMark = (EditText) inputView.findViewById(R.id.approval_mark);
+        final RadioGroup radioGroup = (RadioGroup) inputView.findViewById(R.id.remark_level_radio);
+        final RadioButton remarkHigh = (RadioButton) inputView.findViewById(R.id.remark_high);
+        remarkHigh.setChecked(true);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.remark_high:
+                        reamarkStatus = 1;
+                        break;
+                    case R.id.remark_middle:
+                        reamarkStatus = 2;
+                        break;
+                    case R.id.remark_low:
+                        reamarkStatus = 3;
+                        break;
+                }
+            }
+        });
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity())
+                .setTitle("周报审批")
+                .setView(inputView)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                         approvalText = approvalMark.getText().toString();
+                        CommitApproveResult(pass);
+                    }
+                });
+        mDialog.create().show();
+    }
 
+    private void CommitApproveResult(boolean pass) {
+        //审批状态1,未审批，2,已通过，3,驳回
+        int approvestatus = pass ? 2 : 3;
+        //approvalText = pass ? "通过" : "不通过";
+        LogT.d(" param id = " + mHeaderItemBean.getId() + " stauts is "  + " approvalText " + approvalText);
+        Gson gson = new Gson();
+        AuditReportBean mModel = new AuditReportBean();
+        mModel.setWeeklyId(mHeaderItemBean.getId());//周报ID
+        //mModel.setPlanStatus(workStatus);//项目周报上的完成状态
+        mModel.setRemark(approvalText);//备注
+        mModel.setRemarkState(reamarkStatus);
+        mModel.setStatue(approvestatus);//审批状态
+        mModel.setWeeklyType(1);
+        String json = gson.toJson(mModel);
+        LogT.d("json is " + json);
+        RequestBody model = CommonUtils.getRequestBody(json);
+        ApiService.Utils.getInstance(getActivity()).approvalWeeklyReport(model)
+                .compose(ApiService.Utils.schedulersTransformer())
+                .subscribe(new CustomSubscriber<Result>(getActivity()) {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        ToastUtils.show("审批失败");
+                    }
+
+                    @Override
+                    public void onNext(Result o) {
+                        super.onNext(o);
+                        LogT.d(" o answer is " + o.toString());
+                        if (o.isRet()) {
+                            ToastUtils.show("审批成功");
+                            getActivity().finish();
+                        } else {
+                            ToastUtils.show("审批失败");
+                        }
+                    }
+                });
+    }
 }
