@@ -257,7 +257,7 @@ public class LastWeekReportManagerFragment extends Fragment {
         //approvalText = pass ? "通过" : "不通过";
         LogT.d(" param id = " + mHeaderItemBean.getId() + " stauts is " + " approvalText " + approvalText);
         if (mHeaderItemBean.getId() == 0) {
-            ToastUtils.show("当前项目周报未填写整体情况!");
+            ToastUtils.show("当前周的项目周报未填写!");
             return;
         }
         Gson gson = new Gson();
