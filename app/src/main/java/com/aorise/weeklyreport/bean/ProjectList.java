@@ -19,7 +19,7 @@ public class ProjectList implements Serializable {
     /**
      * id : 42
      * name : 工作信息管理系统
-     * property : 1
+     * property : 1 项目工作。2 部门工作
      */
 
     private int id;

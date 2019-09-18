@@ -14,6 +14,7 @@ public class AuditReportBean extends BaseObservable {
      * remarkState : 0
      * statue : 0 审批状态
      * weeklyId : 0 周报ID
+     * weeklyType: 1 为项目周报 ，2为成员周报
      */
 
     private int planStatus;

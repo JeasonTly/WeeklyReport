@@ -37,7 +37,6 @@ import okhttp3.RequestBody;
 
 /**
  * 项目周报下周工作计划
- *
  */
 
 
@@ -62,7 +61,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
      * 当前周数
      */
     private int weeks = -1;
-    private int where = 0;
+    private boolean isAudit = false;
     private String approvalText;
     /**
      * 项目周报 下周计划列表
@@ -79,18 +78,17 @@ public class NextWeekReprotManagerFragment extends Fragment {
     }
 
     /**
-     *
-     * @param useId      用户ID 暂时无效
-     * @param projectId  项目ID
-     * @param weeks   当前周数
+     * @param useId     用户ID 暂时无效
+     * @param projectId 项目ID
+     * @param weeks     当前周数
      * @return
      */
-    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks,int where) {
+    public static NextWeekReprotManagerFragment newInstance(int useId, int projectId, int weeks, boolean isAudit) {
         NextWeekReprotManagerFragment fragment = new NextWeekReprotManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM2, projectId);
         args.putInt(ARG_PARAM3, weeks);
-        args.putInt(ARG_PARAM4,where);
+        args.putBoolean(ARG_PARAM4, isAudit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,7 +99,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
-            where = getArguments().getInt(ARG_PARAM4);
+            isAudit = getArguments().getBoolean(ARG_PARAM4);
         }
     }
 
@@ -127,10 +125,9 @@ public class NextWeekReprotManagerFragment extends Fragment {
                 startActivity(mIntent);
             }
         });
-        if (where==1) {
-            mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
-            mViewDataBinding.nextOverall.setClickable(false);
-        }
+        mViewDataBinding.auditArea.setVisibility(isAudit ? View.VISIBLE : View.GONE);
+        mViewDataBinding.nextOverall.setClickable(!isAudit);
+
         mViewDataBinding.allow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,6 +152,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
 
     /**
      * 根据周数更新当前项目周报计划的列表信息
+     *
      * @param weeks
      */
     public synchronized void updateManagerList(final int weeks) {
@@ -198,6 +196,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
                     }
                 });
     }
+
     private void showApproveDialog(final boolean pass) {
         View inputView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_input_contentview, null);
         final EditText approvalMark = (EditText) inputView.findViewById(R.id.approval_mark);
@@ -231,7 +230,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
-                         approvalText = approvalMark.getText().toString();
+                        approvalText = approvalMark.getText().toString();
                         CommitApproveResult(pass);
                     }
                 });
@@ -242,7 +241,11 @@ public class NextWeekReprotManagerFragment extends Fragment {
         //审批状态1,未审批，2,已通过，3,驳回
         int approvestatus = pass ? 2 : 3;
         //approvalText = pass ? "通过" : "不通过";
-        LogT.d(" param id = " + mHeaderItemBean.getId() + " stauts is "  + " approvalText " + approvalText);
+        LogT.d(" param id = " + mHeaderItemBean.getId() + " stauts is " + " approvalText " + approvalText);
+        if (mHeaderItemBean.getId() == 0) {
+            ToastUtils.show("当前项目周报未填写整体情况!");
+            return;
+        }
         Gson gson = new Gson();
         AuditReportBean mModel = new AuditReportBean();
         mModel.setWeeklyId(mHeaderItemBean.getId());//周报ID

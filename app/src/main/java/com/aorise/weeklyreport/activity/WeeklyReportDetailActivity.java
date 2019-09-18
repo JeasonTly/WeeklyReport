@@ -202,6 +202,7 @@ public class WeeklyReportDetailActivity extends AppCompatActivity {
         mModel.setRemark(approvalText);//备注
         mModel.setRemarkState(reamarkStatus);
         mModel.setStatue(approvestatus);//审批状态
+        mModel.setWeeklyType(2);//审批状态
         String json = gson.toJson(mModel);
         LogT.d("json is " + json);
         RequestBody model = CommonUtils.getRequestBody(json);

@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.aorise.weeklyreport.base.LogT;
+
 import java.util.List;
 
 public class MultiItemTypeAdapter<T> extends BaseAdapter {
@@ -89,5 +91,9 @@ public class MultiItemTypeAdapter<T> extends BaseAdapter {
         return position;
     }
 
-
+    public void refreshData(List<T> datas){
+        this.mDatas.clear();
+        this.mDatas = datas;
+        notifyDataSetChanged();
+    }
 }

@@ -17,7 +17,6 @@ import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
-import com.aorise.weeklyreport.activity.WeeklyReportDetailActivity;
 import com.aorise.weeklyreport.adapter.ProjectManagerReportRecclerAdapter;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.CommonUtils;
@@ -39,7 +38,7 @@ import okhttp3.RequestBody;
 /**
  * 周报管理系统的项目周报总结
  */
-public class LastWeekReportManagerFragment extends Fragment{
+public class LastWeekReportManagerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -61,21 +60,22 @@ public class LastWeekReportManagerFragment extends Fragment{
     /**
      * 当前周数
      */
-    private int where=0;
+
     private int weeks = -1;
-private String approvalText;
+    private boolean isAudit = false;
+    private String approvalText;
     /**
      * 项目周报列表信息
      */
     private List<HeaderItemBean.PlanDetailsListBean> memberWeeklyModelListBeans = new ArrayList<>();
     /**
-     *  项目列表适配器
+     * 项目列表适配器
      */
     private ProjectManagerReportRecclerAdapter mAdapter;
     /**
-     *  项目整体情况信息
-     *  整体情况和项目周报列表分开。
-     *  未使用复合型适配器
+     * 项目整体情况信息
+     * 整体情况和项目周报列表分开。
+     * 未使用复合型适配器
      */
     private HeaderItemBean mHeaderItemBean;
 
@@ -85,18 +85,19 @@ private String approvalText;
 
     /**
      * 初始化此fragment .
-     * @param useId 用户ID
+     *
+     * @param useId     用户ID
      * @param projectId 项目ID
-     * @param weeks  默认周数
+     * @param weeks     默认周数
      */
     // TODO: Rename and change types and number of parameters
-    public static LastWeekReportManagerFragment newInstance(int useId, int projectId, int weeks,int where) {
+    public static LastWeekReportManagerFragment newInstance(int useId, int projectId, int weeks, boolean isAudit) {
         LastWeekReportManagerFragment fragment = new LastWeekReportManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, useId);
         args.putInt(ARG_PARAM2, projectId);
         args.putInt(ARG_PARAM3, weeks);
-        args.putInt(ARG_PARAM4,where);
+        args.putBoolean(ARG_PARAM4, isAudit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -108,7 +109,7 @@ private String approvalText;
             userId = getArguments().getInt(ARG_PARAM1);
             projectId = getArguments().getInt(ARG_PARAM2);
             weeks = getArguments().getInt(ARG_PARAM3);
-            where = getArguments().getInt(ARG_PARAM4);
+            isAudit = getArguments().getBoolean(ARG_PARAM4);
         }
 
     }
@@ -137,10 +138,11 @@ private String approvalText;
                 startActivity(mIntent);
             }
         });
-        if (where==1) {
-            mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
-            mViewDataBinding.lastOverall.setClickable(false);
-        }
+
+
+        mViewDataBinding.auditArea.setVisibility(isAudit ? View.VISIBLE : View.GONE);
+        mViewDataBinding.lastOverall.setClickable(!isAudit);
+
         mViewDataBinding.allow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +167,7 @@ private String approvalText;
 
     /**
      * 根据周数获取最新的项目周报内容
+     *
      * @param weeks
      */
     public synchronized void updateManagerList(int weeks) {
@@ -191,7 +194,7 @@ private String approvalText;
                         super.onNext(o);
                         LogT.d("项目周报 " + o.toString());
                         if (o.isRet()) {
-                           // LogT.d(" o " + o.getData().getPlanDetailsList().size());
+                            // LogT.d(" o " + o.getData().getPlanDetailsList().size());
                             mHeaderItemBean = o.getData();
                             if (memberWeeklyModelListBeans != null && memberWeeklyModelListBeans.size() != 0) {
                                 memberWeeklyModelListBeans = o.getData().getPlanDetailsList();
@@ -199,14 +202,15 @@ private String approvalText;
                                 memberWeeklyModelListBeans.clear();
                                 memberWeeklyModelListBeans.addAll(o.getData().getPlanDetailsList());
                             }
-                            LogT.d(" 具体周报列表数为"+o.getData().getPlanDetailsList().size());
-                            mViewDataBinding.setLastStage(mHeaderItemBean.getPercentComplete() +"%");
+                            LogT.d(" 具体周报列表数为" + o.getData().getPlanDetailsList().size());
+                            mViewDataBinding.setLastStage(mHeaderItemBean.getPercentComplete() + "%");
                             mViewDataBinding.setLastSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());
                             mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }
                 });
     }
+
     private void showApproveDialog(final boolean pass) {
         View inputView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_input_contentview, null);
         final EditText approvalMark = (EditText) inputView.findViewById(R.id.approval_mark);
@@ -251,7 +255,11 @@ private String approvalText;
         //审批状态1,未审批，2,已通过，3,驳回
         int approvestatus = pass ? 2 : 3;
         //approvalText = pass ? "通过" : "不通过";
-        LogT.d(" param id = " + mHeaderItemBean.getId() + " stauts is "  + " approvalText " + approvalText);
+        LogT.d(" param id = " + mHeaderItemBean.getId() + " stauts is " + " approvalText " + approvalText);
+        if (mHeaderItemBean.getId() == 0) {
+            ToastUtils.show("当前项目周报未填写整体情况!");
+            return;
+        }
         Gson gson = new Gson();
         AuditReportBean mModel = new AuditReportBean();
         mModel.setWeeklyId(mHeaderItemBean.getId());//周报ID

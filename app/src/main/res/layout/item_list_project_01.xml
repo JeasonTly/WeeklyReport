@@ -31,7 +31,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/you"
-        android:text="shenghe" />
+        android:src="@drawable/you" />
 </RelativeLayout>
 </layout>

@@ -543,7 +543,9 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
             rowItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    workTimePlanClickListener.monthClick(position);
+                    if(workTimePlanClickListener !=null ) {
+                        workTimePlanClickListener.monthClick(position);
+                    }
                 }
             });
         }

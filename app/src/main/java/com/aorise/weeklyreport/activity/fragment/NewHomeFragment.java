@@ -20,9 +20,7 @@ import com.aorise.weeklyreport.activity.ProjectInfoActivity;
 import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
 import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
 import com.aorise.weeklyreport.activity.WorkTimeYearStatisticsActivity;
-import com.aorise.weeklyreport.activity.projectweekly.ProjectweeklyCheckActivity;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectListBean;
 import com.aorise.weeklyreport.databinding.FragmentNewHomeBinding;
@@ -43,12 +41,12 @@ import java.util.List;
 
 /**
  * 首页fragment 包括
- *  广告推送
- *  项目概况
- *  周报填写
- *  周报审批
- *  项目周报
- *  绩效考核 (目前为工时统计)
+ * 广告推送
+ * 项目概况
+ * 周报填写
+ * 周报审批
+ * 项目周报
+ * 绩效考核 (目前为工时统计)
  */
 public class NewHomeFragment extends Fragment implements OnBannerListener {
     private FragmentNewHomeBinding mViewDataBinding;
@@ -62,8 +60,8 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      */
     private ArrayList<ProjectList> mProjectList = new ArrayList<>();
     /**
-     *  超级管理员获取的项目列表信息，
-     *  将会重构为ProjectList并传递给选择项目界面或者对应的界面
+     * 超级管理员获取的项目列表信息，
+     * 将会重构为ProjectList并传递给选择项目界面或者对应的界面
      */
     private ArrayList<ProjectListBean.ListBean> mManagerProjectList = new ArrayList<>();
     /**
@@ -90,7 +88,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         userId = sharedPreferences.getInt("userId", -1);
         isHeader = sharedPreferences.getInt("userRole", -1) != 0; // 1为项目负责人，0为项目成员 ,2为超级管理员
         isSuperManager = sharedPreferences.getInt("userRole", -1) == 2;
-        userType = sharedPreferences.getInt("userRole",-1) ;
+        userType = sharedPreferences.getInt("userRole", -1);
 
     }
 
@@ -145,20 +143,69 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         mViewDataBinding.jixiaoArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent mIntent = new Intent();
-               mIntent.setClass(getActivity(), WorkTimeYearStatisticsActivity.class);
-               startActivity(mIntent);
+                Intent mIntent = new Intent();
+                mIntent.setClass(getActivity(), WorkTimeYearStatisticsActivity.class);
+                startActivity(mIntent);
             }
         });
+        // 项目周报审核
         mViewDataBinding.llProjectWeekly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (userType == 3||userType ==2) {
-                    Intent mIntent = new Intent();
-                    mIntent.setClass(getActivity(), ProjectweeklyCheckActivity.class);
-                    startActivity(mIntent);
-                }
+              //  if (userType == 3 || userType == 2) {
+//                    Intent mIntent = new Intent();
+//                    mIntent.setClass(getActivity(), ProjectweeklyCheckActivity.class);
+//                    startActivity(mIntent);
+                ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
+                        .compose(ApiService.Utils.schedulersTransformer())
+                        .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
+                            @Override
+                            public void onCompleted() {
+                                super.onCompleted();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                            }
+
+                            @Override
+                            public void onNext(Result<List<ProjectList>> listResult) {
+                                super.onNext(listResult);
+
+                                if (listResult.isRet()) {
+//                                mManagerProjectList.clear();
+                                    mProjectList.clear();
+                                    mProjectList.addAll(listResult.getData());
+                                    LogT.d("超级管理员 mProjectList is " + mProjectList.toString());
+
+                                    if (mProjectList != null && mProjectList.size() != 0) {
+                                        if (mProjectList.size() == 1) {
+                                            Intent mIntent = new Intent();
+                                            mIntent.putExtra("projectId", mProjectList.get(0).getId());
+                                            mIntent.putExtra("projectName", mProjectList.get(0).getName());
+                                            mIntent.putExtra("userId", userId);
+                                            mIntent.putExtra("isAudit", true);
+                                            mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
+                                            startActivity(mIntent);
+                                        } else {
+                                            LogT.d("mProjectList size 大于1");
+                                            Intent mIntent = new Intent();
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                            mIntent.putExtra("projectList", bundle);
+                                            mIntent.putExtra("isProjectReportAudit", true);
+                                            mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                            startActivity(mIntent);
+                                        }
+                                    } else {
+                                        ToastUtils.show("当前用户角色下无项目!");
+                                    }
+                                }
+                            }
+                        });
+               // }
             }
         });
         if (!isHeader) {
@@ -231,11 +278,11 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * 根据负责人用户的用户ID查询 项目概况 和进行周报审核
      */
     private void queryProjectInfoAsHeaderList(final boolean isReview) {
-        LogT.d(" 是否为审核项目" +isReview);
+        LogT.d(" 是否为审核项目" + isReview);
         if (isSuperManager) {
-            ApiService.Utils.getInstance(getActivity()).getProjectList("0", "0")
+            ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
                     .compose(ApiService.Utils.schedulersTransformer())
-                    .subscribe(new CustomSubscriber<Result<ProjectListBean>>(getActivity()) {
+                    .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override
                         public void onCompleted() {
                             super.onCompleted();
@@ -247,22 +294,14 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                         }
 
                         @Override
-                        public void onNext(Result<ProjectListBean> listResult) {
+                        public void onNext(Result<List<ProjectList>> listResult) {
                             super.onNext(listResult);
 
                             if (listResult.isRet()) {
-                                mManagerProjectList.clear();
+//                                mManagerProjectList.clear();
                                 mProjectList.clear();
-                                mManagerProjectList.addAll(listResult.getData().getList());
+                                mProjectList.addAll(listResult.getData());
                                 LogT.d("超级管理员 mProjectList is " + mProjectList.toString());
-                                for (int i = 0; i < mManagerProjectList.size(); i++) {
-                                    ProjectList projectList = new ProjectList();
-                                    projectList.setId(mManagerProjectList.get(i).getId());
-                                    projectList.setName(mManagerProjectList.get(i).getName());
-                                    LogT.d("周报审核 原始类型 ProjectListBean "+ mManagerProjectList.get(i).toString());
-                                    LogT.d("周报审核 类型转换为projectList "+projectList.toString());
-                                    mProjectList.add(projectList);
-                                }
 
                                 if (mProjectList != null && mProjectList.size() != 0) {
                                     if (mProjectList.size() == 1) {
@@ -297,7 +336,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                             }
                         }
                     });
-        }else if(isHeader) {
+        } else if (isHeader) {
             ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
@@ -352,7 +391,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                             }
                         }
                     });
-        }else{
+        } else {
             ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
@@ -428,6 +467,11 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         reviewText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         reviewText.setSpan(smallSpan, 0, reviewText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         mViewDataBinding.review.setText(reviewText);
+
+        SpannableString projectreviewText = new SpannableString("项目周报审核 Review");
+        projectreviewText.setSpan(largeSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        projectreviewText.setSpan(smallSpan, 0, projectreviewText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mViewDataBinding.review01.setText(projectreviewText);
         SpannableString weeklyReportText = new SpannableString("项目周报 Weekly");
         weeklyReportText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         weeklyReportText.setSpan(smallSpan, 0, weeklyReportText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -446,9 +490,9 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      */
     private void startChooseProject() {
         if (isSuperManager) {
-            ApiService.Utils.getInstance(getActivity()).getProjectList("0", "0")
+            ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
                     .compose(ApiService.Utils.schedulersTransformer())
-                    .subscribe(new CustomSubscriber<Result<ProjectListBean>>(getActivity()) {
+                    .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override
                         public void onCompleted() {
                             super.onCompleted();
@@ -460,22 +504,13 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                         }
 
                         @Override
-                        public void onNext(Result<ProjectListBean> listResult) {
+                        public void onNext(Result<List<ProjectList>> listResult) {
                             super.onNext(listResult);
 
                             if (listResult.isRet()) {
-                                mManagerProjectList.clear();
-                                mProjectList.clear();
-                                mManagerProjectList.addAll(listResult.getData().getList());
-                                for (int i = 0; i < mManagerProjectList.size(); i++) {
-                                    ProjectList projectList = new ProjectList();
-                                    projectList.setId(mManagerProjectList.get(i).getId());
-                                    projectList.setName(mManagerProjectList.get(i).getName());
-                                    LogT.d("原始类型 ProjectListBean "+ mManagerProjectList.get(i).toString());
-                                    LogT.d("类型转换为projectList "+projectList.toString());
-                                    mProjectList.add(projectList);
-                                }
 
+                                mProjectList.clear();
+                                mProjectList.addAll(listResult.getData());
                                 LogT.d("超級管理員 mProjectList is " + mManagerProjectList.toString());
                                 if (mProjectList != null && mProjectList.size() != 0) {
                                     if (mProjectList.size() == 1) {

@@ -83,6 +83,10 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
      */
     private boolean isReview = false;
     /**
+     * 是否为审核项目周报  true为审核项目周报界面
+     */
+    private boolean isAuditProjectReport = false;
+    /**
      * 是则为选择项目对应的项目周报 ，否则为负责人选择项目对应的成员周报
      */
     private boolean isHeaderReport = false;
@@ -105,6 +109,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
         isReview = getIntent().getBooleanExtra("isReview", false);
+        isAuditProjectReport = getIntent().getBooleanExtra("isProjectReportAudit", false);
         isHeaderReport = getIntent().getBooleanExtra("isHeaderReport", false);
         isProjectList = mProjectList.size() != 1;
         mViewDataBinding.chooseProjectActionbar.actionMenu.setVisibility(View.GONE);
@@ -148,7 +153,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         mMemberAdatper.setClickListener(new RecyclerListClickListener() {
             @Override
             public void onClick(int position) {
-                LogT.d("点击查看此人的项目详情咯 "+ mMemberAdatper.getmFilterList().get(position).getUserName());
+                LogT.d("点击查看此人的项目详情咯 " + mMemberAdatper.getmFilterList().get(position).getUserName());
                 if (isReview) {
                     Intent mIntent = new Intent();
                     mIntent.setClass(ChooseProjectActivity.this, AuditWeeklyReportActivity.class);
@@ -296,15 +301,26 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     @Override
     public void onClick(int position) {
         LogT.d("当前选择的projectInfo为" + mAdapter.getmFilterList().get(position));
-        projectId = mProjectList.get(position).getId();
-        projectName = mProjectList.get(position).getName();
-        if (!isReview) {//非周报审核
+        projectId = mAdapter.getmFilterList().get(position).getId();
+        projectName = mAdapter.getmFilterList().get(position).getName();
+        if (!isReview) {//非成员周报审核
+            if (isAuditProjectReport) {//项目周报审批
+                Intent mIntent = new Intent();
+                mIntent.putExtra("projectId", mAdapter.getmFilterList().get(position).getId());
+                mIntent.putExtra("projectName", mAdapter.getmFilterList().get(position).getName());
+                mIntent.putExtra("userId", userId);
+                mIntent.putExtra("isAudit", true);
+                mIntent.setClass(this, ProjectReportManagerActivity.class);
+                startActivity(mIntent);
+                return;
+            }
             if (!isHeaderReport) {//非项目周报,为项目概况
                 Intent mIntent = new Intent();
                 mIntent.putExtra("project_info", mAdapter.getmFilterList().get(position));
                 mIntent.putExtra("isReview", isReview);
                 mIntent.setClass(this, ProjectInfoActivity.class);
                 startActivity(mIntent);
+
             } else {//项目周报
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
@@ -351,6 +367,8 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     @Override
     public void selectPosistion(int position) {
         mAdapter.getFilter().filter(filterList.get(filterList.size() - 1 - position));
+        // mViewDataBinding.chooseSearch.fpClidQuery.setText("");
+
         mViewDataBinding.chooseProjectActionbar.actionBarTitle.setText("项目选择 - " + filterList.get(filterList.size() - 1 - position));
     }
 }

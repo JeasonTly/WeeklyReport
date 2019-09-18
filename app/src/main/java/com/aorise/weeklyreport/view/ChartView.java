@@ -79,7 +79,7 @@ public class ChartView extends View {
     /**
      *  上边距
      */
-    private int margin_top = 20;
+    private int margin_top = 24;
     /**
      *  底边距
      */
