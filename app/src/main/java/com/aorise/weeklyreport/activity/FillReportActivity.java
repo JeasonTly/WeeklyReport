@@ -106,9 +106,13 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
     private SharedPreferences sp;
 
     /**
-     * 项目列表
+     * 项目原始列表
      */
     private List<ProjectList> mProjectList = new ArrayList<>();
+    /**
+     * 项目筛选过后的列表
+     */
+    private List<ProjectList> mSelectProjectList = new ArrayList<>();
     /**
      * 计划
      */
@@ -254,7 +258,6 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mViewDataBinding.timePicker.setLayoutManager(manager);
-        // mViewDataBinding.timePicker.addItemDecoration(new SpacesItemDecoration(2));
         mViewDataBinding.timePicker.setAdapter(mAdapter);
         updateCommitDate();
     }
@@ -265,7 +268,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
     private void initWorkTypePicker() {
         workType.add("项目工作");
         workType.add("部门工作");
-        workType.add("其他工作");
+       // workType.add("其他工作");
         if (!isEdit) {
             mViewDataBinding.workType.setText(workType.get(DEFAULT_WORKTYPE_SELECTION));
             work_type = DEFAULT_WORKTYPE_SELECTION + 1;
@@ -278,6 +281,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                 LogT.d(" options1 " + options1 + " options2 " + options2 + " options3 " + options3);
                 mViewDataBinding.workType.setText(workType.get(options1));
                 work_type = options1 + 1;
+                initProjectListPicker();
             }
         }).setTitleBgColor(0xFF3dd078)//标题背景颜色 Night mode
                 .setBgColor(0xFFFFFFFF)//滚轮背景颜色 Night mode
@@ -318,9 +322,22 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             mViewDataBinding.workProjectName.setText("");
             return;
         }
+        mProjectNameList.clear();
+        mSelectProjectList.clear();
         for (ProjectList projectList : mProjectList) {
             LogT.d("添加的工作项目名称为：" + projectList.getName());
-            mProjectNameList.add(projectList.getName());
+            if(work_type == 1){//项目工作
+                if(projectList.getProperty() == 1){
+                    mProjectNameList.add(projectList.getName());
+                    mSelectProjectList.add(projectList);
+                }
+            }else if(work_type ==2){ //部门工作
+                if(projectList.getProperty() == 2){
+                    mProjectNameList.add(projectList.getName());
+                    mSelectProjectList.add(projectList);
+                }
+            }
+//            mProjectNameList.add(projectList.getName());
         }
         if (!isEdit && mProjectNameList.size() != 0) {
             LogT.d("当前为新增周报 ,且周报列表长度不为0");
@@ -339,9 +356,9 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                 public void onOptionsSelect(int options1, int options2, int options3, View v) {
                     LogT.d(" options1 " + options1 + " options2 " + options2 + " options3 " + options3);
                     //mViewDataBinding.workType.setText(workType.get(options1));
-                    projectId = mProjectList.get(options1).getId();
+                    projectId = mSelectProjectList.get(options1).getId();
                     LogT.d(" project id is " + projectId);
-                    mViewDataBinding.workProjectName.setText(mProjectList.get(options1).getName());
+                    mViewDataBinding.workProjectName.setText(mSelectProjectList.get(options1).getName());
                     initPlanList();
                 }
             }).setTitleBgColor(0xFF3dd078)//标题背景颜色 Night mode
@@ -384,6 +401,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             mViewDataBinding.workPlanName.setText("");
             return;
         }
+        mProjectPlanNameList.clear();
         for (FillProjectPlan projectPlan : mProjectPlan) {
             LogT.d("添加周报计划列表 " + projectPlan.getName());
             mProjectPlanNameList.add(projectPlan.getName());
@@ -435,6 +453,9 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                 }
                 if (isAddPlan) {
                     ToastUtils.show("计划为项目负责人指定,无法修改工作计划!");
+                    return;
+                }
+                if(mProjectPlan.size() ==0 ){
                     return;
                 }
                 planOptionsView.show();

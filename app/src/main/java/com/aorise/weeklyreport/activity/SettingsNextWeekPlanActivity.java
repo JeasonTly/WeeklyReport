@@ -17,7 +17,6 @@ import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.FillProjectPlan;
 import com.aorise.weeklyreport.bean.MemberListSpinnerBean;
-import com.aorise.weeklyreport.bean.ProjectPlan;
 import com.aorise.weeklyreport.bean.WeeklyReportUploadBean;
 import com.aorise.weeklyreport.databinding.ActivitySettingsNextWeekPlanBinding;
 import com.aorise.weeklyreport.network.ApiService;
@@ -45,18 +44,15 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private List<FillProjectPlan> mProjectPlan = new ArrayList<>();
     private List<Double> mPercentList = new ArrayList<>();
 
-    private List<String> mMemberNameList = new ArrayList<>();
     private List<String> mProjectPlanNameList = new ArrayList<>();
     private List<String> mPercentTextList = new ArrayList<>();
     private List<String> workType = new ArrayList<>();
 
     private OptionsPickerView<String> workTypeOptionsView;
-    private OptionsPickerView<String> projectOptionsView;
     private OptionsPickerView<String> planOptionsView;
     private OptionsPickerView<String> percentOptionsView;
 
     private int DEFAULT_WORKTYPE_SELECTION = 0;
-    private int DEFAULT_PROJECT_SELECTION = 0;
     private int DEFAULT_PLAN_SELECTION = 0;
     private int DEFAULT_PERCENT_SELECTION = 1;
 
@@ -93,7 +89,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         mViewDataBinding.commitPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(mViewDataBinding.specificThings.getText().toString())){
+                if (TextUtils.isEmpty(mViewDataBinding.specificThings.getText().toString())) {
                     ToastUtils.show("具体工作事项未填写!");
                     return;
                 }
@@ -174,7 +170,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private void initWorkTypePicker() {
         workType.add("项目工作");
         workType.add("部门工作");
-        workType.add("其他工作");
+//        workType.add("其他工作");
         mViewDataBinding.workType.setText(workType.get(DEFAULT_WORKTYPE_SELECTION));
         work_type = DEFAULT_WORKTYPE_SELECTION + 1;
 
@@ -215,7 +211,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
      * 初始化计划滚轮
      */
     private void initPlanListPicker() {
-        LogT.d(" initPlanListPicker.... " +mProjectPlan.size());
+        LogT.d(" initPlanListPicker.... " + mProjectPlan.size());
         if (mProjectPlan.size() == 0) {
             LogT.d("当前项目没有具体工作事项列表");
             mViewDataBinding.workPlanName.setText("");
@@ -262,6 +258,9 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (inputMethodManager.isActive()) {
                     inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workPlanArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                if (mProjectPlan.size() == 0) {
+                    return;
                 }
                 planOptionsView.show();
             }
@@ -317,7 +316,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
      * 初始化计划列表
      */
     private void initPlanList() {
-        LogT.d(" project id is " + projectId +" userId is "+userId);
+        LogT.d(" project id is " + projectId + " userId is " + userId);
         ApiService.Utils.getInstance(this).getProjectPlan(userId, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<FillProjectPlan>>>(this) {
