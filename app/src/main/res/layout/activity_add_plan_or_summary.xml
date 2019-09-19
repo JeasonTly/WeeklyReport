@@ -204,6 +204,7 @@
                         android:textSize="15sp" />
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/time_picker"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
