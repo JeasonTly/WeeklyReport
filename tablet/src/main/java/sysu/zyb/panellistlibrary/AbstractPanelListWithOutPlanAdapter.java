@@ -6,8 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.EventLogTags;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -24,7 +24,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import sysu.zyb.panellistlibrary.defaultcontent.DefaultContentAdapter;
 import sysu.zyb.panellistlibrary.defaultcontent.DefaultNoPlanContentAdapter;
 
 /**
@@ -39,7 +38,7 @@ import sysu.zyb.panellistlibrary.defaultcontent.DefaultNoPlanContentAdapter;
  * @author zyb
  */
 
-public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelListAdapter{
+public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelListAdapter {
 
     private static final String TAG = "ybz";
 
@@ -93,7 +92,7 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
     private boolean defaultColumn = true;
 
     private int initPosition = 0;//列表显示的初始值，默认第一条数据显示在最上面
-
+    private int initDefaultMonthPosition = 0;//设置默认月份
     private BaseAdapter columnAdapter;
     private BaseAdapter contentAdapter;
 
@@ -118,16 +117,20 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
      *
      * @param context
      * @param pl_root
-     * @param lv_content                内容的ListView
+     * @param lv_content 内容的ListView
      */
-    public AbstractPanelListWithOutPlanAdapter(Context context, PanelListLayout pl_root, ListView lv_content) {
+    public AbstractPanelListWithOutPlanAdapter(Context context, PanelListLayout pl_root, ListView lv_content,WorkTimePlanClickListener workTimePlanClickListener) {
         super(context, pl_root, lv_content, null);
         this.context = context;
         this.pl_root = pl_root;
         this.lv_content = lv_content;
+        this.workTimePlanClickListener = workTimePlanClickListener;
     }
 
-
+    public void scrollToDefaultPostion(int position) {
+        mhsv_content.smoothScrollTo(position * itemWidthList.get(0), 0);
+        mhsv_row.smoothScrollTo(position * itemWidthList.get(0), 0);
+    }
     //region APIs
 
     public void setItemHeight(int dp) {
@@ -366,18 +369,41 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
     public void notifyDataSetChanged() {
         // 先刷新lv_content的数据，然后根据判断决定是否要刷新表头的数据
         Log.d(TAG, " notifyDataSetChanged columnDataList size " + (columnDataList.size()) + " contentdata size " + contentDataList.size());
-        contentAdapter.notifyDataSetChanged();
-        ll_contentItem = (LinearLayout) lv_content.getChildAt(0);//获得content的第一个可见item
-        initColumnLayout();
-        initRowLayout();
-        // 当ListView绘制完成后设置初始位置，否则ll_contentItem会报空指针
-        lv_content.setSelection(initPosition);
-        lv_column.setSelection(initPosition);
+        Log.d(TAG, " notifyDataSetChanged itemwidth size " + (itemWidthList.size()) +" rowdata size "+rowDataList.size());
 
+        if(contentAdapter != null){
+            if(contentAdapter instanceof  DefaultNoPlanContentAdapter){
+                ((DefaultNoPlanContentAdapter)contentAdapter).updateContentItemSize(itemWidthList.size());
 
+            }
+        }
+        pl_root.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "post--lv_content = " + lv_content.toString());
+//                ll_contentItem = (LinearLayout) lv_content.getChildAt(lv_content.getFirstVisiblePosition());//获得content的第一个可见item
+                Log.d(TAG, "lv_content ...." + lv_content.getChildCount());
+                ll_contentItem = (LinearLayout) lv_content.getChildAt(0);//获得content的第一个可见item
+                initColumnLayout();
+                initRowLayout();
+
+                contentAdapter.notifyDataSetChanged();
+                // 当ListView绘制完成后设置初始位置，否则ll_contentItem会报空指针
+                lv_content.setSelection(initPosition);
+                lv_column.setSelection(initPosition);
+                scrollToDefaultPostion(initDefaultMonthPosition);
+            }
+        });
     }
 
-
+    /**
+     * 设置默认月份
+     *
+     * @param initDefaultMonthPosition
+     */
+    public void setInitDefaultMonthPosition(int initDefaultMonthPosition) {
+        this.initDefaultMonthPosition = initDefaultMonthPosition;
+    }
 
     /**
      * 核心代码：
@@ -515,7 +541,7 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
         }
 
         List<String> rowDataList1 = getRowDataList();
-        int rowCount = rowDataList1.size();
+        final int rowCount = rowDataList1.size();
 
         ll_row.setBackgroundColor(Color.parseColor(rowColor));
         //分隔线的设置，如果content的item设置了分割线，那row使用相同的分割线，除非单独给row设置了分割线
@@ -527,11 +553,14 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
         } else {
             ll_row.setDividerDrawable(rowDivider);
         }
-
+        if(ll_row.getChildCount() != 0){
+            ll_row.removeAllViews();
+        }
         // 横向表头每一个 item 的宽度都取决于 content 的 item 的宽度
         for (int i = 0; i < rowCount; i++) {
             TextView rowItem = new TextView(context);
             rowItem.setText(rowDataList1.get(i));//设置文字
+            Log.d("tuliyuan ","设置的横轴名称为"+rowDataList1.get(i));
             rowItem.getPaint().setFakeBoldText(true);
             rowItem.setWidth(widthArray[i]);//设置宽度
             rowItem.setHeight(titleHeight);//设置高度
@@ -543,7 +572,12 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
             rowItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(workTimePlanClickListener !=null ) {
+                    if (workTimePlanClickListener != null) {
+                        if(rowDataList != null && rowDataList.size()!=0){
+                            if(rowDataList.get(0).contains("周")){
+                                return;
+                            }
+                        }
                         workTimePlanClickListener.monthClick(position);
                     }
                 }

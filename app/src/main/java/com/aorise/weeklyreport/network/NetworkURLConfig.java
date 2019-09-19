@@ -31,5 +31,7 @@ public class NetworkURLConfig {
     public static final String WORKTIME_TOTALYEAR_STATISTIC = "api/userWorkTime";//根据年份获取当前工时
     public static final String WORKTIME_TOTALMONTH_STATISTIC = "api/userWorkTime/year/{year}";//根据年 月获取当前工时
     public static final String DEFAULT_WORKTIME= "api/workTime";//根据年份获取当前工时
+    public static final String DEFAULT_PROJECT_WORKTIME= "api/userWorkTimeProjectAPP";//根据年份和项目ID获取工时
+    public static final String DEFAULT_PROJECT_WEEKLY_WORKTIME= "api/userWorkTimeProject/year/{year}";//根据年份 月份 和项目ID获取工时
 
 }

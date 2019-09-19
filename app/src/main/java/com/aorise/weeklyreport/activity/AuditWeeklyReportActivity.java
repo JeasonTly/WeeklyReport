@@ -152,7 +152,11 @@ public class AuditWeeklyReportActivity extends AppCompatActivity implements View
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                if (tab.getText().equals("下周计划")) {
+                    mViewDataBinding.viewpager.setCurrentItem(1);
+                } else if (tab.getText().equals("本周总结")) {
+                    mViewDataBinding.viewpager.setCurrentItem(0);
+                }
             }
         });
     }

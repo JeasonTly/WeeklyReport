@@ -18,6 +18,8 @@ import com.aorise.weeklyreport.bean.ProjectBaseInfo;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectListBean;
 import com.aorise.weeklyreport.bean.ProjectPlan;
+import com.aorise.weeklyreport.bean.ProjectReportWeeklyWorkTime;
+import com.aorise.weeklyreport.bean.ProjectWorkTimeBean;
 import com.aorise.weeklyreport.bean.StatisticBean;
 import com.aorise.weeklyreport.bean.UserInfoBean;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
@@ -67,6 +69,7 @@ public interface ApiService {
 
     /**
      * 登录接口
+     *
      * @param userName
      * @param passWord
      * @return
@@ -81,6 +84,7 @@ public interface ApiService {
 
     /**
      * 填写周报
+     *
      * @param responseBody
      * @return
      */
@@ -90,6 +94,7 @@ public interface ApiService {
 
     /**
      * 修改
+     *
      * @param responseBody
      * @return
      */
@@ -171,6 +176,7 @@ public interface ApiService {
 
     /**
      * 获取成员列表 不分页
+     *
      * @param projectId
      * @return
      */
@@ -214,6 +220,7 @@ public interface ApiService {
 
     /**
      * 新增项目整体情况
+     *
      * @param model
      * @return
      */
@@ -223,6 +230,7 @@ public interface ApiService {
 
     /**
      * 修改项目整体情况
+     *
      * @param model
      * @return
      */
@@ -241,6 +249,7 @@ public interface ApiService {
 
     /**
      * 根据当前年份获取工时
+     *
      * @param year
      * @return
      */
@@ -250,13 +259,16 @@ public interface ApiService {
 
     /**
      * 根据当前年份获取工时
+     *
      * @param year
      * @return
      */
     @GET(NetworkURLConfig.WORKTIME_TOTALMONTH_STATISTIC)
-    Observable<Result<List<WeeklyWorkTimeBean>>> getMonthWorkTime(@Path("year") int year,@Query("month")int month);
+    Observable<Result<List<WeeklyWorkTimeBean>>> getMonthWorkTime(@Path("year") int year, @Query("month") int month);
+
     /**
      * 根据当前年份获取月份的计划工时
+     *
      * @param year
      * @return
      */
@@ -266,6 +278,7 @@ public interface ApiService {
 
     /**
      * 根据当前年份获取工时
+     *
      * @param requestBody
      * @return
      */
@@ -273,6 +286,27 @@ public interface ApiService {
     @PUT(NetworkURLConfig.DEFAULT_WORKTIME)
     Observable<Result> setWorkTime(@Body RequestBody requestBody);
 
+    /**
+     * 根据年份 和 项目ID获取工时信息
+     *
+     * @param year
+     * @param projectID
+     * @return
+     */
+    @GET(NetworkURLConfig.DEFAULT_PROJECT_WORKTIME)
+    Observable<Result<List<ProjectWorkTimeBean>>> getWorkTimeByProjectID(@Query("year") int year, @Query("projectId") int projectID);
+
+    /**
+     * 根据年份月份和项目ID获取工时信息
+     *
+     * @param year  年
+     * @param month  月
+     * @param projectid 项目ID
+     * @return
+     */
+
+    @GET(NetworkURLConfig.DEFAULT_PROJECT_WEEKLY_WORKTIME)
+    Observable<Result<List<ProjectReportWeeklyWorkTime>>> getWeeklyWorkTimeByMonth(@Path("year") int year, @Query("month") int month, @Query("projectId") int projectid);
 
     class Utils {
 
@@ -294,14 +328,9 @@ public interface ApiService {
                             j = new JSONObject(respString);
                             int code = j.optInt("code");
                             String msg = j.optString("message");
-                            LogT.d(" code is "+code  + " message is " +msg);
+                            LogT.d(" code is " + code + " message is " + msg);
                             boolean isRet = j.optBoolean("ret");
-//                            String simpleName = "";
-//                            if (context instanceof Activity) {
-//                                simpleName = ((Activity) context).getClass().getSimpleName();
-//                                LogT.d(" simpleName is "+simpleName);
-//                            }
-                            if(!isRet ){
+                            if (!isRet) {
                                 ToastUtils.show("登陆失败!");
                             }
                             switch (code) {

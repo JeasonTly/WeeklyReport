@@ -155,10 +155,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
             @Override
             public void onClick(View view) {
 
-              //  if (userType == 3 || userType == 2) {
-//                    Intent mIntent = new Intent();
-//                    mIntent.setClass(getActivity(), ProjectweeklyCheckActivity.class);
-//                    startActivity(mIntent);
+                if (userType == 3 || userType == 2) {
                 ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
                         .compose(ApiService.Utils.schedulersTransformer())
                         .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
@@ -207,16 +204,19 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                                 }
                             }
                         });
-               // }
+                }
             }
         });
         if (!isHeader) {
             mViewDataBinding.projectReportArea.setVisibility(View.GONE);
             mViewDataBinding.reportReviewArea.setVisibility(View.GONE);
             mViewDataBinding.jixiaoArea.setVisibility(View.GONE);
-            mViewDataBinding.llProjectWeekly.setVisibility(View.GONE);
-        }
+            //mViewDataBinding.llProjectWeekly.setVisibility(View.GONE);
 
+        }
+        if (userType == 3 || userType == 2) {
+            mViewDataBinding.llProjectWeekly.setVisibility(View.VISIBLE);
+        }
         initBanner();
         return mViewDataBinding.getRoot();
     }

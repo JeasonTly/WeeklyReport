@@ -144,6 +144,16 @@ public class ReviewAndToFillReportActivity extends AppCompatActivity implements 
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                if (tab.getText().equals("下周计划")) {
+                    mViewDataBinding.toreviewViewpager.setCurrentItem(1);
+                    addPlan = true;
+                    mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.GONE);
+                    // mCurrentFragment = mPlanFragment;
+                } else if (tab.getText().equals("本周总结")) {
+                    addPlan = false;
+                    mViewDataBinding.toreviewViewpager.setCurrentItem(0);
+                    mViewDataBinding.toreviewActionbar.actionMenu.setVisibility(View.VISIBLE);
+                }
 
             }
         });

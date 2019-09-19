@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.fragment.MemberInfoFragment;
@@ -14,6 +15,7 @@ import com.aorise.weeklyreport.activity.fragment.ProjectInfoFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectStatisticsFragment;
 import com.aorise.weeklyreport.activity.fragment.ProjectWorkHoursFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
+import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.databinding.ActivityProjectInfoBinding;
@@ -126,6 +128,11 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
         mViewDataBinding.infoTabHost.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                LogT.d(" 当前选择的是哪个页卡？ "+tab.getText());
+                LogT.d("页卡1为空？ "+(mProjectInfoFragment  ==null));
+                LogT.d("页卡2为空？ "+(mMemberInfoFragment  ==null));
+                LogT.d("页卡3为空？ "+(mProjectStatisticsFragment  ==null));
+                LogT.d("页卡4为空？ "+(projectWorkHoursFragment  ==null));
                 if (tab.getText().equals("项目统计")) {
                     mViewDataBinding.infoViewpager.setCurrentItem(0);
                 } else if (tab.getText().equals("项目工时")) {
@@ -140,12 +147,21 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                LogT.d(" 页卡 onTabUnselected "+ tab.getText());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                LogT.d(" 页卡 reselect "+ tab.getText());
+                if (tab.getText().equals("项目统计")) {
+                    mViewDataBinding.infoViewpager.setCurrentItem(0);
+                } else if (tab.getText().equals("项目工时")) {
+                    mViewDataBinding.infoViewpager.setCurrentItem(1);
+                } else if (tab.getText().equals("基本信息")) {
+                    mViewDataBinding.infoViewpager.setCurrentItem(2);
+                } else if (tab.getText().equals("成员信息")) {
+                    mViewDataBinding.infoViewpager.setCurrentItem(3);
+                }
             }
         });
     }
@@ -164,6 +180,7 @@ public class ProjectInfoActivity extends AppCompatActivity implements ViewPager.
 
     @Override
     public void onPageSelected(int i) {
+        LogT.d(" 当前选择的页卡是 "+i);
         mViewDataBinding.infoTabHost.setScrollPosition(i, 0, false);
     }
 

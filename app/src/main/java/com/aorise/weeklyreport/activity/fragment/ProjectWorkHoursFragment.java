@@ -3,7 +3,6 @@ package com.aorise.weeklyreport.activity.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,12 +16,11 @@ import android.widget.TextView;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.WRApplication;
-import com.aorise.weeklyreport.activity.WorkTimeMonthStatisticsActivity;
-import com.aorise.weeklyreport.activity.WorkTimeYearStatisticsActivity;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
-import com.aorise.weeklyreport.bean.PersonWorkTimeBean;
 import com.aorise.weeklyreport.bean.PlanWorkTimeSettingBean;
+import com.aorise.weeklyreport.bean.ProjectReportWeeklyWorkTime;
+import com.aorise.weeklyreport.bean.ProjectWorkTimeBean;
 import com.aorise.weeklyreport.databinding.FragmentProjectWorkHoursBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
@@ -37,7 +35,6 @@ import java.util.Date;
 import java.util.List;
 
 import okhttp3.RequestBody;
-import sysu.zyb.panellistlibrary.AbstractPanelListAdapter;
 import sysu.zyb.panellistlibrary.AbstractPanelListWithOutPlanAdapter;
 import sysu.zyb.panellistlibrary.WorkTimePlanClickListener;
 
@@ -47,6 +44,7 @@ import sysu.zyb.panellistlibrary.WorkTimePlanClickListener;
 public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanClickListener, MenuPopup.MenuPopupSelectedListener {
     private FragmentProjectWorkHoursBinding mViewDataBinding;
     private int currentYear = 2019;
+    private int currentMonth = 9;
     private int defaultYear = 2019;
     /**
      * 纵轴第一列固定列的数据，内容为各成员名称
@@ -69,13 +67,14 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
      */
     private List<String> planDataList = new ArrayList<>();
 
-    private AbstractPanelListAdapter mAdapter;
+    private AbstractPanelListWithOutPlanAdapter mAdapter;
     private String set_workTime_str = "";
     private MenuPopup menuPopup;
     private List<String> mYearList = new ArrayList<>();
     private static final String ARG_PARAM1 = "param1";
     private PlanWorkTimeSettingBean planWorkTimeSettingBean;
     private int projectId;
+
     public static ProjectWorkHoursFragment newInstance(int projectId) {
         // Required empty public constructor
         ProjectWorkHoursFragment projectWorkHoursFragment = new ProjectWorkHoursFragment();
@@ -95,7 +94,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         initItemWidthList();
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM1);
-            System.out.println("projectId"+projectId);
+            System.out.println("projectId" + projectId);
         }
         // 获取默认年份 tuliyuan add start @{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
@@ -139,7 +138,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
      * 初始化适配器！
      */
     private void initAdapter() {
-        mAdapter = new AbstractPanelListAdapter(getActivity(), mViewDataBinding.idPlRoot, mViewDataBinding.idLvContent,this) {
+        mAdapter = new AbstractPanelListWithOutPlanAdapter(getActivity(), mViewDataBinding.idPlRoot, mViewDataBinding.idLvContent, this) {
             @Override
             protected BaseAdapter getContentAdapter() {
                 return null;
@@ -156,7 +155,8 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         mAdapter.setPlanDataList(planDataList);// must have
         mAdapter.setItemHeight(40);// optional, dp
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
-        mAdapter.setInitDefaultMonthPosition(Integer.valueOf(simpleDateFormat.format(new Date())) - 1);
+        currentMonth = Integer.valueOf(simpleDateFormat.format(new Date()));
+        mAdapter.setInitDefaultMonthPosition(Integer.valueOf(currentMonth - 1));
     }
 
 
@@ -217,7 +217,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                     public void onNext(Result<PlanWorkTimeSettingBean> listResult) {
                         super.onNext(listResult);
                         LogT.d(" 获取到的预设工时统计信息为 " + listResult.toString());
-                        System.out.println("计划工时"+listResult.toString());
+                        System.out.println("计划工时" + listResult.toString());
                         if (listResult.isRet()) {
                             planWorkTimeSettingBean = listResult.getData();
                             caculateDefaultWorkTime(listResult.getData());
@@ -230,10 +230,10 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
      * 获取当前年的项目工时
      */
     private void initWorkTimeData() {
-
-        ApiService.Utils.getInstance(getActivity()).getTotalWorkTime(currentYear)
+        LogT.d(" 根据项目ID获取工时信息 " + projectId + " current year " + currentYear);
+        ApiService.Utils.getInstance(getActivity()).getWorkTimeByProjectID(currentYear, projectId)
                 .compose(ApiService.Utils.schedulersTransformer())
-                .subscribe(new CustomSubscriber<Result<List<PersonWorkTimeBean>>>(getActivity()) {
+                .subscribe(new CustomSubscriber<Result<List<ProjectWorkTimeBean>>>(getActivity()) {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
@@ -245,10 +245,10 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                     }
 
                     @Override
-                    public void onNext(Result<List<PersonWorkTimeBean>> listResult) {
+                    public void onNext(Result<List<ProjectWorkTimeBean>> listResult) {
                         super.onNext(listResult);
                         LogT.d(" 获取到的工时统计信息为 " + listResult.toString());
-                        System.out.println("当前年份工时"+listResult.toString());
+                        System.out.println("当前年份工时" + listResult.toString());
                         if (listResult.isRet()) {
                             contentList.clear();
                             columnData.clear();
@@ -259,8 +259,9 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     }
 
 
+
     /**
-     * 获取各个月份的计划工时
+     * 获取当前年各个月份的计划工时
      *
      * @param workTimeBean
      */
@@ -296,14 +297,70 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     }
 
     /**
-     * 计算获取全部人员的工时信息，并进行数据整合
+     * 获取当前月各个周的工时
+     *
+     * @param list)
+     */
+
+    private void caculateMonthStatisticData(List<ProjectReportWeeklyWorkTime> list) {
+
+        for (ProjectReportWeeklyWorkTime workTimeBean : list) {
+            LogT.d(" add person " + workTimeBean.getFullName());
+            LogT.d(" add ProjectReportWeeklyWorkTime " + workTimeBean.toString());
+            List<String> data = new ArrayList<>();
+
+            for (String month : rowDataList) {
+                switch (month) {
+                    case "第一周":
+                        data.add(String.valueOf(workTimeBean.getWeekOne()));
+                        break;
+                    case "第二周":
+                        data.add(String.valueOf(workTimeBean.getWeekTow()));
+                        break;
+                    case "第三周":
+                        data.add(String.valueOf(workTimeBean.getWeekThree()));
+                        break;
+                    case "第四周":
+                        data.add(String.valueOf(workTimeBean.getWeekFour()));
+                        break;
+                    case "第五周":
+                        data.add(String.valueOf(workTimeBean.getWeekFive()));
+                        break;
+                    case "第六周":
+                        data.add(String.valueOf(workTimeBean.getWeekSix()));
+                        break;
+                    case "总计":
+                        data.add(String.valueOf(workTimeBean.getWeekOne()
+                                + workTimeBean.getWeekTow()
+                                + workTimeBean.getWeekThree()
+                                + workTimeBean.getWeekFour()
+                                + workTimeBean.getWeekFive()
+                                + workTimeBean.getWeekSix()));
+                        break;
+                }
+            }
+            LogT.d(" data size is "+data.size());
+            contentList.add(data);//添加内容数据
+            columnData.add(workTimeBean.getFullName());//添加角色名称
+        }
+
+        mAdapter.setContentDataList(contentList);// must have
+        mAdapter.setItemWidthList(itemWidthList);// must have
+        mAdapter.setColumnDataList(columnData);
+        mAdapter.setRowDataList(rowDataList);// must have
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 计算获取全部人员的年份工时信息，并进行数据整合
      *
      * @param list
      */
-    private void caculateStatisticData(List<PersonWorkTimeBean> list) {
+    private void caculateStatisticData(List<ProjectWorkTimeBean> list) {
 
-        for (PersonWorkTimeBean workTimeBean : list) {
+        for (ProjectWorkTimeBean workTimeBean : list) {
             LogT.d(" add person " + workTimeBean.getFullName());
+            LogT.d(" add ProjectWorkTimeBean " + workTimeBean.toString());
             List<String> data = new ArrayList<>();
 
             for (String month : rowDataList) {
@@ -424,12 +481,9 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         if (position == 12) {
             return;
         }
-        Intent mIntent = new Intent();
-        mIntent.putExtra("year", currentYear);
-        mIntent.putExtra("month", position + 1);
-        mIntent.putExtra("monthStr", string);
-        mIntent.setClass(getActivity(), WorkTimeMonthStatisticsActivity.class);
-        startActivity(mIntent);
+        currentMonth = position + 1;
+       // rowDataList.clear();
+        send2MonthView();
     }
 
     /**
@@ -624,4 +678,48 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         initWorkTimeData();
     }
 
+    private void send2MonthView() {
+        rowDataList.clear();
+        columnData.clear();
+        contentList.clear();
+        itemWidthList.clear();
+        planDataList.clear();
+
+        rowDataList.add("第一周");
+        rowDataList.add("第二周");
+        rowDataList.add("第三周");
+        rowDataList.add("第四周");
+        rowDataList.add("第五周");
+        rowDataList.add("第六周");
+        rowDataList.add("总计");
+
+        for (String string : rowDataList) {
+            itemWidthList.add(80);
+        }
+
+        ApiService.Utils.getInstance(getActivity()).getWeeklyWorkTimeByMonth(currentYear, currentMonth, projectId)
+                .compose(ApiService.Utils.schedulersTransformer())
+                .subscribe(new CustomSubscriber<Result<List<ProjectReportWeeklyWorkTime>>>(getActivity()) {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(Result<List<ProjectReportWeeklyWorkTime>> o) {
+                        super.onNext(o);
+                        LogT.d(" 获取月份的周数的工时信息 "+o.getData().toString());
+                        if(o.isRet()){
+                            contentList.clear();
+                            columnData.clear();
+                            caculateMonthStatisticData(o.getData());
+                        }
+                    }
+                });
+    }
 }

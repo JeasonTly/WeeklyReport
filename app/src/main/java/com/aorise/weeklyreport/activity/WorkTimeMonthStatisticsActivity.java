@@ -21,8 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sysu.zyb.panellistlibrary.AbstractPanelListWithOutPlanAdapter;
+import sysu.zyb.panellistlibrary.WorkTimePlanClickListener;
 
-public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
+public class WorkTimeMonthStatisticsActivity extends AppCompatActivity implements WorkTimePlanClickListener {
     private ActivityWorkTimeMonthStatisticsBinding mViewDataBinding;
     /**
      * 当前年、月，用于网络请求
@@ -85,7 +86,7 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        mAdapter = new AbstractPanelListWithOutPlanAdapter(this, mViewDataBinding.idPlRoot, mViewDataBinding.idLvContent) {
+        mAdapter = new AbstractPanelListWithOutPlanAdapter(this, mViewDataBinding.idPlRoot, mViewDataBinding.idLvContent,this) {
             @Override
             protected BaseAdapter getContentAdapter() {
                 return null;
@@ -208,5 +209,15 @@ public class WorkTimeMonthStatisticsActivity extends AppCompatActivity {
         mAdapter.setColumnDataList(columnData);
         mAdapter.setRowDataList(rowDataList);// must have
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void monthClick(int postion) {
+
+    }
+
+    @Override
+    public void workTimePlanClick(int position) {
+
     }
 }

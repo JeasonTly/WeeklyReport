@@ -237,6 +237,11 @@ public class NextWeekReprotManagerFragment extends Fragment {
         mDialog.create().show();
     }
 
+    /**
+     * 提交项目周报审批，是否通过
+     * @param pass
+     */
+
     private void CommitApproveResult(boolean pass) {
         //审批状态1,未审批，2,已通过，3,驳回
         int approvestatus = pass ? 2 : 3;

@@ -49,6 +49,7 @@ public class DefaultNoPlanContentAdapter extends ArrayAdapter<List<String>> {
         this.itemHeight = itemHeight;
     }
 
+
     @Override
     public int getCount() {
         int count = super.getCount();
@@ -72,14 +73,17 @@ public class DefaultNoPlanContentAdapter extends ArrayAdapter<List<String>> {
 
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
+       // Log.d("tuliyuan"," 11111111111111111 "+contentItemSize);
         for (int i = 0; i < contentItemSize; i++) {
             viewHolder.getContentTextViewList().get(i).setText(itemData.get(i));
+            viewHolder.getContentTextViewList().get(i).setVisibility(View.VISIBLE);
         }
 
         return convertView;
     }
-
+    public void updateContentItemSize(int newSize){
+        this.contentItemSize = newSize;
+    }
     class ViewHolder {
         public List<TextView> getContentTextViewList() {
             return contentTextViewList;
@@ -109,6 +113,7 @@ public class DefaultNoPlanContentAdapter extends ArrayAdapter<List<String>> {
                     contentTextViewList.get(i).setWidth(0);
                 }
                 contentTextViewList.get(i).setHeight(itemHeight);
+                contentTextViewList.get(i).setVisibility(View.GONE);
             }
         }
     }

@@ -6,13 +6,14 @@ import java.io.Serializable;
 
 /**
  * Created by Tuliyuan.
- * Date: 2019/9/4.
+ * Date: 2019/9/19.
  */
-public class WeeklyWorkTimeBean extends BaseObservable implements Serializable {
+public class ProjectReportWeeklyWorkTime extends BaseObservable implements Serializable {
     @Override
     public String toString() {
-        return "WeeklyWorkTimeBean{" +
+        return "ProjectReportWeeklyWorkTime{" +
                 "userId=" + userId +
+                ", post='" + post + '\'' +
                 ", year=" + year +
                 ", month=" + month +
                 ", weekOne=" + weekOne +
@@ -22,23 +23,27 @@ public class WeeklyWorkTimeBean extends BaseObservable implements Serializable {
                 ", weekFive=" + weekFive +
                 ", weekSix=" + weekSix +
                 ", fullName='" + fullName + '\'' +
+                ", projectId=" + projectId +
                 '}';
     }
 
     /**
-     * userId : 54
-     * year : 2019
-     * month : 9
-     * weekOne : 5
-     * weekTow : 4
+     * userId : 66
+     * post : 项目负责人
+     * year : 0
+     * month : 0
+     * weekOne : 0
+     * weekTow : 0
      * weekThree : 0
      * weekFour : 0
      * weekFive : 0
      * weekSix : 0
-     * fullName : 潘森林
+     * fullName : 田宜鑫
+     * projectId : 58
      */
 
     private int userId;
+    private String post;
     private int year;
     private int month;
     private float weekOne;
@@ -48,6 +53,7 @@ public class WeeklyWorkTimeBean extends BaseObservable implements Serializable {
     private float weekFive;
     private float weekSix;
     private String fullName;
+    private int projectId;
 
     public int getUserId() {
         return userId;
@@ -55,6 +61,14 @@ public class WeeklyWorkTimeBean extends BaseObservable implements Serializable {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
     }
 
     public int getYear() {
@@ -127,5 +141,13 @@ public class WeeklyWorkTimeBean extends BaseObservable implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 }

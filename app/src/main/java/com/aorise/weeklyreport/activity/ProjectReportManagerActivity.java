@@ -165,7 +165,15 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                if (tab.getText().equals(TITLE_ONE)) {
+                    mViewDataBinding.managerViewpager.setCurrentItem(0);
+                    addPlan = false;
+                } else if (tab.getText().equals(TITLE_TWO)) {
+                    addPlan = true;
+                    mViewDataBinding.managerViewpager.setCurrentItem(1);
 
+                }
+                mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
             }
         });
 
