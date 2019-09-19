@@ -43,7 +43,7 @@ public class DateUtil {
         Log.d(TAG, " from1 " + from1 + " to1 " + to1);
         diffDay = (int) ((to1 - from1) / (1000 * 60 * 60 * 24));
         int diffhour = (int) ((to1 - from1) / (1000 * 60 * 60));
-        if (diffhour > 0) {
+        if (diffhour >= 0) {
             diffDay++;
         }
         Log.d(TAG, "差距了......." + Math.abs(diffDay) + "天");
