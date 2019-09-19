@@ -63,16 +63,19 @@ public class DefaultNoPlanContentAdapter extends ArrayAdapter<List<String>> {
         ViewHolder viewHolder;
         List<String> itemData = getItem(position);
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.defaultcontentitem, parent, false);
-            viewHolder = new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
-
-
-        } else {
-
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+//        if (convertView == null) {
+//
+//            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.defaultcontentitem, parent, false);
+//            viewHolder = new ViewHolder(convertView);
+//            convertView.setTag(viewHolder);
+//
+//        } else {
+//
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.defaultcontentitem, parent, false);
+        viewHolder = new ViewHolder(convertView);
+        convertView.setTag(viewHolder);
        // Log.d("tuliyuan"," 11111111111111111 "+contentItemSize);
         for (int i = 0; i < contentItemSize; i++) {
             viewHolder.getContentTextViewList().get(i).setText(itemData.get(i));

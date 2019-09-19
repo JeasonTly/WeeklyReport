@@ -89,9 +89,10 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mViewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_work_hours, container, false);
-        WRApplication.getInstance().addActivity(getActivity());
+
         initRowDataList();
         initItemWidthList();
+
         if (getArguments() != null) {
             projectId = getArguments().getInt(ARG_PARAM1);
             System.out.println("projectId" + projectId);
@@ -118,8 +119,24 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                 menuPopup.showPopupWindow(mViewDataBinding.worktimeYearActionbar.actionBarTitleArea);
             }
         });
-        mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.INVISIBLE);
+        mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.GONE);
+        mViewDataBinding.worktimeYearActionbar.actionbarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rowDataList.clear();
+                columnData.clear();
+                contentList.clear();
+                itemWidthList.clear();
+                planDataList.clear();
 
+
+                initRowDataList();
+                initItemWidthList();
+                initDefaultWorkTime();
+                initWorkTimeData();
+                mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.GONE);
+            }
+        });
 
         mViewDataBinding.idLvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -163,6 +180,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     @Override
     public void onResume() {
         super.onResume();
+
         initDefaultWorkTime();
         initWorkTimeData();
     }
@@ -481,6 +499,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         if (position == 12) {
             return;
         }
+        mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.VISIBLE);
         currentMonth = position + 1;
        // rowDataList.clear();
         send2MonthView();

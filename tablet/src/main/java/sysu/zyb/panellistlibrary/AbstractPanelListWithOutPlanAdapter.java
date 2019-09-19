@@ -374,7 +374,6 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
         if(contentAdapter != null){
             if(contentAdapter instanceof  DefaultNoPlanContentAdapter){
                 ((DefaultNoPlanContentAdapter)contentAdapter).updateContentItemSize(itemWidthList.size());
-
             }
         }
         pl_root.post(new Runnable() {
@@ -391,7 +390,9 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
                 // 当ListView绘制完成后设置初始位置，否则ll_contentItem会报空指针
                 lv_content.setSelection(initPosition);
                 lv_column.setSelection(initPosition);
-                scrollToDefaultPostion(initDefaultMonthPosition);
+                if(itemWidthList.size() > 8) {
+                    scrollToDefaultPostion(initDefaultMonthPosition);
+                }
             }
         });
     }
@@ -523,6 +524,7 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
         Integer[] widthArray = new Integer[getRowDataList().size()];
 
         if (ll_contentItem == null) {
+            Log.d("tuliyuan", " ll_contentItem ==null ");
             if (itemWidthList != null) {
                 for (int i = 0; i < widthArray.length; i++) {
                     widthArray[i] = itemWidthList.get(i);
@@ -535,14 +537,18 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
                 }
             }
         } else {
+            Log.d("tuliyuan", " ll_contentItem != null ");
+//            for (int i = 0; i < widthArray.length; i++) {
+//                widthArray[i] = ll_contentItem.getChildAt(i).getWidth();
+//            }
             for (int i = 0; i < widthArray.length; i++) {
-                widthArray[i] = ll_contentItem.getChildAt(i).getWidth();
+                widthArray[i] = itemWidthList.get(i);
             }
         }
 
         List<String> rowDataList1 = getRowDataList();
         final int rowCount = rowDataList1.size();
-
+        Log.d("tuliyuan","设置横轴行数为 "+rowCount);
         ll_row.setBackgroundColor(Color.parseColor(rowColor));
         //分隔线的设置，如果content的item设置了分割线，那row使用相同的分割线，除非单独给row设置了分割线
         if (rowDivider == null) {
@@ -553,14 +559,14 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
         } else {
             ll_row.setDividerDrawable(rowDivider);
         }
-        if(ll_row.getChildCount() != 0){
+        if(ll_row.getChildCount() != 0 ){
             ll_row.removeAllViews();
         }
         // 横向表头每一个 item 的宽度都取决于 content 的 item 的宽度
         for (int i = 0; i < rowCount; i++) {
             TextView rowItem = new TextView(context);
             rowItem.setText(rowDataList1.get(i));//设置文字
-            Log.d("tuliyuan ","设置的横轴名称为"+rowDataList1.get(i));
+            Log.d("tuliyuan ","设置的横轴名称为"+rowDataList1.get(i) +" widthArray[i] is "+widthArray[i]);
             rowItem.getPaint().setFakeBoldText(true);
             rowItem.setWidth(widthArray[i]);//设置宽度
             rowItem.setHeight(titleHeight);//设置高度
