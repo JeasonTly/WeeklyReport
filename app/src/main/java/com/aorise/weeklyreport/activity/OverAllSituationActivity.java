@@ -124,6 +124,7 @@ public class OverAllSituationActivity extends AppCompatActivity {
         managerReport.setByWeek(type == 2 ? (weeks + 1) : weeks);
         managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
         managerReport.setPercentComplete(mBean.getPercentComplete());
+        managerReport.setApprovalState(1); //1 待审批
         managerReport.setType(type);
         String json = gson.toJson(managerReport);
         RequestBody requestBody = CommonUtils.getRequestBody(json);
@@ -171,6 +172,7 @@ public class OverAllSituationActivity extends AppCompatActivity {
         managerReport.setByWeek(weeks);
         managerReport.setOverallSituation(mViewDataBinding.oveallSituationSpth.getText().toString());
         managerReport.setPercentComplete(mBean.getPercentComplete());
+        managerReport.setApprovalState(1); //1 待审批
         managerReport.setType(type);
 
         String json = gson.toJson(managerReport);

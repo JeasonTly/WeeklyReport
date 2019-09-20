@@ -7,22 +7,25 @@ import java.io.Serializable;
  * Date: 2019/8/15.
  */
 public class UploadManagerReport implements Serializable {
-
     @Override
     public String toString() {
         return "UploadManagerReport{" +
-                "byWeek=" + byWeek +
+                "approvalState=" + approvalState +
+                ", byWeek=" + byWeek +
                 ", endDate='" + endDate + '\'' +
                 ", id=" + id +
                 ", overallSituation='" + overallSituation + '\'' +
                 ", percentComplete=" + percentComplete +
                 ", projectId=" + projectId +
                 ", startDate='" + startDate + '\'' +
+                ", state=" + state +
                 ", type=" + type +
+                ", weeklyType=" + weeklyType +
                 '}';
     }
 
     /**
+     * approvalState : 0
      * byWeek : 0
      * endDate : string
      * id : 0
@@ -30,9 +33,12 @@ public class UploadManagerReport implements Serializable {
      * percentComplete : 0
      * projectId : 0
      * startDate : string
+     * state : 0
      * type : 0
+     * weeklyType : 0
      */
 
+    private int approvalState;
     private int byWeek;
     private String endDate;
     private int id;
@@ -40,7 +46,17 @@ public class UploadManagerReport implements Serializable {
     private double percentComplete;
     private int projectId;
     private String startDate;
+    private int state;
     private int type;
+    private int weeklyType;
+
+    public int getApprovalState() {
+        return approvalState;
+    }
+
+    public void setApprovalState(int approvalState) {
+        this.approvalState = approvalState;
+    }
 
     public int getByWeek() {
         return byWeek;
@@ -98,11 +114,27 @@ public class UploadManagerReport implements Serializable {
         this.startDate = startDate;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public int getType() {
         return type;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getWeeklyType() {
+        return weeklyType;
+    }
+
+    public void setWeeklyType(int weeklyType) {
+        this.weeklyType = weeklyType;
     }
 }

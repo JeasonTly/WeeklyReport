@@ -345,14 +345,14 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
         if (!isEdit && mProjectNameList.size() != 0) {
             LogT.d("当前为新增周报 ,且周报列表长度不为0");
             mViewDataBinding.workProjectName.setText(mProjectNameList.get(DEFAULT_PROJECT_SELECTION));
-            projectId = mProjectList.get(DEFAULT_PROJECT_SELECTION).getId();
+            projectId = mSelectProjectList.get(DEFAULT_PROJECT_SELECTION).getId();
         } else {
             LogT.d("当前为编辑周报 ,isEdit_projectName " + isEdit_projectName);
             mViewDataBinding.workProjectName.setText(isEdit_projectName);
             // if(TextUtils.isEmpty())
 
         }
-        LogT.d(" mProjectPlanNameList size is " + mProjectPlanNameList.size());
+        LogT.d(" mProjectNameList size is " + mProjectNameList.size());
         if (mProjectNameList.size() != 0) {
             initPlanList();
         } else {
@@ -707,7 +707,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                             mProjectPlan.addAll(o.getData());
                             LogT.d("projectPlanList is " + mProjectPlan.size());
                             mProjectPlanNameList.clear();
-                            if (!isEdit) {
+                            if (!isEdit &&mProjectPlan.size() !=0) {
                                 mViewDataBinding.workPlanName.setText(mProjectPlan.get(DEFAULT_PLAN_SELECTION).getName());
                             }
                             initPlanListPicker();
@@ -793,6 +793,10 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             ToastUtils.show("当前未填写完成情况!");
             return;
         }
+        if(mUpdateDateList.size() == 0){
+            ToastUtils.show("当前未选择工作日期!");
+            return;
+        }
 
         Gson gson = new Gson();
         WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
@@ -804,9 +808,11 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             weeks++;
         }
         mUploadInfo.setByWeek(weeks);//周数
-        mUploadInfo.setStartDate(mUpdateDateList.get(0).getWorkDate());
-        mUploadInfo.setEndDate(mUpdateDateList.get(mUpdateDateList.size() - 1).getWorkDate());
+        if (mUpdateDateList.size() != 0) {
 
+            mUploadInfo.setStartDate(mUpdateDateList.get(0).getWorkDate());
+            mUploadInfo.setEndDate(mUpdateDateList.get(mUpdateDateList.size() - 1).getWorkDate());
+        }
         mUploadInfo.setExplain(explain);//情况说明
         mUploadInfo.setIssue(issue);//遇到的问题
         mUploadInfo.setOutput(output);//输出物

@@ -146,6 +146,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         projectName = mIntent.getStringExtra("projectName");
         auditProjectReport = mIntent.getBooleanExtra("isAudit", false);
         LogT.d(" getDefaultIntent userId is " + userId + " projectId is  " + projectId + " auditProjectReport " + auditProjectReport);
+
     }
 
     private void initFragment() {
@@ -169,8 +170,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                     mViewDataBinding.managerViewpager.setCurrentItem(1);
 
                 }
-                mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
-
+                if(!auditProjectReport){
+                    mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
+                }
             }
 
             @Override
@@ -218,7 +220,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                 mNextReportFragment.updateManagerList(currentWeekNumber);
             }
         }
-        mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
+        if(!auditProjectReport) {
+            mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
+        }
         mViewDataBinding.managerTabHost.setScrollPosition(i, 0, false);
     }
 
