@@ -184,6 +184,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                                             Intent mIntent = new Intent();
                                             mIntent.putExtra("projectId", mProjectList.get(0).getId());
                                             mIntent.putExtra("projectName", mProjectList.get(0).getName());
+                                            mIntent.putExtra("projectType", mProjectList.get(0).getProperty());
                                             mIntent.putExtra("userId", userId);
                                             mIntent.putExtra("isAudit", true);
                                             mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
@@ -465,8 +466,8 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
         fillReportText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         fillReportText.setSpan(smallSpan, 0, fillReportText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         mViewDataBinding.fillReport.setText(fillReportText);
-        SpannableString reviewText = new SpannableString("周报审核 Review");
-        reviewText.setSpan(largeSpan, 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        SpannableString reviewText = new SpannableString("成员周报审核 Review");
+        reviewText.setSpan(largeSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         reviewText.setSpan(smallSpan, 0, reviewText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         mViewDataBinding.review.setText(reviewText);
 
@@ -488,8 +489,9 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
 
     /**
      * 跳转至项目周报或者项目选择界面
-     * 因为该功能只对负责人可见，所以只传入了isHeaderReport = true
+     * 因为该功能只对负责人或者超级管理员经理办可见，所以只传入了isHeaderReport = true
      */
+
     private void startChooseProject() {
         if (isSuperManager) {
             ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
@@ -520,6 +522,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
 
                                         mIntent.putExtra("projectId", mProjectList.get(0).getId());
                                         mIntent.putExtra("projectName", mManagerProjectList.get(0).getName());
+                                        mIntent.putExtra("projectType", mManagerProjectList.get(0).getProperty());
                                         mIntent.putExtra("userId", userId);
                                         mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
                                         startActivity(mIntent);
@@ -567,6 +570,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                                         Intent mIntent = new Intent();
                                         mIntent.putExtra("projectId", mProjectList.get(0).getId());
                                         mIntent.putExtra("projectName", mProjectList.get(0).getName());
+                                        mIntent.putExtra("projectType", mProjectList.get(0).getProperty());
                                         mIntent.putExtra("userId", userId);
                                         mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
                                         startActivity(mIntent);

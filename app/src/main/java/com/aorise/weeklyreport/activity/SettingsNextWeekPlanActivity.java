@@ -63,6 +63,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private int planId = -1;
     private double percent = 10;
     private int projectId = -1;
+    private int projectType = -1;
     private String projectName = "";
 
     private InputMethodManager inputMethodManager;
@@ -78,7 +79,6 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         initGetIntent();
         initMemberList();
         initActionBar();
-        initWorkTypePicker();
         mViewDataBinding.ownerArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,53 +159,17 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private void initGetIntent() {
         Intent mIntent = getIntent();
         projectId = mIntent.getIntExtra("projectId", -1);
+        projectType = mIntent.getIntExtra("projectType", -1);
         weeksNumber = mIntent.getIntExtra("weeks", -1) + 1;
         projectName = mIntent.getStringExtra("projectName");
         mViewDataBinding.workProjectName.setText(projectName);
+        mViewDataBinding.workType.setText(projectType == 1 ? "项目工作" : "部门工作");
     }
 
     /**
      * 初始化项目类型滚轮
      */
-    private void initWorkTypePicker() {
-        workType.add("项目工作");
-        workType.add("部门工作");
-//        workType.add("其他工作");
-        mViewDataBinding.workType.setText(workType.get(DEFAULT_WORKTYPE_SELECTION));
-        work_type = DEFAULT_WORKTYPE_SELECTION + 1;
 
-        workTypeOptionsView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                LogT.d(" options1 " + options1 + " options2 " + options2 + " options3 " + options3);
-                mViewDataBinding.workType.setText(workType.get(options1));
-                work_type = options1 + 1;
-            }
-        }).setTitleBgColor(0xFF3dd078)//标题背景颜色 Night mode
-                .setBgColor(0xFFFFFFFF)//滚轮背景颜色 Night mode
-                .setTitleColor(0xFFffffff)
-                .setDividerColor(0xFF7af1c8)//
-                .setTextColorCenter(0xFF7af1c8)
-                .setTextColorOut(0xFF919ac6)
-                .setCancelColor(0xFFffffff)//取消颜色
-                .setSubmitColor(0xFFffffff)//确定颜色
-                .isCenterLabel(true)
-                .setLabels("", "", "")
-                .setSelectOptions(DEFAULT_WORKTYPE_SELECTION)
-                //标题文字
-                .setTitleText("选择工作类型")
-                .build();
-        workTypeOptionsView.setPicker(workType);
-        mViewDataBinding.workTypeArea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (inputMethodManager.isActive()) {
-                    inputMethodManager.hideSoftInputFromWindow(mViewDataBinding.workTypeArea.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                workTypeOptionsView.show();
-            }
-        });
-    }
 
     /**
      * 初始化计划滚轮

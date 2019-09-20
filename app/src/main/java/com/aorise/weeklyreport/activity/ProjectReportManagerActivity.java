@@ -69,6 +69,11 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
      * 项目ID
      */
     private int projectId = -1;
+
+    /**
+     * 项目类型。1为项目工作，2为部门工作
+     */
+    private int projectType = -1;
     /**
      * 项目名称
      */
@@ -110,6 +115,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                 Intent mIntent = new Intent();
                 mIntent.setClass(ProjectReportManagerActivity.this, SettingsNextWeekPlanActivity.class);
                 mIntent.putExtra("projectId", projectId);
+                mIntent.putExtra("projectType", projectType);
                 mIntent.putExtra("projectName", projectName);
                 mIntent.putExtra("weeks", currentWeekNumber);
                 startActivity(mIntent);
@@ -128,6 +134,7 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         Intent mIntent = getIntent();
         userId = mIntent.getIntExtra("userId", 1);
         projectId = mIntent.getIntExtra("projectId", 1);
+        projectType = mIntent.getIntExtra("projectType", 1);
         projectName = mIntent.getStringExtra("projectName");
         auditProjectReport = mIntent.getBooleanExtra("isAudit", false);
         LogT.d(" getDefaultIntent userId is " + userId + " projectId is  " + projectId + " auditProjectReport " + auditProjectReport);

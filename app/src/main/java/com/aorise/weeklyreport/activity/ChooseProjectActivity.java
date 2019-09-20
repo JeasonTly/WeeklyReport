@@ -308,6 +308,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", mAdapter.getmFilterList().get(position).getId());
                 mIntent.putExtra("projectName", mAdapter.getmFilterList().get(position).getName());
+                mIntent.putExtra("projectType", mAdapter.getmFilterList().get(position).getProperty());
                 mIntent.putExtra("userId", userId);
                 mIntent.putExtra("isAudit", true);
                 mIntent.setClass(this, ProjectReportManagerActivity.class);
@@ -325,6 +326,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("projectName", projectName);
+                mIntent.putExtra("projectType", mAdapter.getmFilterList().get(position).getProperty());
                 mIntent.putExtra("userId", userId);
                 mIntent.setClass(this, ProjectReportManagerActivity.class);
                 startActivity(mIntent);

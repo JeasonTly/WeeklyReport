@@ -122,7 +122,7 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:textColor="#3dd078"
-                    android:text="周报审核review"
+                    android:text="成员周报审核review"
                     android:textSize="32sp"
                     android:id="@+id/review"
                     android:layout_width="wrap_content"
