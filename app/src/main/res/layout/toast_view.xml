@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:id="@+id/toast_plan_name"
-                android:text="工作阶段:"
+                android:text="计划名:"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
 
