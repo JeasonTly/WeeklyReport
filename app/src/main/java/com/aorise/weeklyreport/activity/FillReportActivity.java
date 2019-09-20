@@ -352,10 +352,10 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             // if(TextUtils.isEmpty())
 
         }
-        LogT.d(" mProjectPlanNameList size is "+mProjectPlanNameList.size());
-        if (mProjectNameList .size() != 0) {
+        LogT.d(" mProjectPlanNameList size is " + mProjectPlanNameList.size());
+        if (mProjectNameList.size() != 0) {
             initPlanList();
-        }else{
+        } else {
             mViewDataBinding.workPlanName.setText("");
             mProjectPlan.clear();
             mProjectPlanNameList.clear();
@@ -707,7 +707,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                             mProjectPlan.addAll(o.getData());
                             LogT.d("projectPlanList is " + mProjectPlan.size());
                             mProjectPlanNameList.clear();
-                            if(!isEdit){
+                            if (!isEdit) {
                                 mViewDataBinding.workPlanName.setText(mProjectPlan.get(DEFAULT_PLAN_SELECTION).getName());
                             }
                             initPlanListPicker();
@@ -776,19 +776,20 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
         String explain = mViewDataBinding.showHow.getText().toString();
         String issue = mViewDataBinding.needHelp.getText().toString();
 
-        if(planId ==-1){
+        if (planId == -1) {
             ToastUtils.show("当前未选择项目计划!");
+            return;
         }
 
-        if(TextUtils.isEmpty(mViewDataBinding.specificThings.getText().toString())){
+        if (TextUtils.isEmpty(mViewDataBinding.specificThings.getText().toString())) {
             ToastUtils.show("当前未填写具体工作事项!");
             return;
         }
-        if(TextUtils.isEmpty(mViewDataBinding.output.getText().toString())){
+        if (TextUtils.isEmpty(mViewDataBinding.output.getText().toString())) {
             ToastUtils.show("当前未填写输出物!");
             return;
         }
-        if(TextUtils.isEmpty(mViewDataBinding.showHow.getText().toString())){
+        if (TextUtils.isEmpty(mViewDataBinding.showHow.getText().toString())) {
             ToastUtils.show("当前未填写完成情况!");
             return;
         }
