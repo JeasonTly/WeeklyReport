@@ -145,6 +145,10 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
             }
         });
         initAdapter();
+
+        initDefaultWorkTime();
+        initWorkTimeData();
+
         mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + defaultYear);
         mViewDataBinding.idPlRoot.setAdapter(mAdapter);
         // Inflate the layout for this fragment
@@ -180,9 +184,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     @Override
     public void onResume() {
         super.onResume();
-
-        initDefaultWorkTime();
-        initWorkTimeData();
+       // mViewDataBinding.idPlRoot.setAdapter(mAdapter);
     }
 
     /**

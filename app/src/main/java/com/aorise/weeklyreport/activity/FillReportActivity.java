@@ -34,8 +34,10 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -339,6 +341,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             }
 //            mProjectNameList.add(projectList.getName());
         }
+
         if (!isEdit && mProjectNameList.size() != 0) {
             LogT.d("当前为新增周报 ,且周报列表长度不为0");
             mViewDataBinding.workProjectName.setText(mProjectNameList.get(DEFAULT_PROJECT_SELECTION));
@@ -348,6 +351,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             mViewDataBinding.workProjectName.setText(isEdit_projectName);
             // if(TextUtils.isEmpty())
         }
+        initPlanList();
         if (projectOptionsView != null) {
             projectOptionsView.setPicker(mProjectNameList);
         } else {
@@ -543,10 +547,14 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             weeks = mDetailBean.getByWeek();
 
             editcurrentWeekDateList.clear();
-            mViewDataBinding.setCurrentMonth(TimeUtil.getInstance().endate2monthName(mDetailBean.getWeeklyDateModels().get(0).getWorkDate()));
+            if(mDetailBean.getWeeklyDateModels().size() !=0) {
+                mViewDataBinding.setCurrentMonth(TimeUtil.getInstance().endate2monthName(mDetailBean.getWeeklyDateModels().get(0).getWorkDate()));
+            }else{
+                SimpleDateFormat sm = new SimpleDateFormat("yyyy年MM月");
+                mViewDataBinding.setCurrentMonth(sm.format(new Date()));
+            }
             if (mDetailBean.getWeeklyDateModels() != null && mDetailBean.getWeeklyDateModels().size() != 0) {
                 for (int i = 0; i < mDetailBean.getWeeklyDateModels().size(); i++) {
-
                     editcurrentWeekDateList.add(TimeUtil.getInstance().weeklyBean2TimePicker(mDetailBean.getWeeklyDateModels().get(i)));
                 }
             }

@@ -82,6 +82,7 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
     private String specificItem;
     private List<ApprovalModelListBean> approvalModelList;
     private List<WeeklyDateModelsBean> weeklyDateModels;
+    private int weeklyType;
 
     public int getId() {
         return id;
@@ -360,5 +361,13 @@ public class WeeklyReportDetailBean extends BaseObservable implements Serializab
         public void setDayState(int dayState) {
             this.dayState = dayState;
         }
+    }
+
+    public int getWeeklyType() {
+        return weeklyType;
+    }
+
+    public void setWeeklyType(int weeklyType) {
+        this.weeklyType = weeklyType;
     }
 }

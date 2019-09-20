@@ -10,6 +10,10 @@
         <variable
             name="next_specificThings"
             type="String"></variable>
+
+        <variable
+            name="next_approvalstatus"
+            type="String"></variable>
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -71,7 +75,7 @@
                             android:textSize="15sp" />
 
                     </RelativeLayout>
-
+                    <!-- 阶段完成-->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -101,7 +105,7 @@
                             android:textSize="15sp" />
 
                     </RelativeLayout>
-
+                    <!-- 具体工作事项-->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -123,12 +127,44 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginTop="10dp"
-                            android:gravity="end"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
                             android:layout_marginRight="5dp"
                             android:layout_marginBottom="10dp"
+                            android:gravity="end"
                             android:text="@{next_specificThings}"
+                            android:textColor="#C5C5C5"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+                    <!-- 审批状态-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/base_line_cf">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="审批状态"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="end"
+                            android:text="@{next_approvalstatus}"
                             android:textColor="#C5C5C5"
                             android:textSize="15sp" />
 
@@ -183,5 +219,15 @@
                 android:onClick="NotAllowClick"
                 android:text="驳回" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/next_aprroval_status"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="已通过"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"
+            android:visibility="gone" />
     </LinearLayout>
 </layout>

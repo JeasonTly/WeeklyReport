@@ -127,6 +127,14 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         initViewPager();
     }
 
+    public int getProjectType() {
+        return projectType;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
     /**
      * 获取默认Intent 跳转携带的参数信息
      */

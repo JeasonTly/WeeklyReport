@@ -42,7 +42,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
 
     private List<MemberListSpinnerBean> mMemberList = new ArrayList<>();
     private List<FillProjectPlan> mProjectPlan = new ArrayList<>();
-    private List<Double> mPercentList = new ArrayList<>();
+    private List<Float> mPercentList = new ArrayList<>();
 
     private List<String> mProjectPlanNameList = new ArrayList<>();
     private List<String> mPercentTextList = new ArrayList<>();
@@ -61,10 +61,14 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private int userId = -1;
     private String userName = "";
     private int planId = -1;
-    private double percent = 10;
+    private float percent = 10;
     private int projectId = -1;
     private int projectType = -1;
     private String projectName = "";
+    private boolean isEdit = false;
+
+    private String planName = "";
+    private String specificThings = "";
 
     private InputMethodManager inputMethodManager;
     private String[] dialog_item_name;
@@ -164,6 +168,18 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
         projectName = mIntent.getStringExtra("projectName");
         mViewDataBinding.workProjectName.setText(projectName);
         mViewDataBinding.workType.setText(projectType == 1 ? "项目工作" : "部门工作");
+
+        if (mIntent.hasExtra("userName")) {
+            isEdit = mIntent.getBooleanExtra("isEdit", false);
+            userName = mIntent.getStringExtra("userName");
+            planName = mIntent.getStringExtra("planName");
+            specificThings = mIntent.getStringExtra("specificThings");
+            percent = mIntent.getFloatExtra("percentComplete", -1);
+            mViewDataBinding.workPercentText.setText(String.valueOf(percent) +"%");
+            mViewDataBinding.workPlanName.setText(planName);
+            mViewDataBinding.specificThings.setText(specificThings);
+            mViewDataBinding.ownerName.setText(userName);
+        }
     }
 
     /**
@@ -181,13 +197,20 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
             mViewDataBinding.workPlanName.setText("");
             return;
         }
-        for (FillProjectPlan projectPlan : mProjectPlan) {
-            LogT.d("添加周报列表 " + projectPlan.getName());
-            mProjectPlanNameList.add(projectPlan.getName());
-        }
-        mViewDataBinding.workPlanName.setText(mProjectPlanNameList.get(DEFAULT_PLAN_SELECTION));
+        mProjectPlanNameList.clear();
         planId = mProjectPlan.get(DEFAULT_PLAN_SELECTION).getId();
+        for (int i = 0; i <mProjectPlan.size() ; i++) {
+            if(isEdit && planName.equals(mProjectPlan.get(i).getName())){
+                LogT.d("当前为编辑预设下周计划 周报界面!");
+                planId = mProjectPlan.get(i).getId();
+                DEFAULT_PLAN_SELECTION = i;
+            }
+            mProjectPlanNameList.add(mProjectPlan.get(i).getName());
+        }
 
+        if(!isEdit) {
+            mViewDataBinding.workPlanName.setText(mProjectPlanNameList.get(DEFAULT_PLAN_SELECTION));
+        }
         if (planOptionsView != null) {
             planOptionsView.setPicker(mProjectPlanNameList);
             // planOptionsView.setSelectOptions(DEFAULT_PLAN_SELECTION);
@@ -236,12 +259,15 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
      */
     private void initPercentListPicker() {
         for (int i = 0; i <= 10; i++) {
-            double percentNumber = (double) (i * 10);
+            float percentNumber = (float) (i * 10);
             mPercentList.add(percentNumber);
             mPercentTextList.add(i * 10 + "%");
         }
-        mViewDataBinding.workPercentText.setText(mPercentTextList.get(DEFAULT_PERCENT_SELECTION));
-        percent = mPercentList.get(DEFAULT_PERCENT_SELECTION);
+
+        if(!isEdit) {
+            mViewDataBinding.workPercentText.setText(mPercentTextList.get(DEFAULT_PERCENT_SELECTION));
+            percent = mPercentList.get(DEFAULT_PERCENT_SELECTION);
+        }
         percentOptionsView = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -338,7 +364,14 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                             mMemberList.addAll(o.getData());
                             if (mMemberList != null && mMemberList.size() != 0) {
                                 userId = mMemberList.get(dialog_select_index).getId();
+                                for (int i = 0; i < mMemberList.size(); i++) {
+                                    if (mMemberList.get(i).getUserName().equals(userName) && isEdit) {//如果为编辑周报的情况
+                                        dialog_select_index = i;
+                                        LogT.d(" user Name is "+userName);
+                                    }
+                                }
                                 mViewDataBinding.ownerName.setText(mMemberList.get(dialog_select_index).getUserName());
+
                                 initPlanList();
                             }
                         }

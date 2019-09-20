@@ -21,6 +21,7 @@ public class HeaderItemBean implements Serializable {
                 ", endDate='" + endDate + '\'' +
                 ", overallSituation='" + overallSituation + '\'' +
                 ", percentComplete=" + percentComplete +
+                ", approvalState=" + approvalState +
                 ", planDetailsList=" + planDetailsList +
                 '}';
     }
@@ -33,6 +34,7 @@ public class HeaderItemBean implements Serializable {
     private String endDate;
     private String overallSituation;
     private double percentComplete;
+    private int approvalState; //1.未审核，2。已审核，3 已驳回
     private List<PlanDetailsListBean> planDetailsList;
 
     public int getId() {
@@ -99,9 +101,13 @@ public class HeaderItemBean implements Serializable {
         this.percentComplete = percentComplete;
     }
 
+    public int getApprovalState() {
+        return approvalState;
+    }
 
-
-
+    public void setApprovalState(int approvalState) {
+        this.approvalState = approvalState;
+    }
 
     public List<PlanDetailsListBean> getPlanDetailsList() {
         return planDetailsList;
@@ -139,7 +145,7 @@ public class HeaderItemBean implements Serializable {
         private String stage;
         private String specificPhase;
         private String specificItem;
-        private int percentComplete;
+        private float percentComplete;
         private String person;
         private int isComplete;
 
@@ -183,11 +189,11 @@ public class HeaderItemBean implements Serializable {
             this.specificPhase = specificPhase;
         }
 
-        public int getPercentComplete() {
+        public float getPercentComplete() {
             return percentComplete;
         }
 
-        public void setPercentComplete(int percentComplete) {
+        public void setPercentComplete(float percentComplete) {
             this.percentComplete = percentComplete;
         }
 

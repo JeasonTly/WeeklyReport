@@ -366,6 +366,7 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
      * 如果不是，则不更新纵向表头，交给开发者自己去更新
      * 开发者可以调用{@link #getColumnAdapter()}以获得columnAdapter
      */
+    @Override
     public void notifyDataSetChanged() {
         // 先刷新lv_content的数据，然后根据判断决定是否要刷新表头的数据
         Log.d(TAG, " notifyDataSetChanged columnDataList size " + (columnDataList.size()) + " contentdata size " + contentDataList.size());
@@ -382,11 +383,12 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
                 Log.d(TAG, "post--lv_content = " + lv_content.toString());
 //                ll_contentItem = (LinearLayout) lv_content.getChildAt(lv_content.getFirstVisiblePosition());//获得content的第一个可见item
                 Log.d(TAG, "lv_content ...." + lv_content.getChildCount());
+                Log.d(TAG,"  post--lv_content height is "+ lv_column.getHeight());
                 ll_contentItem = (LinearLayout) lv_content.getChildAt(0);//获得content的第一个可见item
                 initColumnLayout();
                 initRowLayout();
-
-                contentAdapter.notifyDataSetChanged();
+                columnAdapter.notifyDataSetChanged();
+               // contentAdapter.notifyDataSetChanged();
                 // 当ListView绘制完成后设置初始位置，否则ll_contentItem会报空指针
                 lv_content.setSelection(initPosition);
                 lv_column.setSelection(initPosition);
@@ -772,13 +774,11 @@ public abstract class AbstractPanelListWithOutPlanAdapter extends AbstractPanelL
                 view = new TextView(context);
                 ((TextView) view).setHeight(columnItemHeight);
                 //如果以上设置高度的代码无法生效，则使用下面的方式设置
-//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(titleWidth,columnItemHeight);
-//                view.setLayoutParams(lp);
-//                view.getLayoutParams().height = columnItemHeight;
+
             } else {
                 view = convertView;
             }
-            Log.d("tuliyuan1111", "设置列" + columnDataList.get(position));
+            Log.d("tuliyuan", "设置列" + columnDataList.get(position));
             ((TextView) view).setText(columnDataList.get(position));
             ((TextView) view).setTextSize(15);
             view.setPadding(0, 0, 0, 0);

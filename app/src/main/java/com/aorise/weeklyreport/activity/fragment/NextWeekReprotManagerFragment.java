@@ -17,7 +17,10 @@ import android.widget.RadioGroup;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
+import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
+import com.aorise.weeklyreport.activity.SettingsNextWeekPlanActivity;
 import com.aorise.weeklyreport.adapter.ProjectManagerReportRecclerAdapter;
+import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
@@ -40,7 +43,7 @@ import okhttp3.RequestBody;
  */
 
 
-public class NextWeekReprotManagerFragment extends Fragment {
+public class NextWeekReprotManagerFragment extends Fragment implements RecyclerListClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -113,7 +116,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
         mAdapter = new ProjectManagerReportRecclerAdapter(getActivity(), memberWeeklyModelListBeans);
         mViewDataBinding.nextReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.nextReportRecycler.setAdapter(mAdapter);
-
+        mAdapter.setItemClickListener(this);
         mViewDataBinding.nextOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +161,14 @@ public class NextWeekReprotManagerFragment extends Fragment {
     public synchronized void updateManagerList(final int weeks) {
         this.weeks = weeks;
         LogT.d(" project id is " + projectId + " weeks is " + weeks);
+        if (isAudit) {
+            mViewDataBinding.nextAprrovalStatus.setVisibility(View.GONE);
+            mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
+        } else {
+            mViewDataBinding.nextAprrovalStatus.setVisibility(View.GONE);
+            mViewDataBinding.auditArea.setVisibility(View.GONE);
+        }
+
         ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks + 1, 2)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
@@ -191,6 +202,29 @@ public class NextWeekReprotManagerFragment extends Fragment {
 
                             mViewDataBinding.setNextStage(mHeaderItemBean.getPercentComplete() + "%");
                             mViewDataBinding.setNextSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());
+                            if (TextUtils.isEmpty(mHeaderItemBean.getOverallSituation())) {
+                                mViewDataBinding.setNextApprovalstatus("待审批");
+                            } else {
+                                String approvalStatus = "";
+                                switch (mHeaderItemBean.getApprovalState()) {
+                                    case 1:
+                                        approvalStatus = "待审批";
+                                        break;
+                                    case 2:
+                                        if (isAudit) {
+                                            mViewDataBinding.nextAprrovalStatus.setText("已通过");
+                                            mViewDataBinding.nextAprrovalStatus.setVisibility(View.VISIBLE);
+                                            mViewDataBinding.auditArea.setVisibility(View.GONE);
+                                        }
+                                        approvalStatus = "已通过";
+                                        break;
+                                    case 3:
+                                        approvalStatus = "已驳回";
+                                        break;
+                                }
+                                mViewDataBinding.setNextApprovalstatus(approvalStatus);
+                            }
+
                             mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }
@@ -239,6 +273,7 @@ public class NextWeekReprotManagerFragment extends Fragment {
 
     /**
      * 提交项目周报审批，是否通过
+     *
      * @param pass
      */
 
@@ -288,5 +323,36 @@ public class NextWeekReprotManagerFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onClick(int position) {
+        LogT.d(" onClick " + memberWeeklyModelListBeans.get(position).toString());
+        if (mHeaderItemBean != null) {
+            if (mHeaderItemBean.getApprovalState() == 2) {
+                return;
+            }
+        }
+        if (TextUtils.isEmpty(memberWeeklyModelListBeans.get(position).getSpecificPhase())
+                || TextUtils.isEmpty(memberWeeklyModelListBeans.get(position).getSpecificItem())) {
+            return;
+        }
+        Intent mIntent = new Intent();
+        mIntent.setClass(getActivity(), SettingsNextWeekPlanActivity.class);
+        mIntent.putExtra("projectId", projectId);
+        mIntent.putExtra("projectType", ((ProjectReportManagerActivity) getActivity()).getProjectType());
+        mIntent.putExtra("projectName", ((ProjectReportManagerActivity) getActivity()).getProjectName());
+        mIntent.putExtra("planName", memberWeeklyModelListBeans.get(position).getSpecificPhase());
+        mIntent.putExtra("specificThings", memberWeeklyModelListBeans.get(position).getSpecificItem());
+        mIntent.putExtra("userName", memberWeeklyModelListBeans.get(position).getPerson());
+        mIntent.putExtra("percentComplete", memberWeeklyModelListBeans.get(position).getPercentComplete());
+        mIntent.putExtra("isEdit", true);
+        mIntent.putExtra("weeks", weeks);
+        startActivity(mIntent);
+    }
+
+    @Override
+    public void onLongClick(int position) {
+
     }
 }

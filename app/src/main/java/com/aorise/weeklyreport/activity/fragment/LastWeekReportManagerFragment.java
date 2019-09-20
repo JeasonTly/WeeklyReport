@@ -18,6 +18,7 @@ import android.widget.RadioGroup;
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
 import com.aorise.weeklyreport.adapter.ProjectManagerReportRecclerAdapter;
+import com.aorise.weeklyreport.adapter.RecyclerListClickListener;
 import com.aorise.weeklyreport.adapter.SpacesItemDecoration;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
@@ -38,7 +39,7 @@ import okhttp3.RequestBody;
 /**
  * 周报管理系统的项目周报总结
  */
-public class LastWeekReportManagerFragment extends Fragment {
+public class LastWeekReportManagerFragment extends Fragment implements RecyclerListClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -124,6 +125,7 @@ public class LastWeekReportManagerFragment extends Fragment {
         mAdapter = new ProjectManagerReportRecclerAdapter(getActivity(), memberWeeklyModelListBeans);
         mViewDataBinding.lastReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
+        mAdapter.setItemClickListener(this);
         /**
          * 项目周报整体情况总结
          */
@@ -173,6 +175,13 @@ public class LastWeekReportManagerFragment extends Fragment {
     public synchronized void updateManagerList(int weeks) {
         this.weeks = weeks;
         LogT.d("project id is " + projectId + " weeks is " + weeks);
+        if(isAudit){
+            mViewDataBinding.lastAprrovalStatus.setVisibility(View.GONE);
+            mViewDataBinding.auditArea.setVisibility(View.VISIBLE);
+        } else {
+            mViewDataBinding.lastAprrovalStatus.setVisibility(View.GONE);
+            mViewDataBinding.auditArea.setVisibility(View.GONE);
+        }
         ApiService.Utils.getInstance(getContext()).getHeaderList(projectId, weeks, 1)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<HeaderItemBean>>(this.getContext()) {
@@ -205,6 +214,29 @@ public class LastWeekReportManagerFragment extends Fragment {
                             LogT.d(" 具体周报列表数为" + o.getData().getPlanDetailsList().size());
                             mViewDataBinding.setLastStage(mHeaderItemBean.getPercentComplete() + "%");
                             mViewDataBinding.setLastSpecificThings(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation()) ? "未填写" : mHeaderItemBean.getOverallSituation());
+                            if(TextUtils.isEmpty(mHeaderItemBean.getOverallSituation())){
+                                mViewDataBinding.setLastApprovalStates("待审批");
+                            }else {
+                                String approvalStatus = "";
+                                switch (mHeaderItemBean.getApprovalState()){
+                                    case 1:
+                                        approvalStatus = "待审批";
+                                        break;
+                                    case 2:
+                                        if(isAudit) {
+                                            mViewDataBinding.lastAprrovalStatus.setText("已通过");
+                                            mViewDataBinding.lastAprrovalStatus.setVisibility(View.VISIBLE);
+                                            mViewDataBinding.auditArea.setVisibility(View.GONE);
+                                        }
+                                        approvalStatus = "已通过";
+                                        break;
+                                    case 3:
+                                        approvalStatus = "已驳回";
+                                        break;
+                                }
+                                mViewDataBinding.setLastApprovalStates(approvalStatus);
+                            }
+
                             mAdapter.refreshData(o.getData().getPlanDetailsList());
                         }
                     }
@@ -302,5 +334,15 @@ public class LastWeekReportManagerFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onClick(int position) {
+
+    }
+
+    @Override
+    public void onLongClick(int position) {
+
     }
 }
