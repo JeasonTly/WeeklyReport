@@ -76,7 +76,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
     /**
      * 工作计划ID
      */
-    private int planId = 1;
+    private int planId = -1;
     /**
      * 百分比
      */
@@ -270,7 +270,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
     private void initWorkTypePicker() {
         workType.add("项目工作");
         workType.add("部门工作");
-       // workType.add("其他工作");
+        // workType.add("其他工作");
         if (!isEdit) {
             mViewDataBinding.workType.setText(workType.get(DEFAULT_WORKTYPE_SELECTION));
             work_type = DEFAULT_WORKTYPE_SELECTION + 1;
@@ -283,7 +283,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                 LogT.d(" options1 " + options1 + " options2 " + options2 + " options3 " + options3);
                 mViewDataBinding.workType.setText(workType.get(options1));
                 work_type = options1 + 1;
-                initProjectListPicker();
+                initProjectList();
             }
         }).setTitleBgColor(0xFF3dd078)//标题背景颜色 Night mode
                 .setBgColor(0xFFFFFFFF)//滚轮背景颜色 Night mode
@@ -310,6 +310,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                     ToastUtils.show("计划为项目负责人指定,无法修改工作类型!");
                     return;
                 }
+
                 workTypeOptionsView.show();
             }
         });
@@ -328,18 +329,17 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
         mSelectProjectList.clear();
         for (ProjectList projectList : mProjectList) {
             LogT.d("添加的工作项目名称为：" + projectList.getName());
-            if(work_type == 1){//项目工作
-                if(projectList.getProperty() == 1){
+            if (work_type == 1) {//项目工作
+                if (projectList.getProperty() == 1) {
                     mProjectNameList.add(projectList.getName());
                     mSelectProjectList.add(projectList);
                 }
-            }else if(work_type ==2){ //部门工作
-                if(projectList.getProperty() == 2){
+            } else if (work_type == 2) { //部门工作
+                if (projectList.getProperty() == 2) {
                     mProjectNameList.add(projectList.getName());
                     mSelectProjectList.add(projectList);
                 }
             }
-//            mProjectNameList.add(projectList.getName());
         }
 
         if (!isEdit && mProjectNameList.size() != 0) {
@@ -350,8 +350,18 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             LogT.d("当前为编辑周报 ,isEdit_projectName " + isEdit_projectName);
             mViewDataBinding.workProjectName.setText(isEdit_projectName);
             // if(TextUtils.isEmpty())
+
         }
-        initPlanList();
+        LogT.d(" mProjectPlanNameList size is "+mProjectPlanNameList.size());
+        if (mProjectNameList .size() != 0) {
+            initPlanList();
+        }else{
+            mViewDataBinding.workPlanName.setText("");
+            mProjectPlan.clear();
+            mProjectPlanNameList.clear();
+            initPlanListPicker();
+        }
+
         if (projectOptionsView != null) {
             projectOptionsView.setPicker(mProjectNameList);
         } else {
@@ -391,6 +401,10 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                     ToastUtils.show("计划为项目负责人指定,无法修改项目名称!");
                     return;
                 }
+                if (mProjectNameList.size() == 0) {
+                    ToastUtils.show("当前无项目!");
+                    return;
+                }
                 projectOptionsView.show();
             }
         });
@@ -400,7 +414,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
      * 初始化计划滚轮
      */
     private void initPlanListPicker() {
-        if (mProjectPlan.size() == 0 && TextUtils.isEmpty(mViewDataBinding.workPlanName.getText())) {
+        if (mProjectPlan.size() == 0) {
             LogT.d("当前项目没有具体工作事项列表");
             mViewDataBinding.workPlanName.setText("");
             return;
@@ -459,7 +473,8 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                     ToastUtils.show("计划为项目负责人指定,无法修改工作计划!");
                     return;
                 }
-                if(mProjectPlan.size() ==0 ){
+                if (mProjectPlanNameList.size() == 0) {
+                    ToastUtils.show("当前无项目计划!");
                     return;
                 }
                 planOptionsView.show();
@@ -547,9 +562,9 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             weeks = mDetailBean.getByWeek();
 
             editcurrentWeekDateList.clear();
-            if(mDetailBean.getWeeklyDateModels().size() !=0) {
+            if (mDetailBean.getWeeklyDateModels().size() != 0) {
                 mViewDataBinding.setCurrentMonth(TimeUtil.getInstance().endate2monthName(mDetailBean.getWeeklyDateModels().get(0).getWorkDate()));
-            }else{
+            } else {
                 SimpleDateFormat sm = new SimpleDateFormat("yyyy年MM月");
                 mViewDataBinding.setCurrentMonth(sm.format(new Date()));
             }
@@ -659,7 +674,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                             LogT.d("mProjectList is " + mProjectList.toString());
                             mProjectNameList.clear();
                             initProjectListPicker();
-                            initPlanList();
+
                         }
                     }
                 });
@@ -692,8 +707,10 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
                             mProjectPlan.addAll(o.getData());
                             LogT.d("projectPlanList is " + mProjectPlan.size());
                             mProjectPlanNameList.clear();
+                            if(!isEdit){
+                                mViewDataBinding.workPlanName.setText(mProjectPlan.get(DEFAULT_PLAN_SELECTION).getName());
+                            }
                             initPlanListPicker();
-                            // mViewDataBinding.specificThings.setAdapter(new CustomSpinnerAdapter(FillReportActivity.this, R.layout.item_spinner_list, mProjectPlan));
                         }
                     }
                 });
@@ -704,7 +721,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
      * 写recycleview 是简单，但是还得先计算单个view占得宽度。就这样吧。应该不会增加什么了
      */
     private void updateCommitDate() {
-        if(mUpdateDateList !=null){
+        if (mUpdateDateList != null) {
             mUpdateDateList.clear();
         }
 
@@ -723,7 +740,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             modelsBean.setWorkDate(TimeUtil.getInstance().cn2enDate(currentWeekDateList.get(i).getDateName()));
             mUpdateDateList.add(modelsBean);
         }
-        LogT.d(" mUpdateDateList is " + mUpdateDateList.toString() + " workTime " + workTime );
+        LogT.d(" mUpdateDateList is " + mUpdateDateList.toString() + " workTime " + workTime);
         String startTime = TimeUtil.getInstance().cn2enDate(currentWeekDateList.get(0).getDateName());
         String endTime = TimeUtil.getInstance().cn2enDate(currentWeekDateList.get(currentWeekDateList.size() - 1).getDateName());
         for (int i = 0; i < currentWeekDateList.size(); i++) {
@@ -733,7 +750,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
             }
         }
         for (int i = 0; i < currentWeekDateList.size(); i++) {
-            if (currentWeekDateList.get(i).getSelectStates()  > 0 && i > 0) {
+            if (currentWeekDateList.get(i).getSelectStates() > 0 && i > 0) {
                 endTime = TimeUtil.getInstance().cn2enDate(currentWeekDateList.get(i).getDateName());
             }
         }
@@ -758,8 +775,25 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
         String output = mViewDataBinding.output.getText().toString();
         String explain = mViewDataBinding.showHow.getText().toString();
         String issue = mViewDataBinding.needHelp.getText().toString();
-        Gson gson = new Gson();
 
+        if(planId ==-1){
+            ToastUtils.show("当前未选择项目计划!");
+        }
+
+        if(TextUtils.isEmpty(mViewDataBinding.specificThings.getText().toString())){
+            ToastUtils.show("当前未填写具体工作事项!");
+            return;
+        }
+        if(TextUtils.isEmpty(mViewDataBinding.output.getText().toString())){
+            ToastUtils.show("当前未填写输出物!");
+            return;
+        }
+        if(TextUtils.isEmpty(mViewDataBinding.showHow.getText().toString())){
+            ToastUtils.show("当前未填写完成情况!");
+            return;
+        }
+
+        Gson gson = new Gson();
         WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
         if (approvalStatus == 2) {
             approvalStatus = 1;
@@ -787,6 +821,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
         if (isEdit) {
             mUploadInfo.setId(reportId);
         }
+
         mUploadInfo.setWeeklyDateModels(mUpdateDateList);
         LogT.d(" upload info is " + mUploadInfo.toString());
         String jsonData = gson.toJson(mUploadInfo);
