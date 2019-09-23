@@ -245,9 +245,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
             mProjectPlanNameList.add(mProjectPlan.get(i).getName());
         }
 
-        if(!isEdit) {
-            mViewDataBinding.workPlanName.setText(mProjectPlanNameList.get(DEFAULT_PLAN_SELECTION));
-        }
+        mViewDataBinding.workPlanName.setText(mProjectPlanNameList.get(DEFAULT_PLAN_SELECTION));
         if (planOptionsView != null) {
             planOptionsView.setPicker(mProjectPlanNameList);
             // planOptionsView.setSelectOptions(DEFAULT_PLAN_SELECTION);
@@ -365,6 +363,8 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                             mProjectPlan.addAll(o.getData());
                             LogT.d("projectPlanList is " + mProjectPlan.size());
                             mProjectPlanNameList.clear();
+                           // LogT.d(" default position is "+DEFAULT_PLAN_SELECTION +" name is "+mProjectPlan.get(0).getName());
+                           // mViewDataBinding.workPlanName.setText(mProjectPlan.get(DEFAULT_PLAN_SELECTION).getName());
                             initPlanListPicker();
                             // mViewDataBinding.specificThings.setAdapter(new CustomSpinnerAdapter(FillReportActivity.this, R.layout.item_spinner_list, mProjectPlan));
                         }
@@ -445,6 +445,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(userName)) {
                     userName = mMemberList.get(dialog_select_index).getUserName();
                 }
+                DEFAULT_PLAN_SELECTION = 0;
                 mViewDataBinding.ownerName.setText(userName);
                 LogT.d(" userId is " + userId);
                 initPlanList();

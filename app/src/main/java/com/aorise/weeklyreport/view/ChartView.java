@@ -79,7 +79,7 @@
         /**
          *  上边距
          */
-        private int margin_top = 24;
+        private int margin_top = 40;
         /**
          *  底边距
          */
@@ -96,17 +96,17 @@
         /**
          *   为柱的宽度，也为X轴text的宽度
          */
-        private int mBarItemWidth = 180;
+        private int mBarItemWidth = 200;
 
         /**
          *   为柱之间的间距
          */
-        private int mBarItemSpace = 100;
+        private int mBarItemSpace = 160;
 
         /**
          *  Y轴坐标文字描述宽度 日期描述
          */
-        private int mXTextPaintWidth = 120;//
+        private int mXTextPaintWidth = 180;//
 
 
         private int startX; // 指的是X轴的起始位置，应该为mXTextPaintWidth+ Y_xWidth + 左边距
@@ -164,7 +164,7 @@
 
             todayPaint = new TextPaint();
             todayPaint.setColor(ContextCompat.getColor(context, R.color.red));
-            todayPaint.setTextSize(DensityUtil.dip2px(getContext(), 12));
+            todayPaint.setTextSize(DensityUtil.dip2px(getContext(), 10));
 
             BlurMaskFilter PaintBGBlur = new BlurMaskFilter(
                     1, BlurMaskFilter.Blur.INNER);
@@ -263,7 +263,7 @@
             for (int i = 0; i < default_value + 1; i++) {
                 TextPaint textPaint = new TextPaint();
                 textPaint.setColor(Color.GRAY);
-                textPaint.setTextSize(DensityUtil.dip2px(getContext(), 16));
+                textPaint.setTextSize(DensityUtil.dip2px(getContext(), 10));
                 // 设置文字右对齐
                 textPaint.setTextAlign(Paint.Align.LEFT);
                 String text = "";
