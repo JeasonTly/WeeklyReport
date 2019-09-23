@@ -66,6 +66,7 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
     private int projectType = -1;
     private String projectName = "";
     private boolean isEdit = false;
+    private int memberId = -1;
 
     private String planName = "";
     private String specificThings = "";
@@ -99,42 +100,76 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                 }
                 WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
                 mUploadInfo.setApprovalState(1);
-                mUploadInfo.setWorkType(work_type);
-                mUploadInfo.setType(2);
+                mUploadInfo.setWorkType(work_type);//工作类型
+                mUploadInfo.setType(2); //计划还是总结
                 mUploadInfo.setProjectId(projectId);
                 mUploadInfo.setPlanId(planId);
                 mUploadInfo.setPercentComplete(percent);
                 mUploadInfo.setUserId(userId);
                 mUploadInfo.setByWeek(weeksNumber);
                 mUploadInfo.setSpecificItem(mViewDataBinding.specificThings.getText().toString());
+                if(isEdit){
+                    mUploadInfo.setId(memberId);
+                }
                 Gson gson = new Gson();
                 String jsonData = gson.toJson(mUploadInfo);
                 RequestBody mResponseBody = CommonUtils.getRequestBody(jsonData);
-                ApiService.Utils.getInstance(SettingsNextWeekPlanActivity.this).fillInWeeklyReprot(mResponseBody)
-                        .compose(ApiService.Utils.schedulersTransformer())
-                        .subscribe(new CustomSubscriber<Result>(SettingsNextWeekPlanActivity.this) {
-                            @Override
-                            public void onCompleted() {
-                                super.onCompleted();
-                            }
+                if(isEdit){
 
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                            }
-
-                            @Override
-                            public void onNext(Result o) {
-                                super.onNext(o);
-                                LogT.d(" fillInWeeklyReprot data is " + o);
-                                if (o.isRet()) {
-                                    ToastUtils.show("指派下周计划成功");
-                                    SettingsNextWeekPlanActivity.this.finish();
-                                } else {
-                                    ToastUtils.show(o.getMessage());
+                    ApiService.Utils.getInstance(SettingsNextWeekPlanActivity.this).updateWeeklyReprot(mResponseBody)
+                            .compose(ApiService.Utils.schedulersTransformer())
+                            .subscribe(new CustomSubscriber<Result>(SettingsNextWeekPlanActivity.this) {
+                                @Override
+                                public void onCompleted() {
+                                    super.onCompleted();
                                 }
-                            }
-                        });
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                }
+
+                                @Override
+                                public void onNext(Result o) {
+                                    super.onNext(o);
+                                    LogT.d(" fillInWeeklyReprot data is " + o);
+                                    if (o.isRet()) {
+                                        ToastUtils.show("指派下周计划成功");
+                                        SettingsNextWeekPlanActivity.this.finish();
+                                    } else {
+                                        ToastUtils.show(o.getMessage());
+                                    }
+                                }
+                            });
+                }else {
+                    ApiService.Utils.getInstance(SettingsNextWeekPlanActivity.this).fillInWeeklyReprot(mResponseBody)
+                            .compose(ApiService.Utils.schedulersTransformer())
+                            .subscribe(new CustomSubscriber<Result>(SettingsNextWeekPlanActivity.this) {
+                                @Override
+                                public void onCompleted() {
+                                    super.onCompleted();
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                }
+
+                                @Override
+                                public void onNext(Result o) {
+                                    super.onNext(o);
+                                    LogT.d(" fillInWeeklyReprot data is " + o);
+                                    if (o.isRet()) {
+                                        ToastUtils.show("指派下周计划成功");
+                                        SettingsNextWeekPlanActivity.this.finish();
+                                    } else {
+                                        ToastUtils.show(o.getMessage());
+                                    }
+                                }
+                            });
+                }
+
+
             }
         });
     }
@@ -173,6 +208,8 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
             isEdit = mIntent.getBooleanExtra("isEdit", false);
             userName = mIntent.getStringExtra("userName");
             planName = mIntent.getStringExtra("planName");
+            memberId = mIntent.getIntExtra("memberId",-1);
+
             specificThings = mIntent.getStringExtra("specificThings");
             percent = mIntent.getFloatExtra("percentComplete", -1);
             mViewDataBinding.workPercentText.setText(String.valueOf(percent) +"%");
@@ -363,13 +400,14 @@ public class SettingsNextWeekPlanActivity extends AppCompatActivity {
                             mMemberList.clear();
                             mMemberList.addAll(o.getData());
                             if (mMemberList != null && mMemberList.size() != 0) {
-                                userId = mMemberList.get(dialog_select_index).getId();
+
                                 for (int i = 0; i < mMemberList.size(); i++) {
                                     if (mMemberList.get(i).getUserName().equals(userName) && isEdit) {//如果为编辑周报的情况
                                         dialog_select_index = i;
                                         LogT.d(" user Name is "+userName);
                                     }
                                 }
+                                userId = mMemberList.get(dialog_select_index).getId();
                                 mViewDataBinding.ownerName.setText(mMemberList.get(dialog_select_index).getUserName());
 
                                 initPlanList();

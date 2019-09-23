@@ -11,9 +11,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.activity.OverAllSituationActivity;
@@ -64,6 +67,10 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
 
     private int weeks = -1;
     private boolean isAudit = false;
+    /**
+     * 审批状态
+     */
+    private int workStatus = 1;
     private String approvalText;
     /**
      * 项目周报列表信息
@@ -154,7 +161,7 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.notAllow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showApproveDialog(true);
+                showApproveDialog(false);
             }
         });
         return mViewDataBinding.getRoot();
@@ -248,6 +255,20 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         final EditText approvalMark = (EditText) inputView.findViewById(R.id.approval_mark);
         final RadioGroup radioGroup = (RadioGroup) inputView.findViewById(R.id.remark_level_radio);
         final RadioButton remarkHigh = (RadioButton) inputView.findViewById(R.id.remark_high);
+        final Spinner view = (Spinner)inputView.findViewById(R.id.work_status_spinner);
+        final RelativeLayout spinnearea = (RelativeLayout)inputView.findViewById(R.id.status_area);
+        spinnearea.setVisibility(View.VISIBLE);
+        view.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                workStatus = position + 1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         remarkHigh.setChecked(true);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -300,7 +321,7 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         Gson gson = new Gson();
         AuditReportBean mModel = new AuditReportBean();
         mModel.setWeeklyId(mHeaderItemBean.getId());//周报ID
-        //mModel.setPlanStatus(workStatus);//项目周报上的完成状态
+        mModel.setPlanStatus(workStatus);//项目周报上的完成状态
         mModel.setRemark(approvalText);//备注
         mModel.setRemarkState(reamarkStatus);
         mModel.setStatue(approvestatus);//审批状态

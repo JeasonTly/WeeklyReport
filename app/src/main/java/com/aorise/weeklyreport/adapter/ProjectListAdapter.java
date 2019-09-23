@@ -2,10 +2,12 @@ package com.aorise.weeklyreport.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 
 import com.aorise.weeklyreport.BR;
 import com.aorise.weeklyreport.R;
@@ -26,12 +28,14 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
     private RecyclerListClickListener mRecyclerListListener;
     private List<ProjectList> mFilterList = new ArrayList<>();
     private List<ProjectList> mSourceList = new ArrayList<>();
+    private boolean isProjectAudit = false;
 
-    public ProjectListAdapter(Context context, List<ProjectList> projectBaseInfos) {
+    public ProjectListAdapter(Context context, List<ProjectList> projectBaseInfos,boolean isProjectAudit) {
         super(context);
         this.mSourceList = projectBaseInfos;
         this.mList = projectBaseInfos;
         this.mFilterList = projectBaseInfos;
+        this.isProjectAudit = isProjectAudit;
     }
 
 
@@ -57,6 +61,28 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
                 return true;
             }
         });
+        TextView mReportStates = (TextView)viewHolder.itemView.findViewById(R.id.project_report_status);
+        String reportStatus = "";
+        int textColor = 0;
+        switch (mFilterList.get(position).getWeeklyStates()){
+            case 1:
+                reportStatus = "已审批";
+                textColor = Color.rgb(61,208,120);
+                break;
+
+            case 3:
+                reportStatus = "待审批";
+                textColor = Color.rgb(255,108,74);
+                break;
+                default:
+            case 2:
+                reportStatus = "未填写";
+                textColor = Color.rgb(255,108,74);
+                break;
+        }
+        mReportStates.setVisibility(isProjectAudit? View.VISIBLE:View.INVISIBLE);
+        mReportStates.setText(reportStatus);
+        mReportStates.setTextColor(textColor);
         viewHolder.getBinding().setVariable(BR.projectbaseinfo, mFilterList.get(position));
         viewHolder.getBinding().executePendingBindings();
     }

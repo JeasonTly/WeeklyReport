@@ -10,6 +10,7 @@
         android:layout_height="150dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:background="@drawable/base_line"
         android:orientation="vertical">
 
         <RadioButton
@@ -36,7 +37,45 @@
             android:text="3.描述不清楚，不客观，不属实"
             android:textSize="15sp" />
     </RadioGroup>
+    <!-- 状态-->
+    <RelativeLayout
+        android:id="@+id/status_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"
+        android:background="@drawable/base_line">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingBottom="10dp"
+            android:text="状态"
+            android:textColor="#A8A8A8"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/work_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="end"
+            android:paddingBottom="10dp"
+            android:textSize="15sp"></TextView>
+
+        <Spinner
+            android:id="@+id/work_status_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:entries="@array/plan_status"></Spinner>
+    </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

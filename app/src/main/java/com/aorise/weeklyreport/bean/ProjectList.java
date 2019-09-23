@@ -25,6 +25,7 @@ public class ProjectList implements Serializable {
     private int id;
     private String name;
     private int property;
+    private int weeklyStates;
 
     public int getId() {
         return id;
@@ -48,5 +49,13 @@ public class ProjectList implements Serializable {
 
     public void setProperty(int property) {
         this.property = property;
+    }
+
+    public int getWeeklyStates() {
+        return weeklyStates;
+    }
+
+    public void setWeeklyStates(int weeklyStates) {
+        this.weeklyStates = weeklyStates;
     }
 }

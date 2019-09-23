@@ -15,12 +15,20 @@
             android:textSize="15sp"
             android:text="@{projectbaseinfo.name}"
             android:layout_centerVertical="true"
+            android:minWidth="50dp"
             android:layout_marginLeft="15dp"
             android:gravity="start"
             android:id="@+id/project_adapter_txt"
-            android:layout_toLeftOf="@+id/project_adapter_img"
+            android:layout_toLeftOf="@+id/project_report_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/project_report_status"
+        android:layout_toLeftOf="@+id/project_adapter_img"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content" />
     <ImageView
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"

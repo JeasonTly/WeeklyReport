@@ -151,7 +151,7 @@ public interface ApiService {
      * @return
      */
     @GET(NetworkURLConfig.LIST_PROJECT)
-    Observable<Result<ProjectListBean>> getProjectList(@Path("pageIndex") String pageIndex, @Path("pageNum") String pageNum);
+    Observable<Result<ProjectListBean>> getProjectList(@Path("pageIndex") String pageIndex, @Path("pageNum") String pageNum,@Query("byWeek")int weeks);
 
     /**
      * 根据项目ID获取项目信息

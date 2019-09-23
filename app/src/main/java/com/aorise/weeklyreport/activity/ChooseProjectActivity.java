@@ -105,6 +105,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_choose_project);
+        mProjectList.clear();
         mProjectList = (ArrayList<ProjectList>) getIntent().getBundleExtra("projectList").getSerializable("_projectList");
         SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
@@ -112,7 +113,14 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
         isAuditProjectReport = getIntent().getBooleanExtra("isProjectReportAudit", false);
         isHeaderReport = getIntent().getBooleanExtra("isHeaderReport", false);
         isProjectList = mProjectList.size() != 1;
-        mViewDataBinding.chooseProjectActionbar.actionMenu.setVisibility(View.GONE);
+        if(!isAuditProjectReport){
+            mViewDataBinding.chooseProjectActionbar.actionMenu.setVisibility(View.GONE);
+        }else{
+            //mViewDataBinding.chooseProjectActionbar.actionMenuText.setVisibility(View.VISIBLE);
+            //mViewDataBinding.chooseProjectActionbar.actionMenuText.setText("第36周");
+        }
+
+
 
         LogT.d(" show projectList size is " + mProjectList.size());
         /**
@@ -125,7 +133,7 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
 
         menuPopup.setPopupGravity(Gravity.BOTTOM);
 
-        mAdapter = new ProjectListAdapter(this, mProjectList);
+        mAdapter = new ProjectListAdapter(this, mProjectList,isAuditProjectReport);
         mAdapter.setClickListener(this);
         mViewDataBinding.chooseSearch.fpClidQuery.addTextChangedListener(new TextWatcher() {
             @Override
@@ -243,10 +251,17 @@ public class ChooseProjectActivity extends AppCompatActivity implements Recycler
     @Override
     protected void onResume() {
         super.onResume();
-        if (isReview && mProjectList.size() == 1) {
-            projectId = mProjectList.get(0).getId();
-            projectName = mProjectList.get(0).getName();
-            getMemberList(mProjectList.get(0).getId());
+
+        if (isReview) {
+            if( mProjectList.size() == 1){
+                projectId = mProjectList.get(0).getId();
+                projectName = mProjectList.get(0).getName();
+                getMemberList(mProjectList.get(0).getId());
+            }else {
+                if(!isProjectList){
+                    getMemberList(projectId);
+                }
+            }
         }
     }
 
