@@ -91,7 +91,7 @@ public class DateUtil {
             date = date2;
         }
         datestr = simpleDateFormat.format(date);
-        LogT.d(" 比比哪个更大" + datestr);
+        LogT.d(" 比比哪个更小" + datestr);
         return datestr;
     }
 }

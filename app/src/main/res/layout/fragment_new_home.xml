@@ -31,6 +31,7 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:orientation="horizontal"
+            android:background="@drawable/base_line_cf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <!-- 项目概况-->
@@ -40,7 +41,6 @@
                 android:id="@+id/project_info_area"
                 android:orientation="vertical"
                 android:layout_width="0dp"
-                android:layout_margin="1dp"
                 android:layout_height="match_parent">
                 <ImageView
                     android:layout_gravity="center_horizontal"
@@ -64,7 +64,6 @@
                 android:layout_weight="1"
                 android:id="@+id/report_fill_area"
                 android:orientation="vertical"
-                android:layout_margin="1dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <ImageView
@@ -90,7 +89,6 @@
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
                 android:id="@+id/report_review_area"
-                android:layout_margin="1dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <ImageView
@@ -116,12 +114,13 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:background="@drawable/base_line_cf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <!-- 项目周报-->
             <LinearLayout
                 android:layout_weight="1"
-                android:layout_margin="1dp"
+
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
                 android:id="@+id/project_report_area"
@@ -146,7 +145,7 @@
             <!--项目周报审核-->
             <LinearLayout
                 android:layout_weight="1"
-                android:layout_margin="1dp"
+
                 android:visibility="gone"
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
@@ -172,7 +171,7 @@
             <!-- 工时-->
             <LinearLayout
                 android:layout_weight="1"
-                android:layout_margin="1dp"
+
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
                 android:id="@+id/gongshi_area"
