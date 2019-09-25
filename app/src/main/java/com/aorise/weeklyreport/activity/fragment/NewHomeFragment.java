@@ -163,9 +163,9 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
             public void onClick(View view) {
 
                 if (userType == 3 || userType == 2) {
-                    ApiService.Utils.getInstance(getActivity()).getProjectList("0", "0", TimeUtil.getInstance().getDayofWeek())
+                    ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0, TimeUtil.getInstance().getDayofWeek())
                             .compose(ApiService.Utils.schedulersTransformer())
-                            .subscribe(new CustomSubscriber<Result<ProjectListBean>>(getActivity()) {
+                            .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                                 @Override
                                 public void onCompleted() {
                                     super.onCompleted();
@@ -177,23 +177,13 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                                 }
 
                                 @Override
-                                public void onNext(Result<ProjectListBean> listResult) {
+                                public void onNext(Result<List<ProjectList>> listResult) {
                                     super.onNext(listResult);
 
                                     if (listResult.isRet()) {
                                         mProjectList.clear();
-                                        mProjectListBean.clear();
-                                        mProjectListBean.addAll(listResult.getData().getList());
-                                        LogT.d("超级管理员或者经理办 项目周报审核 mProjectList is " + mProjectListBean.toString());
-                                        for (ProjectListBean.ListBean bean : mProjectListBean) {
-                                            LogT.d(" ProjectListBean.ListBean bean " + bean.toString());
-                                            ProjectList projectList = new ProjectList();
-                                            projectList.setName(bean.getName());
-                                            projectList.setId(bean.getId());
-                                            projectList.setProperty(bean.getProperty());
-                                            projectList.setWeeklyStates(bean.getWeeklyState());
-                                            mProjectList.add(projectList);
-                                        }
+                                        mProjectList.addAll(listResult.getData());
+
                                         if (mProjectList != null && mProjectList.size() != 0) {
                                             if (mProjectList.size() == 1) {
                                                 Intent mIntent = new Intent();
@@ -247,7 +237,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      * 根据普通用户的用户ID查询 项目概况
      */
     private void queryProjectInfoList() {
-        ApiService.Utils.getInstance(getActivity()).getProjectList(userId, -1)
+        ApiService.Utils.getInstance(getActivity()).getProjectList(userId, -1,0)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                     @Override
@@ -298,7 +288,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
     private void queryProjectInfoAsHeaderList(final boolean isReview) {
         LogT.d(" 是否为审核项目" + isReview);
         if (isSuperManager) {
-            ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
+            ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0,0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override
@@ -355,7 +345,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                         }
                     });
         } else if (isHeader) {
-            ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId)
+            ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId,0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override
@@ -410,7 +400,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                         }
                     });
         } else {
-            ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId)
+            ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId,0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override
@@ -505,7 +495,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
 
     private void startChooseProject() {
         if (isSuperManager) {
-            ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0)
+            ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0,0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override
@@ -555,7 +545,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                         }
                     });
         } else {
-            ApiService.Utils.getInstance(getActivity()).getProjectList(-1, userId)
+            ApiService.Utils.getInstance(getActivity()).getProjectList(-1, userId,0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
                         @Override

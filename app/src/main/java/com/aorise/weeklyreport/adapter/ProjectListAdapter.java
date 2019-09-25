@@ -64,7 +64,7 @@ public class ProjectListAdapter extends BaseAdapter<ProjectList, BaseViewHolder>
         TextView mReportStates = (TextView)viewHolder.itemView.findViewById(R.id.project_report_status);
         String reportStatus = "";
         int textColor = 0;
-        switch (mFilterList.get(position).getWeeklyStates()){
+        switch (mFilterList.get(position).getWeeklyState()){
             case 1:
                 reportStatus = "已审批";
                 textColor = Color.rgb(61,208,120);

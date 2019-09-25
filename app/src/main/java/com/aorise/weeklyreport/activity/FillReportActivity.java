@@ -651,7 +651,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
      * 获取项目列表
      */
     private void initProjectList() {
-        ApiService.Utils.getInstance(this).getProjectList(userId, -1)
+        ApiService.Utils.getInstance(this).getProjectList(userId, -1,0)
                 .compose(ApiService.Utils.schedulersTransformer())
                 .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(this) {
                     @Override

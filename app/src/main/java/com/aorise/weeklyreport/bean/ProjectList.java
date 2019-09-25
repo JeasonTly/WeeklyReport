@@ -12,20 +12,31 @@ public class ProjectList implements Serializable {
         return "ProjectList{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", endDate='" + endDate + '\'' +
                 ", property=" + property +
+                ", weeklyState=" + weeklyState +
+                ", percentComplete=" + percentComplete +
+                ", percentPlan=" + percentPlan +
                 '}';
     }
 
     /**
-     * id : 42
-     * name : 工作信息管理系统
-     * property : 1 项目工作。2 部门工作
+     * id : 37
+     * name : 小程序快速开发框架搭建工作
+     * endDate : 2019-08-19 00:00:00
+     * property : 1
+     * weeklyState : 2
+     * percentComplete : 0
+     * percentPlan : 0
      */
 
     private int id;
     private String name;
+    private String endDate;
     private int property;
-    private int weeklyStates;
+    private int weeklyState;
+    private double percentComplete;
+    private double percentPlan;
 
     public int getId() {
         return id;
@@ -43,6 +54,14 @@ public class ProjectList implements Serializable {
         this.name = name;
     }
 
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     public int getProperty() {
         return property;
     }
@@ -51,11 +70,27 @@ public class ProjectList implements Serializable {
         this.property = property;
     }
 
-    public int getWeeklyStates() {
-        return weeklyStates;
+    public int getWeeklyState() {
+        return weeklyState;
     }
 
-    public void setWeeklyStates(int weeklyStates) {
-        this.weeklyStates = weeklyStates;
+    public void setWeeklyState(int weeklyState) {
+        this.weeklyState = weeklyState;
+    }
+
+    public double getPercentComplete() {
+        return percentComplete;
+    }
+
+    public void setPercentComplete(double percentComplete) {
+        this.percentComplete = percentComplete;
+    }
+
+    public double getPercentPlan() {
+        return percentPlan;
+    }
+
+    public void setPercentPlan(double percentPlan) {
+        this.percentPlan = percentPlan;
     }
 }

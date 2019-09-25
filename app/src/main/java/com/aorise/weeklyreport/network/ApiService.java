@@ -153,7 +153,7 @@ public interface ApiService {
      * @return
      */
     @GET(NetworkURLConfig.LIST_PROJECT_BY_USERID)
-    Observable<Result<List<ProjectList>>> getProjectList(@Query("userId") int userId, @Query("leaderId") int leaderId);
+    Observable<Result<List<ProjectList>>> getProjectList(@Query("userId") int userId, @Query("leaderId") int leaderId ,@Query("byWeek") int weeks);
 
     /**
      * 分页获取项目列表

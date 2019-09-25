@@ -21,6 +21,7 @@ public abstract class CustomSubscriber<T> extends Subscriber<T> {
         mContext = context;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
