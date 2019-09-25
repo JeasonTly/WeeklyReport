@@ -38,7 +38,7 @@ public class UserInfoBean extends BaseObservable implements Serializable {
     private String fullName;
     private String mobile;
     private String roleName;
-    private int roleId;
+    private int roleId;// 7 .超级管理员 //22 项目负责人 // 23 普通成员 // 25经理办 //31 销售专员
     private List<PermissionModelListBean> permissionModelList;
 
     public int getId() {

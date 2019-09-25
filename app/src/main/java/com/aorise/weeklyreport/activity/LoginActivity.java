@@ -113,18 +113,7 @@ public class LoginActivity extends BaseActivity {
                             editor.putInt("userId", o.getData().getId());
                             editor.putString("fullName", o.getData().getFullName());
                             editor.putString("uuid", o.getData().getUuid());
-
-                            if (!TextUtils.isEmpty(o.getData().getRoleName())) {
-                                if (o.getData().getRoleName().equals("普通成员")) {
-                                    editor.putInt("userRole", 0);
-                                } else if (o.getData().getRoleName().equals("超级管理员")) {//项目周报审核权限
-                                    editor.putInt("userRole", 2);
-                                }  else if (o.getData().getRoleName().equals("经理办")) {//项目周报审核权限
-                                    editor.putInt("userRole", 3);
-                                }  else {
-                                    editor.putInt("userRole", 1);
-                                }
-                            }
+                            editor.putInt("userRole", o.getData().getRoleId());
                             for (UserInfoBean.PermissionModelListBean permission : o.getData().getPermissionModelList()) {
                                 if (permission.getId() == 1) {
                                     editor.putBoolean("permi_projectinfo", true);//项目概况

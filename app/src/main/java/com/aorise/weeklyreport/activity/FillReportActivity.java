@@ -800,7 +800,7 @@ public class FillReportActivity extends AppCompatActivity implements TimeSelectL
 
         Gson gson = new Gson();
         WeeklyReportUploadBean mUploadInfo = new WeeklyReportUploadBean();
-        if (approvalStatus == 2) {
+        if (approvalStatus == 3) {
             approvalStatus = 1;
         }
         mUploadInfo.setApprovalState(approvalStatus);//审批状态1,未审批，2,已通过，3驳回

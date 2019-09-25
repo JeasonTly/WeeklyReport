@@ -77,26 +77,26 @@ public class PersonalFragment extends Fragment {
 
         final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", 2);
-        int isManager = sharedPreferences.getInt("userRole", -1);
-        String isManagerText = "";
-        switch (isManager) {
-            case 0:
-                isManagerText = "普通成员";
-                break;
-            case 1:
-                isManagerText = "项目负责人";
-                break;
-            case 2:
-                isManagerText = "超级管理员";
-                break;
-            case 3:
-                isManagerText = "经理办";
-                break;
-            default:
-                isManagerText = "无信息";
-                break;
-        }
-        mViewDataBinding.personalJobs.setText(isManagerText);
+//        int isManager = sharedPreferences.getInt("userRole", -1);
+//        String isManagerText = "";
+//        switch (isManager) {
+//            case 0:
+//                isManagerText = "普通成员";
+//                break;
+//            case 1:
+//                isManagerText = "项目负责人";
+//                break;
+//            case 2:
+//                isManagerText = "超级管理员";
+//                break;
+//            case 3:
+//                isManagerText = "经理办";
+//                break;
+//            default:
+//                isManagerText = "无信息";
+//                break;
+//        }
+//        mViewDataBinding.personalJobs.setText(isManagerText);
         mViewDataBinding.personalActionbar.actionbarBack.setVisibility(View.GONE);
         mViewDataBinding.personalExit.setOnClickListener(new View.OnClickListener() {
             @Override
