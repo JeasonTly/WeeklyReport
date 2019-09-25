@@ -19,6 +19,7 @@ public class NetworkURLConfig {
     public static final String PROJECT_BASE_INFO = "api/project/{id}";//项目基本信息
     public static final String POST_WEEKLY_REPORT = "api/memberWeekly";//添加周报
     public static final String PUT_WEEKLY_REPORT = "api/memberWeekly";//修改周报
+    public static final String DELETE_WEEKLY_REPORT = "api/memberWeekly";//删除周报
     public static final String APPROVAL_WEEKLY_REPORT = "api/approval";//审核周报
     public static final String PROJECT_PLAN = "api/projectPlan/owner/{owner}";//当前项目下的计划列表
     public static final String PROJECT_PLAN_BYPROJECTID = "api/projectPlan";//当前项目下的计划列表

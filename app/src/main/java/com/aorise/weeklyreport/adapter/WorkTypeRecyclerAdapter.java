@@ -1,6 +1,8 @@
 package com.aorise.weeklyreport.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.view.View;
@@ -10,6 +12,10 @@ import com.aorise.weeklyreport.BR;
 import com.aorise.weeklyreport.R;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.WeeklyReportBean;
+import com.aorise.weeklyreport.network.ApiService;
+import com.aorise.weeklyreport.network.CustomSubscriber;
+import com.aorise.weeklyreport.network.Result;
+import com.hjq.toast.ToastUtils;
 
 import java.util.List;
 
@@ -75,6 +81,15 @@ public class WorkTypeRecyclerAdapter extends BaseAdapter<WeeklyReportBean, BaseV
             @Override
             public void onClick(View v) {
                 recyclerListClickListener.onClick(position);
+            }
+        });
+        baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+               if(recyclerListClickListener!=null){
+                   recyclerListClickListener.onLongClick(position);
+               }
+                return true;
             }
         });
         baseViewHolder.getBinding().executePendingBindings();

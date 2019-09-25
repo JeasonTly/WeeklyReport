@@ -1,6 +1,8 @@
 package com.aorise.weeklyreport.activity.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -23,6 +25,7 @@ import com.aorise.weeklyreport.databinding.FragmentConclusionBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
 import com.aorise.weeklyreport.network.Result;
+import com.hjq.toast.ToastUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
-    private static final String ARG_PARAM5= "param5";
+    private static final String ARG_PARAM5 = "param5";
 
     private FragmentConclusionBinding mViewDataBinding;
     // TODO: Rename and change types of parameters
@@ -85,13 +88,13 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     /**
      * 审核周报界面的初始化
      *
-     * @param projectId     项目ID
-     * @param userId        用户ID
-     * @param weeks         选择的周数
+     * @param projectId   项目ID
+     * @param userId      用户ID
+     * @param weeks       选择的周数
      * @param isAuditMode 是否为项目负责人
      * @return 返回工作总结Fragment
      */
-    public static ConclusionFragment newInstance(int projectId, int userId, int weeks, boolean isAuditMode,boolean canAudit) {
+    public static ConclusionFragment newInstance(int projectId, int userId, int weeks, boolean isAuditMode, boolean canAudit) {
         ConclusionFragment fragment = new ConclusionFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, projectId);
@@ -123,7 +126,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
         mViewDataBinding.summaryPlt.setRefreshListener(this);
         mViewDataBinding.summaryPlt.setCanLoadMore(false);
         //为查看周报所初始化的本fragment
-        if(!isAuditMode) {
+        if (!isAuditMode) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
             userId = sharedPreferences.getInt("userId", 2);
         }
@@ -156,6 +159,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     /**
      * 审批界面或者周报查看界面在点击Actionbar的Title时，
      * 重新发起网络请求获取对应周数的周报信息
+     *
      * @param weeks
      */
     public synchronized void update(int weeks) {
@@ -165,6 +169,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     /**
      * 审批界面或者周报查看界面在点击Actionbar的Title时，
      * 重新发起网络请求获取对应周数的周报信息
+     *
      * @param weeks
      */
     public synchronized void updateList(int weeks) {
@@ -227,6 +232,7 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
 
     /**
      * RecycleView 即周报列表的点击事件
+     *
      * @param position
      */
     @Override
@@ -240,7 +246,59 @@ public class ConclusionFragment extends Fragment implements BaseRefreshListener,
     }
 
     @Override
-    public void onLongClick(int position) {
+    public void onLongClick(final int position) {
+        if (!canAudit) {
+            LogT.d("您不可修改此成员周报");
+           // ToastUtils.show("您没有权限删除此周报!");
+            return;
+        }
+        if (isAuditMode) {
+            LogT.d("审批周报不可删除");
+           // ToastUtils.show("您没有权限删除此周报!");
+            return;
+        }
 
+        if (mPlanWeeklyReport.get(position).getApprovalState() == 2) {
+            ToastUtils.show("此周报已完成审批，不可删除!");
+            return;
+        }
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("警告!")
+                .setMessage("您确定要删除此条周报吗?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ApiService.Utils.getInstance(getActivity())
+                                .deleteWeeklyReprot(mPlanWeeklyReport.get(position).getId())
+                                .compose(ApiService.Utils.schedulersTransformer())
+                                .subscribe(new CustomSubscriber<Result>(getActivity()) {
+                                    @Override
+                                    public void onCompleted() {
+                                        super.onCompleted();
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        super.onError(e);
+                                    }
+
+                                    @Override
+                                    public void onNext(Result o) {
+                                        super.onNext(o);
+                                        if (o.isRet()) {
+                                            ToastUtils.show("删除成功!");
+                                            updateList(weeks);
+                                        }
+                                    }
+                                });
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
     }
 }

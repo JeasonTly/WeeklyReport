@@ -47,6 +47,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -93,7 +94,7 @@ public interface ApiService {
     Observable<Result> fillInWeeklyReprot(@Body RequestBody responseBody);
 
     /**
-     * 修改
+     * 修改周报
      *
      * @param responseBody
      * @return
@@ -101,6 +102,15 @@ public interface ApiService {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @PUT(NetworkURLConfig.PUT_WEEKLY_REPORT)
     Observable<Result> updateWeeklyReprot(@Body RequestBody responseBody);
+
+    /**
+     * 删除周报
+     * @param reportId
+     * @return
+     */
+
+    @DELETE(NetworkURLConfig.DELETE_WEEKLY_REPORT)
+    Observable<Result> deleteWeeklyReprot(@Query("id") int reportId);
 
     /**
      * 获取当前项目下对应用户的计划安排
