@@ -1,5 +1,6 @@
 package com.aorise.weeklyreport.base;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.text.ParsePosition;
@@ -34,6 +35,9 @@ public class DateUtil {
     }
 
     public static int getDiffDay(String firstDate, String NextDate) {
+        if(TextUtils.isEmpty(firstDate) || TextUtils.isEmpty(NextDate)){
+            return 0;
+        }
         int diffDay = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date firdate = dateFormat.parse(firstDate, new ParsePosition(0));

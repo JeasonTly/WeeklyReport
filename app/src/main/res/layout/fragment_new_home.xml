@@ -36,6 +36,7 @@
             android:layout_height="wrap_content">
             <!-- 项目概况-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:background="@drawable/new_home_item_bg"
                 android:id="@+id/project_info_area"
@@ -60,6 +61,7 @@
             </LinearLayout>
             <!-- 周报填写 -->
             <LinearLayout
+                android:visibility="gone"
                 android:background="@drawable/new_home_item_bg"
                 android:layout_weight="1"
                 android:id="@+id/report_fill_area"
@@ -85,6 +87,7 @@
             </LinearLayout>
             <!-- 成员周报审核-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
@@ -120,7 +123,7 @@
             <!-- 项目周报-->
             <LinearLayout
                 android:layout_weight="1"
-
+                android:visibility="gone"
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
                 android:id="@+id/project_report_area"
@@ -145,7 +148,6 @@
             <!--项目周报审核-->
             <LinearLayout
                 android:layout_weight="1"
-
                 android:visibility="gone"
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
@@ -171,7 +173,7 @@
             <!-- 工时-->
             <LinearLayout
                 android:layout_weight="1"
-
+                android:visibility="gone"
                 android:background="@drawable/new_home_item_bg"
                 android:orientation="vertical"
                 android:id="@+id/gongshi_area"

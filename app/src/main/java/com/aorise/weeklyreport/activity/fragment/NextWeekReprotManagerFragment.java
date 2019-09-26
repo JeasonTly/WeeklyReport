@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.RequestBody;
+
+import static com.aorise.weeklyreport.base.PermissionBean.PERMISSION_PROJECT_WRITE;
 
 /**
  * 项目周报下周工作计划
@@ -95,6 +98,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
      */
     private int userRoleId = -1;
 
+    private SharedPreferences sp ;
     /**
      * @param useId     用户ID 暂时无效
      * @param projectId 项目ID
@@ -135,8 +139,14 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.nextOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!sp.getBoolean(PERMISSION_PROJECT_WRITE,false)){
+                    ToastUtils.show("您没有权限修改项目周报");
+                    return;
+                }
                 if(userRoleId == UserRole.ROLE_SALER){
                     ToastUtils.show("销售专员不可编辑项目周报整体情况!");
+                    return;
                 }
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
@@ -146,7 +156,9 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
                 startActivity(mIntent);
             }
         });
-        userRoleId  = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getInt("userRole",-1);
+
+        sp = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userRoleId  = sp.getInt("userRole",-1);
         mViewDataBinding.auditArea.setVisibility(isAudit ? View.VISIBLE : View.GONE);
         mViewDataBinding.nextOverall.setClickable(!isAudit);
 

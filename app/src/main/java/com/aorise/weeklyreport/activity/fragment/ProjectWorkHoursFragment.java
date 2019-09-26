@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.aorise.weeklyreport.R;
-import com.aorise.weeklyreport.WRApplication;
 import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.PlanWorkTimeSettingBean;
@@ -75,6 +74,8 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     private PlanWorkTimeSettingBean planWorkTimeSettingBean;
     private int projectId;
 
+    private boolean CURRENT_MODE_YEAR = true;
+
     public static ProjectWorkHoursFragment newInstance(int projectId) {
         // Required empty public constructor
         ProjectWorkHoursFragment projectWorkHoursFragment = new ProjectWorkHoursFragment();
@@ -116,7 +117,9 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         mViewDataBinding.worktimeYearActionbar.actionBarTitleArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuPopup.showPopupWindow(mViewDataBinding.worktimeYearActionbar.actionBarTitleArea);
+                if(CURRENT_MODE_YEAR){
+                    menuPopup.showPopupWindow(mViewDataBinding.worktimeYearActionbar.actionBarTitleArea);
+                }
             }
         });
         mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.GONE);
@@ -128,8 +131,8 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                 contentList.clear();
                 itemWidthList.clear();
                 planDataList.clear();
-
-
+                CURRENT_MODE_YEAR = true;
+                mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear );
                 initRowDataList();
                 initItemWidthList();
                 initDefaultWorkTime();
@@ -184,7 +187,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     @Override
     public void onResume() {
         super.onResume();
-       // mViewDataBinding.idPlRoot.setAdapter(mAdapter);
+        // mViewDataBinding.idPlRoot.setAdapter(mAdapter);
     }
 
     /**
@@ -279,7 +282,6 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
     }
 
 
-
     /**
      * 获取当前年各个月份的计划工时
      *
@@ -359,7 +361,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                         break;
                 }
             }
-            LogT.d(" data size is "+data.size());
+            LogT.d(" data size is " + data.size());
             contentList.add(data);//添加内容数据
             columnData.add(workTimeBean.getFullName());//添加角色名称
         }
@@ -503,7 +505,9 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         }
         mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.VISIBLE);
         currentMonth = position + 1;
-       // rowDataList.clear();
+        // rowDataList.clear();
+        CURRENT_MODE_YEAR = false;
+        mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear + string);
         send2MonthView();
     }
 
@@ -734,8 +738,8 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                     @Override
                     public void onNext(Result<List<ProjectReportWeeklyWorkTime>> o) {
                         super.onNext(o);
-                        LogT.d(" 获取月份的周数的工时信息 "+o.getData().toString());
-                        if(o.isRet()){
+                        LogT.d(" 获取月份的周数的工时信息 " + o.getData().toString());
+                        if (o.isRet()) {
                             contentList.clear();
                             columnData.clear();
                             caculateMonthStatisticData(o.getData());

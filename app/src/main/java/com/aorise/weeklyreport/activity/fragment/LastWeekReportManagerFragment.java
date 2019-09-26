@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.RequestBody;
+
+import static com.aorise.weeklyreport.base.PermissionBean.PERMISSION_PROJECT_WRITE;
 
 /**
  * 周报管理系统的项目周报总结
@@ -93,7 +96,7 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
      * 用户角色id
      */
     private int userRoleId = -1;
-
+    private SharedPreferences sp;
     public LastWeekReportManagerFragment() {
         // Required empty public constructor
     }
@@ -140,7 +143,8 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.lastReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
         mAdapter.setItemClickListener(this);
-        userRoleId  = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getInt("userRole",-1);
+        sp = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        userRoleId  = sp.getInt("userRole",-1);
 
         /**
          * 项目周报整体情况总结
@@ -148,8 +152,14 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.lastOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!sp.getBoolean(PERMISSION_PROJECT_WRITE,false)){
+                    ToastUtils.show("您没有权限修改项目周报");
+                    return;
+                }
                 if(userRoleId == UserRole.ROLE_SALER){
                     ToastUtils.show("销售专员不可编辑项目周报整体情况!");
+                    return;
                 }
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);

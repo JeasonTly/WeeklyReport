@@ -21,6 +21,7 @@ import com.aorise.weeklyreport.activity.ProjectReportManagerActivity;
 import com.aorise.weeklyreport.activity.ReviewAndToFillReportActivity;
 import com.aorise.weeklyreport.activity.WorkTimeYearStatisticsActivity;
 import com.aorise.weeklyreport.base.LogT;
+import com.aorise.weeklyreport.base.PermissionBean;
 import com.aorise.weeklyreport.base.TimeUtil;
 import com.aorise.weeklyreport.bean.ProjectList;
 import com.aorise.weeklyreport.bean.ProjectListBean;
@@ -118,11 +119,6 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
             @Override
             public void onClick(View v) {
                 LogT.d("您点击了项目概况!!!");
-//                if (!isHeader) {
-//                    queryProjectInfoList();
-//                } else {
-//
-//                } // 7 .超级管理员 //22 项目负责人 // 23 普通成员 // 25经理办 //31 销售专员
                    if(userRoleId == UserRole.ROLE_SUPER_MANAGER || userRoleId == UserRole.ROLE_MANAGER){
                        queryProjectInfoAsHeaderList(false);
                    }else{
@@ -218,18 +214,46 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
 
             }
         });
-
-        if(userRoleId == UserRole.ROLE_MEMBER || userRoleId ==UserRole.ROLE_SALER){
-            mViewDataBinding.projectReportArea.setVisibility(View.GONE);
-            mViewDataBinding.reportReviewArea.setVisibility(View.GONE);
-            mViewDataBinding.gongshiArea.setVisibility(View.GONE);
+        //项目概况查看权限
+        if(sharedPreferences.getBoolean(PermissionBean.PERMISSION_PROJECT_BASE_INFO,false)){
+            mViewDataBinding.projectInfoArea.setVisibility(View.VISIBLE);
         }
-        if(userRoleId == UserRole.ROLE_SALER){ //销售专员可以看项目周报。只有查看的权限。
+        //成员周报填写权限
+        if(sharedPreferences.getBoolean(PermissionBean.PERMISSION_WEEKLY_WRITE,false)){
+            mViewDataBinding.reportFillArea.setVisibility(View.VISIBLE);
+        }
+        //成员周报审核权限
+        if(sharedPreferences.getBoolean(PermissionBean.PERMISSION_MEMBER_AUDIT,false)){
+            mViewDataBinding.reportReviewArea.setVisibility(View.VISIBLE);
+        }
+
+        //项目周报查看权限
+        if(sharedPreferences.getBoolean(PermissionBean.PERMISSION_PROJECT_REPORT_VIEW,false)){
             mViewDataBinding.projectReportArea.setVisibility(View.VISIBLE);
         }
-        if (userRoleId == UserRole.ROLE_SUPER_MANAGER || userRoleId == UserRole.ROLE_MANAGER) {
+
+        //项目周报审核权限
+        if(sharedPreferences.getBoolean(PermissionBean.PERMISSION_PROJECT_AUDIT,false)){
             mViewDataBinding.llProjectWeekly.setVisibility(View.VISIBLE);
         }
+
+        //工时统计
+        if(sharedPreferences.getBoolean(PermissionBean.PERMISSION_WORKTIME,false)){
+            mViewDataBinding.gongshiArea.setVisibility(View.VISIBLE);
+        }
+
+//        if(userRoleId == UserRole.ROLE_MEMBER || userRoleId ==UserRole.ROLE_SALER){
+//            mViewDataBinding.projectReportArea.setVisibility(View.GONE);
+//            mViewDataBinding.reportReviewArea.setVisibility(View.GONE);
+//            mViewDataBinding.gongshiArea.setVisibility(View.GONE);
+//        }
+//
+//        if(userRoleId == UserRole.ROLE_SALER){ //销售专员可以看项目周报。只有查看的权限。
+//            mViewDataBinding.projectReportArea.setVisibility(View.VISIBLE);
+//        }
+//        if (userRoleId == UserRole.ROLE_SUPER_MANAGER || userRoleId == UserRole.ROLE_MANAGER) {
+//            mViewDataBinding.llProjectWeekly.setVisibility(View.VISIBLE);
+//        }
 
         initBanner();
         return mViewDataBinding.getRoot();
@@ -408,62 +432,6 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                         }
                     });
         }
-//        } else {//项目概况查询项目列表 isReview = false
-//            ApiService.Utils.getInstance(getActivity()).getProjectList(isReview ? -1 : userId, userId, 0)
-//                    .compose(ApiService.Utils.schedulersTransformer())
-//                    .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
-//                        @Override
-//                        public void onCompleted() {
-//                            super.onCompleted();
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//                            super.onError(e);
-//                            LogT.d("error msg" + e.toString());
-//                        }
-//
-//                        @Override
-//                        public void onNext(Result<List<ProjectList>> o) {
-//                            super.onNext(o);
-//                            if (o.isRet()) {
-//                                mProjectList.clear();
-//                                mProjectList.addAll(o.getData());
-//                                LogT.d("普通成员 mProjectList is " + mProjectList.toString());
-//                                if (mProjectList != null && mProjectList.size() != 0) {
-//                                    if (mProjectList.size() == 1) {
-//                                        if (!isReview) {//项目概况
-//                                            Intent mIntent = new Intent();
-//                                            mIntent.putExtra("isReview", isReview);
-//                                            mIntent.putExtra("project_info", mProjectList.get(0));
-//                                            mIntent.setClass(getActivity(), ProjectInfoActivity.class);
-//                                            startActivity(mIntent);
-//                                        } else {//项目组周报审核
-//                                            Intent mIntent = new Intent();
-//                                            mIntent.putExtra("isReview", isReview);
-//                                            Bundle bundle = new Bundle();
-//                                            bundle.putSerializable("_projectList", (Serializable) mProjectList);
-//                                            mIntent.putExtra("projectList", bundle);
-//                                            mIntent.setClass(getActivity(), ChooseProjectActivity.class);
-//                                            startActivity(mIntent);
-//                                        }
-//                                    } else {
-//                                        LogT.d("mProjectList size 大于1");
-//                                        Intent mIntent = new Intent();
-//                                        Bundle bundle = new Bundle();
-//                                        bundle.putSerializable("_projectList", (Serializable) mProjectList);
-//                                        mIntent.putExtra("projectList", bundle);
-//                                        mIntent.putExtra("isReview", isReview);
-//                                        mIntent.setClass(getActivity(), ChooseProjectActivity.class);
-//                                        startActivity(mIntent);
-//                                    }
-//                                } else {
-//                                    ToastUtils.show("当前用户角色下无项目!");
-//                                }
-//                            }
-//                        }
-//                    });
-//        }
     }
 
     /**
