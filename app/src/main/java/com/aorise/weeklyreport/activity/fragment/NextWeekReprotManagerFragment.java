@@ -372,7 +372,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
             return;
         }
         if(userRoleId == UserRole.ROLE_SALER){
-            ToastUtils.show("项目专员不可编辑成员周报!");
+            ToastUtils.show("销售专员不可编辑成员周报!");
             return;
         }
         Intent mIntent = new Intent();
