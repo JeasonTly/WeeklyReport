@@ -61,6 +61,15 @@ public class ProjectManagerReportRecclerAdapter extends BaseAdapter<HeaderItemBe
                 }
             }
         });
+        baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mClickListener != null) {
+                    mClickListener.onLongClick(position);
+                }
+                return true;
+            }
+        });
         baseViewHolder.getBinding().executePendingBindings();
     }
 

@@ -224,6 +224,9 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
             mViewDataBinding.reportReviewArea.setVisibility(View.GONE);
             mViewDataBinding.gongshiArea.setVisibility(View.GONE);
         }
+        if(userRoleId == UserRole.ROLE_SALER){ //销售专员可以看项目周报。只有查看的权限。
+            mViewDataBinding.projectReportArea.setVisibility(View.VISIBLE);
+        }
         if (userRoleId == UserRole.ROLE_SUPER_MANAGER || userRoleId == UserRole.ROLE_MANAGER) {
             mViewDataBinding.llProjectWeekly.setVisibility(View.VISIBLE);
         }
@@ -500,7 +503,7 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
      */
 
     private void startChooseProject() {
-        if (isSuperManager) {
+        if (userRoleId == UserRole.ROLE_SUPER_MANAGER || userRoleId == UserRole.ROLE_MANAGER) {
             ApiService.Utils.getInstance(getActivity()).getProjectList(0, 0, 0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
@@ -550,7 +553,55 @@ public class NewHomeFragment extends Fragment implements OnBannerListener {
                             }
                         }
                     });
-        } else {
+        } else if(userRoleId == UserRole.ROLE_SALER){
+            ApiService.Utils.getInstance(getActivity()).getProjectList(userId, -1, 0)
+                    .compose(ApiService.Utils.schedulersTransformer())
+                    .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            LogT.d("error msg" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(Result<List<ProjectList>> o) {
+                            super.onNext(o);
+                            if (o.isRet()) {
+                                mProjectList.clear();
+                                mProjectList.addAll(o.getData());
+                                LogT.d("项目组负责人 mProjectList is " + mProjectList.toString());
+                                if (mProjectList != null && mProjectList.size() != 0) {
+                                    if (mProjectList.size() == 1) {
+                                        Intent mIntent = new Intent();
+                                        mIntent.putExtra("projectId", mProjectList.get(0).getId());
+                                        mIntent.putExtra("projectName", mProjectList.get(0).getName());
+                                        mIntent.putExtra("projectType", mProjectList.get(0).getProperty());
+                                        mIntent.putExtra("userId", userId);
+                                        mIntent.setClass(getActivity(), ProjectReportManagerActivity.class);
+                                        startActivity(mIntent);
+                                    } else {
+                                        LogT.d("mProjectList size 大于1");
+                                        Intent mIntent = new Intent();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("_projectList", (Serializable) mProjectList);
+                                        mIntent.putExtra("projectList", bundle);
+                                        mIntent.putExtra("userId", userId);
+                                        mIntent.putExtra("isHeaderReport", true);
+                                        mIntent.setClass(getActivity(), ChooseProjectActivity.class);
+                                        startActivity(mIntent);
+                                    }
+                                } else {
+                                    ToastUtils.show("当前用户角色下无负责的项目!");
+                                }
+                            }
+                        }
+                    });
+        } else if(userRoleId == UserRole.ROLE_PROJECT_MANAGER){
             ApiService.Utils.getInstance(getActivity()).getProjectList(-1, userId, 0)
                     .compose(ApiService.Utils.schedulersTransformer())
                     .subscribe(new CustomSubscriber<Result<List<ProjectList>>>(getActivity()) {

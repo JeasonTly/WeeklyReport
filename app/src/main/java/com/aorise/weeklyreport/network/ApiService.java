@@ -81,6 +81,7 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json;charset=UTF-8")
     @POST(NetworkURLConfig.LOGIN_URL_N)
+    @Deprecated
     Observable<Result<String>> login(@Body RequestBody requestBody);
 
     /**
@@ -160,6 +161,7 @@ public interface ApiService {
      *
      * @return
      */
+    @Deprecated
     @GET(NetworkURLConfig.LIST_PROJECT)
     Observable<Result<ProjectListBean>> getProjectList(@Path("pageIndex") String pageIndex, @Path("pageNum") String pageNum,@Query("byWeek")int weeks);
 
@@ -169,6 +171,7 @@ public interface ApiService {
      * @param projectId
      * @return
      */
+
     @GET(NetworkURLConfig.PROJECT_BASE_INFO)
     Observable<Result<ProjectBaseInfo>> getProjectInfoById(@Path("id") int projectId);
 
@@ -248,6 +251,15 @@ public interface ApiService {
     @PUT(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
     Observable<Result<Integer>> putHeaderReport(@Body RequestBody model);
 
+
+    /**
+     * 修改项目整体情况
+     *
+     * @param id
+     * @return
+     */
+    @DELETE(NetworkURLConfig.HEADER_WEEKY_REPORT_POST)
+    Observable<Result> deleteHeaderReport(@Query("id")int id);
     /**
      * 获取项目统计信息
      *
@@ -368,11 +380,11 @@ public interface ApiService {
 
 
             if (context instanceof AppCompatActivity) {
-                LogT.d("这是登录界面");
                 simpleName = ((Activity) context).getClass().getSimpleName();
                 LogT.d(" context instanceof AppCompatActivity simpleName is " + simpleName);
                 if (simpleName.equals("LoginActivity")) {
                     //mOkhttpBuilder.addInterceptor(new ReceivedCookiesInterceptor(context));
+                    LogT.d("这是登录界面");
                     mOkhttpBuilder.addInterceptor(interceptor);
                 }
             }

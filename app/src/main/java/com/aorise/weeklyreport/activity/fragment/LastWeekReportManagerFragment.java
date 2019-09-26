@@ -1,6 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -27,6 +28,7 @@ import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.AuditReportBean;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
+import com.aorise.weeklyreport.bean.UserRole;
 import com.aorise.weeklyreport.databinding.FragmentHeaderBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
@@ -87,6 +89,11 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
      */
     private HeaderItemBean mHeaderItemBean;
 
+    /**
+     * 用户角色id
+     */
+    private int userRoleId = -1;
+
     public LastWeekReportManagerFragment() {
         // Required empty public constructor
     }
@@ -133,12 +140,17 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.lastReportRecycler.addItemDecoration(new SpacesItemDecoration(9));
         mViewDataBinding.lastReportRecycler.setAdapter(mAdapter);
         mAdapter.setItemClickListener(this);
+        userRoleId  = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getInt("userRole",-1);
+
         /**
          * 项目周报整体情况总结
          */
         mViewDataBinding.lastOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(userRoleId == UserRole.ROLE_SALER){
+                    ToastUtils.show("销售专员不可编辑项目周报整体情况!");
+                }
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("weeks", weeks);

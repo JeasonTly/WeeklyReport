@@ -1,6 +1,7 @@
 package com.aorise.weeklyreport.activity.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -30,6 +31,7 @@ import com.aorise.weeklyreport.base.CommonUtils;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.bean.AuditReportBean;
 import com.aorise.weeklyreport.bean.HeaderItemBean;
+import com.aorise.weeklyreport.bean.UserRole;
 import com.aorise.weeklyreport.databinding.FragmentMemeberCheckBinding;
 import com.aorise.weeklyreport.network.ApiService;
 import com.aorise.weeklyreport.network.CustomSubscriber;
@@ -89,6 +91,11 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
     }
 
     /**
+     * 用户角色id
+     */
+    private int userRoleId = -1;
+
+    /**
      * @param useId     用户ID 暂时无效
      * @param projectId 项目ID
      * @param weeks     当前周数
@@ -128,6 +135,9 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.nextOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(userRoleId == UserRole.ROLE_SALER){
+                    ToastUtils.show("销售专员不可编辑项目周报整体情况!");
+                }
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("weeks", weeks + 1);
@@ -136,6 +146,7 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
                 startActivity(mIntent);
             }
         });
+        userRoleId  = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getInt("userRole",-1);
         mViewDataBinding.auditArea.setVisibility(isAudit ? View.VISIBLE : View.GONE);
         mViewDataBinding.nextOverall.setClickable(!isAudit);
 
@@ -360,6 +371,10 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
                 || TextUtils.isEmpty(memberWeeklyModelListBeans.get(position).getSpecificItem())) {
             return;
         }
+        if(userRoleId == UserRole.ROLE_SALER){
+            ToastUtils.show("项目专员不可编辑成员周报!");
+            return;
+        }
         Intent mIntent = new Intent();
         mIntent.setClass(getActivity(), SettingsNextWeekPlanActivity.class);
         mIntent.putExtra("projectId", projectId);
@@ -376,7 +391,62 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
     }
 
     @Override
-    public void onLongClick(int position) {
+    public void onLongClick(final int position) {
+        LogT.d(" current item info is "+memberWeeklyModelListBeans.get(position).toString());
+        if(isAudit){//如果是项目周报审核
+            return;
+        }
+        if(userRoleId == UserRole.ROLE_SALER){
+            ToastUtils.show("销售专员无法删除成员周报!");
+            return;
+        }
+        if(memberWeeklyModelListBeans.get(position).getIsComplete() ==1){
+            ToastUtils.show("当前周报进度已完成!");
+            return;
+        }
+        if(TextUtils.isEmpty(memberWeeklyModelListBeans.get(position).getSpecificPhase()) || memberWeeklyModelListBeans.get(position).getSpecificPhase() == null){
+            ToastUtils.show("当前阶段不可删除!");
+            return;
+        }
 
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("警告!")
+                .setMessage("您确定要删除此条周报吗?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ApiService.Utils.getInstance(getActivity())
+                                .deleteWeeklyReprot(memberWeeklyModelListBeans.get(position).getMemberId())
+                                .compose(ApiService.Utils.schedulersTransformer())
+                                .subscribe(new CustomSubscriber<Result>(getActivity()) {
+                                    @Override
+                                    public void onCompleted() {
+                                        super.onCompleted();
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        super.onError(e);
+                                    }
+
+                                    @Override
+                                    public void onNext(Result o) {
+                                        super.onNext(o);
+                                        LogT.d("删除内容为"+o.toString());
+                                        if (o.isRet()) {
+                                            ToastUtils.show("删除成功!");
+                                            updateManagerList(weeks);
+                                        }
+                                    }
+                                });
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
     }
 }

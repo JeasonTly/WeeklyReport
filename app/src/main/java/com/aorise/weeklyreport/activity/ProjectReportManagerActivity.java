@@ -1,5 +1,6 @@
 package com.aorise.weeklyreport.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.aorise.weeklyreport.activity.fragment.NextWeekReprotManagerFragment;
 import com.aorise.weeklyreport.adapter.MainFragmentAdapter;
 import com.aorise.weeklyreport.base.LogT;
 import com.aorise.weeklyreport.base.TimeUtil;
+import com.aorise.weeklyreport.bean.UserRole;
 import com.aorise.weeklyreport.databinding.ActivityMemberManagerBinding;
 import com.aorise.weeklyreport.view.MenuPopup;
 
@@ -84,6 +86,10 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
      */
     private boolean auditProjectReport = false;
 
+    /**
+     *  用户角色ID
+     */
+    private int userRoleId  = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +115,10 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                 ProjectReportManagerActivity.this.finish();
             }
         });
+        userRoleId  = getSharedPreferences("UserInfo", Context.MODE_PRIVATE).getInt("userRole",-1);
+        if(userRoleId == UserRole.ROLE_SALER){
+            mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.GONE);
+        }
         mViewDataBinding.managerActionbar.actionMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +183,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
                 if(!auditProjectReport){
                     mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
                 }
+                if(userRoleId == UserRole.ROLE_SALER){
+                    mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -191,6 +204,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
 
                 }
                 mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
+                if(userRoleId == UserRole.ROLE_SALER){
+                    mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -222,6 +238,9 @@ public class ProjectReportManagerActivity extends AppCompatActivity implements V
         }
         if(!auditProjectReport) {
             mViewDataBinding.managerActionbar.actionMenu.setVisibility(addPlan ? View.VISIBLE : View.GONE);
+        }
+        if(userRoleId == UserRole.ROLE_SALER){//销售专员不可以指定工作计划
+            mViewDataBinding.managerActionbar.actionMenu.setVisibility(View.GONE);
         }
         mViewDataBinding.managerTabHost.setScrollPosition(i, 0, false);
     }
