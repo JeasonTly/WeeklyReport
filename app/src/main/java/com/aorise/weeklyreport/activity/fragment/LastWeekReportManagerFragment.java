@@ -161,6 +161,11 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
                     ToastUtils.show("销售专员不可编辑项目周报整体情况!");
                     return;
                 }
+
+                if(mHeaderItemBean.getApprovalState() ==2){
+                    ToastUtils.show("当前项目周报已审批!");
+                    return;
+                }
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("weeks", weeks);

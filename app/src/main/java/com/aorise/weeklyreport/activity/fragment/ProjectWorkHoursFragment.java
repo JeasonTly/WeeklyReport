@@ -133,6 +133,7 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                 planDataList.clear();
                 CURRENT_MODE_YEAR = true;
                 mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear );
+                mViewDataBinding.worktimeYearActionbar.actionBarDropdown.setVisibility(View.VISIBLE);
                 initRowDataList();
                 initItemWidthList();
                 initDefaultWorkTime();
@@ -499,15 +500,15 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
                 break;
 
         }
-//        LogT.d(" 你点击了" + string);
         if (position == 12) {
             return;
         }
-        mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.VISIBLE);
+
         currentMonth = position + 1;
-        // rowDataList.clear();
-        CURRENT_MODE_YEAR = false;
-        mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear + string);
+        // rowDataList.clear()        CURRENT_MODE_YEAR = false;
+        mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear +"年"+ string);
+        mViewDataBinding.worktimeYearActionbar.actionBarDropdown.setVisibility(View.GONE);
+        mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.VISIBLE);
         send2MonthView();
     }
 

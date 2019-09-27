@@ -148,6 +148,10 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
                     ToastUtils.show("销售专员不可编辑项目周报整体情况!");
                     return;
                 }
+                if(mHeaderItemBean.getApprovalState() ==2){
+                    ToastUtils.show("当前项目周报已审批!");
+                    return;
+                }
                 Intent mIntent = new Intent();
                 mIntent.putExtra("projectId", projectId);
                 mIntent.putExtra("weeks", weeks + 1);
@@ -311,6 +315,11 @@ public class NextWeekReprotManagerFragment extends Fragment implements RecyclerL
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         approvalText = approvalMark.getText().toString();
+//                        if(mHeaderItemBean.getApprovalState() == 2){
+//                            ToastUtils.show("当前项目周报已审批!");
+//                            dialog.dismiss();
+//                            return;
+//                        }
                         CommitApproveResult(pass);
                     }
                 });
