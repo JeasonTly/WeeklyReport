@@ -79,9 +79,9 @@ public interface ApiService {
     @POST(NetworkURLConfig.LOGIN_URL)
     Observable<Result<UserInfoBean>> login(@Field("userName") String userName, @Field("passWord") String passWord);
 
+
     @Headers("Content-Type: application/json;charset=UTF-8")
     @POST(NetworkURLConfig.LOGIN_URL_N)
-    @Deprecated
     Observable<Result<String>> login(@Body RequestBody requestBody);
 
     /**

@@ -505,7 +505,8 @@ public class ProjectWorkHoursFragment extends Fragment implements WorkTimePlanCl
         }
 
         currentMonth = position + 1;
-        // rowDataList.clear()        CURRENT_MODE_YEAR = false;
+        // rowDataList.clear()
+         CURRENT_MODE_YEAR = false;
         mViewDataBinding.worktimeYearActionbar.actionBarTitle.setText("工时统计 -" + currentYear +"年"+ string);
         mViewDataBinding.worktimeYearActionbar.actionBarDropdown.setVisibility(View.GONE);
         mViewDataBinding.worktimeYearActionbar.actionbarBack.setVisibility(View.VISIBLE);

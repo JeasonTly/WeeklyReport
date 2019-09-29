@@ -152,18 +152,20 @@ public class LastWeekReportManagerFragment extends Fragment implements RecyclerL
         mViewDataBinding.lastOverall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                /**
+                 * 没有项目周报编辑的权限！
+                 */
                 if(!sp.getBoolean(PERMISSION_PROJECT_WRITE,false)){
                     ToastUtils.show("您没有权限修改项目周报");
                     return;
                 }
-                if(userRoleId == UserRole.ROLE_SALER){
-                    ToastUtils.show("销售专员不可编辑项目周报整体情况!");
-                    return;
-                }
+//                if(userRoleId == UserRole.ROLE_SALER){
+//                    ToastUtils.show("销售专员不可编辑项目周报整体情况!");
+//                    return;
+//                }
 
                 if(mHeaderItemBean.getApprovalState() ==2){
-                    ToastUtils.show("当前项目周报已审批!");
+                    ToastUtils.show("当前项目周报已通过审批!");
                     return;
                 }
                 Intent mIntent = new Intent();
